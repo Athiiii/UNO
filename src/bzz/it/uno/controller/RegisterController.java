@@ -27,7 +27,7 @@ public class RegisterController extends JFrame {
 
 	private JPanel contentPane;
 	private StartController frame;
-	private int xx, xy;
+	private int xAxis, yAxis;
 	
 	/**
 	 * Create the frame.
@@ -46,14 +46,14 @@ public class RegisterController extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				RegisterController.this.setLocation(x - xx, y - xy);
+				RegisterController.this.setLocation(x - xAxis, y - yAxis);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				xx = e.getX();
-				xy = e.getY();
+				xAxis = e.getX();
+				yAxis = e.getY();
 			}
 		});
 		contentPane.setBackground(Color.WHITE);
@@ -67,79 +67,79 @@ public class RegisterController extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JLabel label_3 = new JLabel("");
-		label_3.setVerticalAlignment(SwingConstants.TOP);
-		label_3.setIcon(new ImageIcon(new ImageIcon(StartController.class.getResource("/images/login.png")).getImage()
+		JLabel loginView = new JLabel("");
+		loginView.setVerticalAlignment(SwingConstants.TOP);
+		loginView.setIcon(new ImageIcon(new ImageIcon(StartController.class.getResource("/images/login.png")).getImage()
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
-		panel.add(label_3);
+		panel.add(loginView);
 
-		Button button = new Button("Registrieren");
-		button.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		button.setBackground(new Color(0, 153, 204));
-		button.addActionListener(new ActionListener() {
+		Button registerBtn = new Button("Registrieren");
+		registerBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		registerBtn.setBackground(new Color(0, 153, 204));
+		registerBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		button.setBounds(243, 382, 142, 39);
-		contentPane.add(button);
+		registerBtn.setBounds(243, 382, 142, 39);
+		contentPane.add(registerBtn);
 
-		TextField textField = new TextField();
-		textField.setFont(new Font("Dialog", Font.PLAIN, 27));
-		textField.setBounds(398, 256, 273, 39);
-		contentPane.add(textField);
+		TextField passwordField = new TextField();
+		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
+		passwordField.setBounds(398, 256, 273, 39);
+		contentPane.add(passwordField);
+		
+		TextField repeatPasswordField = new TextField();
+		repeatPasswordField.setFont(new Font("Dialog", Font.PLAIN, 27));
+		repeatPasswordField.setBounds(398, 321, 273, 39);
+		contentPane.add(repeatPasswordField);
 
-		TextField textField_1 = new TextField();
-		textField_1.setFont(new Font("Dialog", Font.PLAIN, 27));
-		textField_1.setBounds(398, 195, 273, 39);
-		contentPane.add(textField_1);
+		TextField usernameField = new TextField();
+		usernameField.setFont(new Font("Dialog", Font.PLAIN, 27));
+		usernameField.setBounds(398, 195, 273, 39);
+		contentPane.add(usernameField);
 
-		Label label = new Label("UNO Register");
-		label.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
-		label.setBounds(243, 74, 349, 57);
-		contentPane.add(label);
+		Label titleLabel = new Label("UNO Register");
+		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
+		titleLabel.setBounds(243, 74, 349, 57);
+		contentPane.add(titleLabel);
 
-		Label label_1 = new Label("Username");
-		label_1.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		label_1.setBounds(243, 195, 107, 39);
-		contentPane.add(label_1);
+		Label usernameLabel = new Label("Username");
+		usernameLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		usernameLabel.setBounds(243, 195, 107, 39);
+		contentPane.add(usernameLabel);
 
-		Label label_2 = new Label("Password");
-		label_2.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		label_2.setBounds(243, 256, 107, 39);
-		contentPane.add(label_2);
+		Label passwordLabel = new Label("Password");
+		passwordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		passwordLabel.setBounds(243, 256, 107, 39);
+		contentPane.add(passwordLabel);
 
-		JLabel lblNewLabel = new JLabel("Bereits ein Konto?");
-		lblNewLabel.addMouseListener(new MouseAdapter() {
+		JLabel alreadyAccount = new JLabel("Bereits ein Konto?");
+		alreadyAccount.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				frame.setVisible(true);
 				RegisterController.this.setVisible(false);
 			}
 		});
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblNewLabel.setBounds(501, 382, 153, 39);
-		lblNewLabel.setForeground(Color.BLUE.darker());
-		contentPane.add(lblNewLabel);
+		alreadyAccount.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		alreadyAccount.setBounds(501, 382, 153, 39);
+		alreadyAccount.setForeground(Color.BLUE.darker());
+		contentPane.add(alreadyAccount);
 
-		JLabel lblX = new JLabel(" x");
-		lblX.addMouseListener(new MouseAdapter() {
+		JLabel closeWindow = new JLabel(" x");
+		closeWindow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
-		lblX.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblX.setBounds(632, 0, 52, 57);
-		contentPane.add(lblX);
+		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
+		closeWindow.setBounds(632, 0, 52, 57);
+		contentPane.add(closeWindow);
 		
-		JLabel label_4 = new JLabel("<html>Passwort <br/> wiederholen</html>");
-		label_4.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		label_4.setBounds(243, 321, 131, 39);
-		contentPane.add(label_4);
-		
-		TextField textField_2 = new TextField();
-		textField_2.setFont(new Font("Dialog", Font.PLAIN, 27));
-		textField_2.setBounds(398, 321, 273, 39);
-		contentPane.add(textField_2);
+		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
+		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		repeatPasswordLabel.setBounds(243, 321, 131, 39);
+		contentPane.add(repeatPasswordLabel);		
 	}
 }
