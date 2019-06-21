@@ -5,7 +5,7 @@ import bzz.it.uno.model.CardDeck;
 
 /**
  * 
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
 public class RuleManagement {

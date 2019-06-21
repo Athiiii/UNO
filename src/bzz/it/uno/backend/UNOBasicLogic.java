@@ -12,7 +12,7 @@ import bzz.it.uno.model.User;
 
 /**
  * 
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
 public class UNOBasicLogic {
@@ -36,6 +36,10 @@ public class UNOBasicLogic {
 		return user;
 	}
 
+	/**
+	 * 
+	 * @return List of all shuffled Cards
+	 */
 	private List<Card> generateAllUnoCards() {
 		List<Card> cards = new ArrayList<Card>();
 		boolean firstTime = true;

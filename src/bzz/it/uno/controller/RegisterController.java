@@ -13,19 +13,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 
 /**
  * 	
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
-public class RegisterController extends JFrame {
+public class RegisterController extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private LoginController frame;
@@ -75,22 +77,21 @@ public class RegisterController extends JFrame {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
-		Button registerBtn = new Button("Registrieren");
+		JButton registerBtn = new JButton("Registrieren");
 		registerBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		registerBtn.setBackground(new Color(0, 153, 204));
-		registerBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		registerBtn.setBounds(243, 382, 142, 39);
+		registerBtn.addActionListener(this);
+		registerBtn.setBorderPainted(false);
+		registerBtn.setFocusPainted(false);
+		registerBtn.setBounds(243, 382, 169, 39);
 		contentPane.add(registerBtn);
 
-		TextField passwordField = new TextField();
+		JPasswordField passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(398, 256, 273, 39);
 		contentPane.add(passwordField);
 		
-		TextField repeatPasswordField = new TextField();
+		JPasswordField repeatPasswordField = new JPasswordField();
 		repeatPasswordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		repeatPasswordField.setBounds(398, 321, 273, 39);
 		contentPane.add(repeatPasswordField);
@@ -136,12 +137,18 @@ public class RegisterController extends JFrame {
 			}
 		});
 		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
-		closeWindow.setBounds(632, 0, 52, 57);
+		closeWindow.setBounds(690, 0, 52, 57);
 		contentPane.add(closeWindow);
 		
 		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
 		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		repeatPasswordLabel.setBounds(243, 321, 131, 39);
 		contentPane.add(repeatPasswordLabel);		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Register
+		
 	}
 }
