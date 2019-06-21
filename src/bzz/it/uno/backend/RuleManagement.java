@@ -10,7 +10,7 @@ import bzz.it.uno.model.CardDeck;
  */
 public class RuleManagement {
 
-	public boolean checkRules(CardDeck playingDeck, Card settingCard) {
+	public boolean checkRules(CardDeck playingDeck, CardDeck playerDeck, Card settingCard) {
 		boolean result = true;
 		
 		

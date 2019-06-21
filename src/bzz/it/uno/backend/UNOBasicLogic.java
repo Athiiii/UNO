@@ -7,6 +7,7 @@ import java.util.List;
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardDeck;
 import bzz.it.uno.model.CardType;
+import bzz.it.uno.model.GameUser;
 import bzz.it.uno.model.User;
 
 /**
@@ -25,10 +26,10 @@ public class UNOBasicLogic {
 		cardStacks = new CardDeck(new ArrayList<Card>());
 	}
 
-	public User CheckIfSomeoneWon(List<User> players) {
-		User user = null;
+	public GameUser CheckIfSomeoneWon(List<GameUser> players) {
+		GameUser user = null;
 
-		for (User u : players) {
+		for (GameUser gu : players) {
 			// TODO
 		}
 

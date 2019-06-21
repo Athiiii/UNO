@@ -33,7 +33,6 @@ public class LoginController extends JFrame {
 				try {
 					LoginController frame = new LoginController();
 					frame.setVisible(true);
-					new UNOBasicLogic();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
