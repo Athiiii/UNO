@@ -19,15 +19,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-	
+
+import bzz.it.uno.backend.UNOBasicLogic;
+
 public class LoginController extends JFrame {
 
 	private JPanel contentPane;
 	private int xx, xy;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -41,11 +40,11 @@ public class LoginController extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public LoginController() {		
-
+		setUndecorated(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 700, 500);
+		contentPane = new JPanel();
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
