@@ -9,7 +9,12 @@
             Connects to the database where all the data is safed for the UNO game
         </description>
 
-		
+		<class>bzz.it.uno.model.Lobby</class>
+		<class>bzz.it.uno.model.FriendList</class>
+		<class>bzz.it.uno.model.Message</class>
+		<class>bzz.it.uno.model.Moves</class>
+		<class>bzz.it.uno.model.User_Lobby</class>
+		<class>bzz.it.uno.model.User</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
