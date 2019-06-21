@@ -18,7 +18,7 @@ public class FriendList {
 	public void setFriendId(int friendId) {
 		this.friendId = friendId;
 	}
-	 @OneToOne(mappedBy = "user", optional = false)
+	@OneToOne(mappedBy = "user", optional = false)
 	public User getUser() {
 		return user;
 	}
