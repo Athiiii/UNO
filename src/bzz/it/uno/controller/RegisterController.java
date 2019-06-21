@@ -28,13 +28,13 @@ import javax.swing.border.EmptyBorder;
 public class RegisterController extends JFrame {
 
 	private JPanel contentPane;
-	private StartController frame;
+	private LoginController frame;
 	private int xAxis, yAxis;
 	
 	/**
 	 * Create the frame.
 	 */
-	public RegisterController(StartController frame) {
+	public RegisterController(LoginController frame) {
 		this.frame = frame;
 		frame.setVisible(false);
 		this.setUndecorated(true);
@@ -71,7 +71,7 @@ public class RegisterController extends JFrame {
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(new ImageIcon(StartController.class.getResource("/images/login.png")).getImage()
+		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/login.png")).getImage()
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 

@@ -20,13 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-
-/**
- * 
- * @author Athavan
- *
- */
-public class StartController extends JFrame {
+public class LoginController extends JFrame {
 
 	private JPanel contentPane;
 	private int xx, xy;
@@ -35,7 +29,7 @@ public class StartController extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					StartController frame = new StartController();
+					LoginController frame = new LoginController();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,7 +49,7 @@ public class StartController extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				StartController.this.setLocation(x - xx, y - xy);
+				LoginController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -78,7 +72,7 @@ public class StartController extends JFrame {
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(new ImageIcon(StartController.class.getResource("/images/login.png")).getImage()
+		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/login.png")).getImage()
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
@@ -121,7 +115,7 @@ public class StartController extends JFrame {
 		missingAccount.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				new RegisterController(StartController.this);
+				new RegisterController(LoginController.this);
 			}
 		});
 		missingAccount.setFont(new Font("Tahoma", Font.PLAIN, 19));
