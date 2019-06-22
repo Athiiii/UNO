@@ -99,6 +99,15 @@ public class LoginController extends JFrame implements ActionListener {
 		loginButton.setBounds(243, 382, 142, 39);
 		loginButton.setBorderPainted(false);
 		loginButton.setFocusPainted(false);
+		loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				loginButton.setBackground(loginButton.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				loginButton.setBackground(new Color(0, 153, 204));
+			}
+		});
 		contentPane.add(loginButton);
 
 		passwordField = new JPasswordField();
@@ -138,16 +147,31 @@ public class LoginController extends JFrame implements ActionListener {
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
 
-		JLabel closeWindow = new JLabel(" x");
+		JButton closeWindow = new JButton("");
+		closeWindow.setBounds(650, 0, 50,50);
+		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
+		closeWindow.setBackground(Color.WHITE);
+		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
+				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
 		closeWindow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
-		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
-		closeWindow.setBounds(632, 0, 52, 57);
+		closeWindow.setBorderPainted(false);
+		closeWindow.setFocusPainted(false);
+		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(closeWindow.getBackground().darker());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(Color.WHITE);
+			}
+		});
 		contentPane.add(closeWindow);
+
 	}
 
 	/**

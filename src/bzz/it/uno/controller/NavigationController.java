@@ -2,13 +2,17 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -64,17 +68,30 @@ public class NavigationController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-
-		JLabel closeWindow = new JLabel(" x");
-		closeWindow.setForeground(Color.WHITE);
-		closeWindow.setBounds(653, 0, 47, 49);
+		
+		JButton closeWindow = new JButton("");
+		closeWindow.setBounds(653, 0, 50,50);
+		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
+		closeWindow.setBackground(Color.DARK_GRAY);
+		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeWhite.png"))
+				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
 		closeWindow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
-		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
+		closeWindow.setBorderPainted(false);
+		closeWindow.setFocusPainted(false);
+		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(closeWindow.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(Color.DARK_GRAY);
+			}
+		});
 		contentPane.add(closeWindow);
 
 		JButton newGame = new JButton("Neues Spiel");
@@ -201,6 +218,32 @@ public class NavigationController extends JFrame {
 			}
 		});
 		contentPane.add(btnOffeneLobbies);
-	}
 
+		JButton btnLogout = new JButton("");
+		btnLogout.setBounds(603, 0, 50, 50);
+		btnLogout.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
+		btnLogout.setBackground(Color.DARK_GRAY);
+		btnLogout.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/logout.png"))
+				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+		btnLogout.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		btnLogout.setBorderPainted(false);
+		btnLogout.setFocusPainted(false);
+		btnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnLogout.setBackground(btnLogout.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnLogout.setBackground(Color.DARK_GRAY);
+			}
+		});
+		contentPane.add(btnLogout);
+	}
 }

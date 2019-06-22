@@ -84,6 +84,15 @@ public class RegisterController extends JFrame implements ActionListener {
 		registerBtn.setBorderPainted(false);
 		registerBtn.setFocusPainted(false);
 		registerBtn.setBounds(243, 382, 169, 39);
+		registerBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				registerBtn.setBackground(registerBtn.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				registerBtn.setBackground(new Color(0, 153, 204));
+			}
+		});
 		contentPane.add(registerBtn);
 
 		JPasswordField passwordField = new JPasswordField();
@@ -129,16 +138,31 @@ public class RegisterController extends JFrame implements ActionListener {
 		alreadyAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(alreadyAccount);
 
-		JLabel closeWindow = new JLabel(" x");
+		JButton closeWindow = new JButton("");
+		closeWindow.setBounds(692, 0, 50,50);
+		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
+		closeWindow.setBackground(Color.WHITE);
+		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
+				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
 		closeWindow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
-		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
-		closeWindow.setBounds(690, 0, 52, 57);
+		closeWindow.setBorderPainted(false);
+		closeWindow.setFocusPainted(false);
+		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(closeWindow.getBackground().darker());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(Color.WHITE);
+			}
+		});
 		contentPane.add(closeWindow);
+
 		
 		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
 		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
