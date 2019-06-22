@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardDeck;
@@ -26,30 +27,40 @@ public class UNOBasicLogic {
 		playedCards = new CardDeck(generateAllUnoCards());
 		cardStacks = new CardDeck(new ArrayList<Card>());
 	}
-	
 
-	public GameUser CheckIfSomeoneWon(List<GameUser> players) {
+	public GameUser CheckIfSomeoneWon(List<GameUser> players, boolean includePointCheck) {
 		GameUser user = null;
 
 		for (GameUser gu : players) {
-			// TODO
+			if (gu.getUserDeck().getCards().size() == 0) {
+				user = gu;
+				if (includePointCheck && gu.getPunkte() >= 500) {
+					user = gu;
+					break;
+				} else
+					user = null;
+			}
 		}
 
 		return user;
 	}
-	
-	public boolean playedCorrect() {
-		
-		return true;
+
+	public boolean playedCorrect(GameUser user, Card card) {
+		return ruleManagement.checkRules(playedCards, card, user);
 	}
-	
+
 	public Card takeCard(GameUser user) {
-		Card card = cardStacks.getCards().get(cardStacks.getCards().size() -1);
+		Card card = cardStacks.getCards().get(cardStacks.getCards().size() - 1);
 		user.getUserDeck().addCard(card);
 		cardStacks.removeCard(card);
 		return card;
 	}
-	
+
+	public GameUser triggerUser(List<GameUser> users) {
+		Random rand = new Random();
+		return users.get(rand.nextInt(users.size()));
+	}
+
 	public void playCard(GameUser user, Card card) {
 		user.getUserDeck().removeCard(card);
 		playedCards.addCard(card);
@@ -66,13 +77,13 @@ public class UNOBasicLogic {
 		for (int i = 0; i < 8; ++i) {
 			// Common
 			int color = i;
-			if (firstTime) {		
-				//ZERO CARD
-				cards.add(new Card(0, farben[i], CardType.COMMON));				
-				//PLUSFOUR
+			if (firstTime) {
+				// ZERO CARD
+				cards.add(new Card(0, farben[i], CardType.COMMON));
+				// PLUSFOUR
 				cards.add(new Card(50, "", CardType.PLUSFOUR));
-			}else {
-				//COLORCHANGE
+			} else {
+				// COLORCHANGE
 				cards.add(new Card(50, "", CardType.EXPOSE));
 				color = i - 4;
 			}
@@ -86,40 +97,40 @@ public class UNOBasicLogic {
 			cards.add(new Card(8, farben[color], CardType.COMMON));
 			cards.add(new Card(9, farben[color], CardType.COMMON));
 
-			//STOP
+			// STOP
 			cards.add(new Card(20, farben[color], CardType.EXPOSE));
-			//RETOUR
+			// RETOUR
 			cards.add(new Card(20, farben[color], CardType.BACK));
-			//PLUSTWO
-			cards.add(new Card(20, farben[color], CardType.PLUSTWO));			
+			// PLUSTWO
+			cards.add(new Card(20, farben[color], CardType.PLUSTWO));
 			if (i == 3)
 				firstTime = false;
 		}
-		
-		//shuffle 3 times
+
+		// shuffle 3 times
 		Collections.shuffle(cards);
 		Collections.shuffle(cards);
 		Collections.shuffle(cards);
-		
+
 		return cards;
 	}
-	
+
 	public void reshuffleCards() {
 		Card currentCard = playedCards.getCards().get(0);
 		cardStacks.getCards().addAll(playedCards.getCards());
 		playedCards.setCards(Arrays.asList(currentCard));
 	}
-	
+
 	public void distributeCardsToAllPlayers(List<GameUser> users) {
-		for(int i = 0; i < 7; ++i) {
-			for(int j = 0; j < users.size(); ++j) {
+		for (int i = 0; i < 7; ++i) {
+			for (int j = 0; j < users.size(); ++j) {
 				Card card = cardStacks.getCards().get(0);
 				users.get(j).getUserDeck().addCard(card);
 				cardStacks.removeCard(card);
 			}
 		}
 	}
-	
+
 	public void SetFirstCard() {
 		Card card = cardStacks.getCards().get(0);
 		playedCards.addCard(card);
