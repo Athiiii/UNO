@@ -1,6 +1,7 @@
 package bzz.it.uno.backend;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class UNOBasicLogic {
 		playedCards = new CardDeck(generateAllUnoCards());
 		cardStacks = new CardDeck(new ArrayList<Card>());
 	}
+	
 
 	public GameUser CheckIfSomeoneWon(List<GameUser> players) {
 		GameUser user = null;
@@ -34,6 +36,23 @@ public class UNOBasicLogic {
 		}
 
 		return user;
+	}
+	
+	public boolean playedCorrect() {
+		
+		return true;
+	}
+	
+	public Card takeCard(GameUser user) {
+		Card card = cardStacks.getCards().get(cardStacks.getCards().size() -1);
+		user.getUserDeck().addCard(card);
+		cardStacks.removeCard(card);
+		return card;
+	}
+	
+	public void playCard(GameUser user, Card card) {
+		user.getUserDeck().removeCard(card);
+		playedCards.addCard(card);
 	}
 
 	/**
@@ -84,5 +103,26 @@ public class UNOBasicLogic {
 		
 		return cards;
 	}
-
+	
+	public void reshuffleCards() {
+		Card currentCard = playedCards.getCards().get(0);
+		cardStacks.getCards().addAll(playedCards.getCards());
+		playedCards.setCards(Arrays.asList(currentCard));
+	}
+	
+	public void distributeCardsToAllPlayers(List<GameUser> users) {
+		for(int i = 0; i < 7; ++i) {
+			for(int j = 0; j < users.size(); ++j) {
+				Card card = cardStacks.getCards().get(0);
+				users.get(j).getUserDeck().addCard(card);
+				cardStacks.removeCard(card);
+			}
+		}
+	}
+	
+	public void SetFirstCard() {
+		Card card = cardStacks.getCards().get(0);
+		playedCards.addCard(card);
+		cardStacks.removeCard(card);
+	}
 }

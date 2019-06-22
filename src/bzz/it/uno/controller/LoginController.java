@@ -201,12 +201,17 @@ public class LoginController extends JFrame implements ActionListener {
 		if (currentUser != null) {
 			// forward to NavigationController
 			this.setVisible(false);
-			new NavigationController(currentUser);
+			new NavigationController(currentUser, this);
 		} else {
 			JOptionPane.showMessageDialog(this, "Login is failed. Invalid username or password", "Login failed", 0);
 			passwordField.setText("");
 			usernameInput.setText("");
 		}
 		/// ///
+	}
+	
+	public void SetUserName(String username) {
+		this.usernameInput.setText(username);
+		this.passwordField.setText("");
 	}
 }

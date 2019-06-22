@@ -32,10 +32,12 @@ public class NavigationController extends JFrame {
 
 	private User user;
 	private JPanel contentPane;
+	private LoginController frame;
 	private int xy, xx;
 
-	public NavigationController(User use) {
+	public NavigationController(User user, LoginController frame) {
 		this.user = user;
+		this.frame = frame;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 500);
@@ -68,9 +70,9 @@ public class NavigationController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-		
+
 		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(653, 0, 50,50);
+		closeWindow.setBounds(653, 0, 50, 50);
 		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
 		closeWindow.setBackground(Color.DARK_GRAY);
 		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeWhite.png"))
@@ -229,8 +231,9 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				frame.SetUserName(user.getUsername());
+				frame.setVisible(true);
 			}
 		});
 		btnLogout.setBorderPainted(false);
