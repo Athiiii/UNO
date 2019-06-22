@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * 
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
 public class CardDeck {

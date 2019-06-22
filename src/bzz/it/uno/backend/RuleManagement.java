@@ -51,5 +51,7 @@ public class RuleManagement {
 			result = true;
 		return result;
 	}
+	
+	
 
 }

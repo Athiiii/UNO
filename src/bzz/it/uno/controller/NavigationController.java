@@ -104,8 +104,8 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				new SpielController(user);
 			}
 		});
 		newGame.setBorderPainted(false);
@@ -129,8 +129,8 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				new ProfilController(user);
 			}
 		});
 		btnProfil.setBorderPainted(false);
@@ -154,8 +154,8 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				new RankingController(user);
 			}
 		});
 		btnRanking.setBorderPainted(false);
@@ -179,8 +179,8 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				new FreundesListenController(user);
 			}
 		});
 		btnFreunde.setBorderPainted(false);
@@ -204,8 +204,8 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				setVisible(false);
+				new LobbyController(user);
 			}
 		});
 		btnOffeneLobbies.setBorderPainted(false);
