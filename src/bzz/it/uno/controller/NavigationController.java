@@ -105,7 +105,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new SpielController(user);
+				new SpielController(user, NavigationController.this);
 			}
 		});
 		newGame.setBorderPainted(false);
