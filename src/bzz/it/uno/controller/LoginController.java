@@ -27,6 +27,7 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
 /**
@@ -47,6 +48,11 @@ public class LoginController extends JFrame implements ActionListener {
 				try {
 					LoginController frame = new LoginController();
 					frame.setVisible(true);
+					User u = new User();
+					u.setUsername("Hey");
+					u.setPassword("pwd");
+					u.setComputer(false);
+					new UserDao().addUser(u);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

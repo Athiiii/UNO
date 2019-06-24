@@ -16,4 +16,12 @@ public class UserDao {
 		return users;
 		
 	}
+	
+	public void addUser(User user) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(user);
+		entityManager.getTransaction().commit();
+		HandleConnectionToDB.closeEntityManager();
+	}
 }
