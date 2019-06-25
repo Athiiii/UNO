@@ -21,7 +21,8 @@ public class User {
 	private byte[] picture;
 	private boolean coputer;
 	private FriendList friendList;
-	private List<User_Lobby> userLobby;
+
+	private List<User_Lobby> userLobbys;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,7 +72,7 @@ public class User {
 	}
 
 	@OneToOne
-	@JoinColumn(name="friend")
+	@JoinColumn(name = "friend")
 	public FriendList getFriendList() {
 		return friendList;
 	}
@@ -80,13 +81,13 @@ public class User {
 		this.friendList = friendList;
 	}
 
-	@OneToMany(mappedBy = "user_Lobby", orphanRemoval = true)
+	@OneToMany
 	public List<User_Lobby> getUserLobby() {
-		return userLobby;
+		return userLobbys;
 	}
 
-	public void setUserLobby(List<User_Lobby> userLobby) {
-		this.userLobby = userLobby;
+	public void setUserLobby(List<User_Lobby> userLobbys) {
+		this.userLobbys = userLobbys;
 	}
 
 }

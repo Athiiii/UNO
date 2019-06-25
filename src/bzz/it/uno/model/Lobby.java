@@ -24,7 +24,7 @@ public class Lobby {
 	public void setId(int id) {
 		this.id = id;
 	}
-	@OneToMany(mappedBy = "user_Lobby", orphanRemoval = true)
+	@OneToMany
 	public List<User_Lobby> getUserLobby() {
 		return userLobby;
 	}

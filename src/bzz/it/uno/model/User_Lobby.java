@@ -58,7 +58,7 @@ public class User_Lobby {
 		this.points = points;
 	}
 
-	@OneToMany(mappedBy = "message", orphanRemoval = true)
+	@OneToMany
 	public List<Message> getMessages() {
 		return messages;
 	}

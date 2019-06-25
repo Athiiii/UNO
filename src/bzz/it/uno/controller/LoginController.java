@@ -51,8 +51,8 @@ public class LoginController extends JFrame implements ActionListener {
 					User u = new User();
 					u.setUsername("Hey");
 					u.setPassword("pwd");
-					u.setComputer(false);
-					new UserDao().addUser(u);
+					//u.setComputer(false);
+					//new UserDao().addUser(u);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -207,7 +207,7 @@ public class LoginController extends JFrame implements ActionListener {
 		if (currentUser != null) {
 			// forward to NavigationController
 			this.setVisible(false);
-			new NavigationController(currentUser, this);
+			//new NavigationController(currentUser, this);
 		} else {
 			JOptionPane.showMessageDialog(this, "Login is failed. Invalid username or password", "Login failed", 0);
 			passwordField.setText("");
