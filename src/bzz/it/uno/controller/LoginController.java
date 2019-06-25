@@ -12,20 +12,35 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import bzz.it.uno.backend.UNOBasicLogic;
+import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.model.User;
 
-public class LoginController extends JFrame {
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
+public class LoginController extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private int xx, xy;
+	private TextField usernameInput;
+	private JPasswordField passwordField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -33,6 +48,11 @@ public class LoginController extends JFrame {
 				try {
 					LoginController frame = new LoginController();
 					frame.setVisible(true);
+					User u = new User();
+					u.setUsername("Hey");
+					u.setPassword("pwd");
+					u.setComputer(false);
+					new UserDao().addUser(u);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,7 +60,7 @@ public class LoginController extends JFrame {
 		});
 	}
 
-	public LoginController() {		
+	public LoginController() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 500);
@@ -78,22 +98,30 @@ public class LoginController extends JFrame {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
-		Button loginButton = new Button("Login");
+		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		loginButton.setBackground(new Color(0, 153, 204));
-		loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		loginButton.addActionListener(this);
+		loginButton.setBounds(243, 382, 142, 39);
+		loginButton.setBorderPainted(false);
+		loginButton.setFocusPainted(false);
+		loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				loginButton.setBackground(loginButton.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				loginButton.setBackground(new Color(0, 153, 204));
 			}
 		});
-		loginButton.setBounds(243, 382, 142, 39);
 		contentPane.add(loginButton);
 
-		TextField passwordField = new TextField();
+		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(381, 301, 273, 39);
 		contentPane.add(passwordField);
 
-		TextField usernameInput = new TextField();
+		usernameInput = new TextField();
 		usernameInput.setFont(new Font("Dialog", Font.PLAIN, 27));
 		usernameInput.setBounds(381, 195, 273, 39);
 		contentPane.add(usernameInput);
@@ -125,15 +153,71 @@ public class LoginController extends JFrame {
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
 
-		JLabel closeWindow = new JLabel(" x");
+		JButton closeWindow = new JButton("");
+		closeWindow.setBounds(650, 0, 50,50);
+		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
+		closeWindow.setBackground(Color.WHITE);
+		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
+				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
 		closeWindow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
-		closeWindow.setFont(new Font("Tahoma", Font.BOLD, 40));
-		closeWindow.setBounds(632, 0, 52, 57);
+		closeWindow.setBorderPainted(false);
+		closeWindow.setFocusPainted(false);
+		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(closeWindow.getBackground().darker());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				closeWindow.setBackground(Color.WHITE);
+			}
+		});
 		contentPane.add(closeWindow);
+
+	}
+
+	/**
+	 * Login Process
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO authenticate over DAO
+
+		/// TEMPORARY///
+		List<User> users = new ArrayList<User>();
+		User u = new User();
+		u.setUsername("asdf");
+		u.setPassword("asdf");
+		users.add(u);
+
+		User currentUser = null;
+		for (User user : users) {
+			if (user.getUsername().equals(usernameInput.getText())
+					&& user.getPassword().equals(passwordField.getText())) {
+				// successfully authorized
+				currentUser = user;
+				break;
+			}
+		}
+
+		if (currentUser != null) {
+			// forward to NavigationController
+			this.setVisible(false);
+			new NavigationController(currentUser, this);
+		} else {
+			JOptionPane.showMessageDialog(this, "Login is failed. Invalid username or password", "Login failed", 0);
+			passwordField.setText("");
+			usernameInput.setText("");
+		}
+		/// ///
+	}
+	
+	public void SetUserName(String username) {
+		this.usernameInput.setText(username);
+		this.passwordField.setText("");
 	}
 }

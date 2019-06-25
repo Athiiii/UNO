@@ -2,7 +2,7 @@ package bzz.it.uno.model;
 
 /**
  * 
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
 public class Card {

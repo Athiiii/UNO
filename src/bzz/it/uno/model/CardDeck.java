@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * 
- * @author Athavan
+ * @author Athavan Theivakulasingham
  *
  */
 public class CardDeck {
@@ -14,15 +14,19 @@ public class CardDeck {
 		this.cards = cards;
 	}
 
-	public List<Card> getCard() {
+	public List<Card> getCards() {
 		return cards;
 	}
 
-	public void setCard(List<Card> card) {
+	public void setCards(List<Card> card) {
 		this.cards = card;
 	}
 	
-	public void AddCard(Card card) {
+	public void addCard(Card card) {
 		this.cards.add(card);
+	}
+	
+	public boolean removeCard(Card card) {
+		return this.cards.remove(card);
 	}
 }
