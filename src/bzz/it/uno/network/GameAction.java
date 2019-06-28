@@ -23,12 +23,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class GameAction {
-
-	public static void main(String[] args) {
-		new GameAction().subscribe("1");
-		new GameAction().publish("Hallo welt", "1");
-	}
+public class GameAction implements MqttCallback {
 
 	public void publish(String message, String topic) {
 		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
@@ -51,26 +46,25 @@ public class GameAction {
 		try {
 			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
 
-			client.setCallback(new MqttCallback() {
-
-				@Override
-				public void connectionLost(Throwable arg0) {
-				}
-
-				@Override
-				public void deliveryComplete(IMqttDeliveryToken arg0) {
-				}
-
-				@Override
-				public void messageArrived(String arg0, MqttMessage mqttMessage) throws Exception {
-					System.out.println(new String(mqttMessage.getPayload()));
-				}
-			});
+			client.setCallback(this);
 
 			client.connect();
 			client.subscribe("UNO/" + topic);
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void connectionLost(Throwable arg0) {
+	}
+
+	@Override
+	public void deliveryComplete(IMqttDeliveryToken arg0) {
+	}
+
+	@Override
+	public void messageArrived(String arg0, MqttMessage mqttMessage) throws Exception {
+		System.out.println(new String(mqttMessage.getPayload()));
 	}
 }
