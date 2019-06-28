@@ -48,11 +48,6 @@ public class LoginController extends JFrame implements ActionListener {
 				try {
 					LoginController frame = new LoginController();
 					frame.setVisible(true);
-					User u = new User();
-					u.setUsername("Hey");
-					u.setPassword("pwd");
-					//u.setComputer(false);
-					//new UserDao().addUser(u);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -185,29 +180,12 @@ public class LoginController extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO authenticate over DAO
+		User currentUser = new UserDao().selectByUsername(usernameInput.getText());
 
-		/// TEMPORARY///
-		List<User> users = new ArrayList<User>();
-		User u = new User();
-		u.setUsername("asdf");
-		u.setPassword("asdf");
-		users.add(u);
-
-		User currentUser = null;
-		for (User user : users) {
-			if (user.getUsername().equals(usernameInput.getText())
-					&& user.getPassword().equals(passwordField.getText())) {
-				// successfully authorized
-				currentUser = user;
-				break;
-			}
-		}
-
-		if (currentUser != null) {
+		if (currentUser != null && currentUser.getPassword().equals(passwordField.getText())) {
 			// forward to NavigationController
 			this.setVisible(false);
-			//new NavigationController(currentUser, this);
+			new NavigationController(currentUser, this);
 		} else {
 			JOptionPane.showMessageDialog(this, "Login is failed. Invalid username or password", "Login failed", 0);
 			passwordField.setText("");
