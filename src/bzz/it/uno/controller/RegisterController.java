@@ -16,14 +16,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.model.User;
 
 /**
- * 	
+ * 
  * @author Athavan Theivakulasingham
  *
  */
@@ -32,7 +35,10 @@ public class RegisterController extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private LoginController frame;
 	private int xAxis, yAxis;
-	
+	private JPasswordField passwordField;
+	private JPasswordField repeatPasswordField;
+	private TextField usernameField;
+
 	/**
 	 * Create the frame.
 	 */
@@ -95,17 +101,17 @@ public class RegisterController extends JFrame implements ActionListener {
 		});
 		contentPane.add(registerBtn);
 
-		JPasswordField passwordField = new JPasswordField();
+		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(398, 256, 273, 39);
 		contentPane.add(passwordField);
-		
-		JPasswordField repeatPasswordField = new JPasswordField();
+
+		repeatPasswordField = new JPasswordField();
 		repeatPasswordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		repeatPasswordField.setBounds(398, 321, 273, 39);
 		contentPane.add(repeatPasswordField);
 
-		TextField usernameField = new TextField();
+		usernameField = new TextField();
 		usernameField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		usernameField.setBounds(398, 195, 273, 39);
 		contentPane.add(usernameField);
@@ -139,7 +145,7 @@ public class RegisterController extends JFrame implements ActionListener {
 		contentPane.add(alreadyAccount);
 
 		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(692, 0, 50,50);
+		closeWindow.setBounds(692, 0, 50, 50);
 		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
 		closeWindow.setBackground(Color.WHITE);
 		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
@@ -163,16 +169,43 @@ public class RegisterController extends JFrame implements ActionListener {
 		});
 		contentPane.add(closeWindow);
 
-		
 		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
 		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		repeatPasswordLabel.setBounds(243, 321, 131, 39);
-		contentPane.add(repeatPasswordLabel);		
+		contentPane.add(repeatPasswordLabel);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Register
-		
+		if (repeatPasswordField.getText().equals(passwordField.getText())) {
+			UserDao dao = new UserDao();
+			User user = dao.selectByUsername(usernameField.getText());
+			if (user == null) {
+				user = new User();
+				user.setComputer(false);
+				user.setPassword(passwordField.getText());
+				user.setUsername(usernameField.getText());
+				dao.addUser(user);
+				
+				// forward to NavigationController
+				this.setVisible(false);
+				new NavigationController(user, frame);
+			} else {
+				JOptionPane.showMessageDialog(this, "Register failed. Entered username is already given",
+						"Register failed", 0);
+				usernameField.setText("");
+				passwordField.setText("");
+				repeatPasswordField.setText("");
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(this, "Register failed. Entered passwords are different.", "Register failed",
+					0);
+			passwordField.setText("");
+			repeatPasswordField.setText("");
+		}
+		/*
+		 * - check if this user already exists - add user to db - forward to navigation
+		 */
 	}
 }

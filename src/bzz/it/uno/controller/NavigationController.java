@@ -130,7 +130,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new ProfilController(user);
+				new ProfilController(user, NavigationController.this);
 			}
 		});
 		btnProfil.setBorderPainted(false);
@@ -155,7 +155,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new RankingController(user);
+				new RankingController(user, NavigationController.this);
 			}
 		});
 		btnRanking.setBorderPainted(false);
@@ -180,7 +180,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new FreundesListenController(user);
+				new FreundesListenController(user, NavigationController.this);
 			}
 		});
 		btnFreunde.setBorderPainted(false);
@@ -205,7 +205,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new LobbyController(user);
+				new LobbyController(user, NavigationController.this);
 			}
 		});
 		btnOffeneLobbies.setBorderPainted(false);

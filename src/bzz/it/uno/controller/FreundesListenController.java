@@ -24,8 +24,9 @@ public class FreundesListenController extends JFrame {
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
+	private NavigationController navigationFrame;
 
-	public FreundesListenController(User user) {
+	public FreundesListenController(User user,NavigationController navigationFrame) {
 		this.user = user;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,5 +78,32 @@ public class FreundesListenController extends JFrame {
 			}
 		});
 		contentPane.add(closeWindow);
+		
+		JButton backBtn = new JButton(" Zur\u00FCck");
+		backBtn.setForeground(Color.WHITE);
+		backBtn.setBounds(0, 0, 127, 50);
+		backBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
+		backBtn.setBackground(Color.DARK_GRAY);
+		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png"))
+				.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+		backBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				dispose();
+				navigationFrame.setVisible(true);
+			}
+		});
+		backBtn.setBorderPainted(false);
+		backBtn.setFocusPainted(false);
+		backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				backBtn.setBackground(backBtn.getBackground().brighter());
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				backBtn.setBackground(Color.DARK_GRAY);
+			}
+		});
+		contentPane.add(backBtn);
 	}
 }

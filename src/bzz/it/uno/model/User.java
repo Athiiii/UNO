@@ -19,7 +19,7 @@ public class User {
 	private String username;
 	private String password;
 	private byte[] picture;
-	private boolean coputer;
+	private boolean computer;
 	private FriendList friendList;
 
 	private List<User_Lobby> userLobbys;
@@ -63,12 +63,12 @@ public class User {
 	}
 
 	@Column(name = "computer")
-	public boolean isCoputer() {
-		return coputer;
+	public boolean isComputer() {
+		return computer;
 	}
 
-	public void setCoputer(boolean coputer) {
-		this.coputer = coputer;
+	public void setComputer(boolean computer) {
+		this.computer = computer;
 	}
 
 	@OneToOne
