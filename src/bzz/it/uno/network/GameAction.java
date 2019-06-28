@@ -1,4 +1,4 @@
-  
+
 /* 
  * Copyright (c) 2009, 2012 IBM Corp.
  *
@@ -13,26 +13,64 @@
 
 package bzz.it.uno.network;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class GameAction {
 
 	public static void main(String[] args) {
-		GameAction g = new GameAction();
+		new GameAction().subscribe("1");
+		new GameAction().publish("Hallo welt", "1");
+	}
+
+	public void publish(String message, String topic) {
+		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
+		MqttClient client = null;
 		try {
-			g.publish("Hallo welt");
-		} catch (Exception e) {
+			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
+			System.out.println("connecting...");
+			client.connect();
+			client.publish("UNO/" + topic, message.getBytes(), 2, true);
+			client.disconnect();
+			System.out.println("finished");
+		} catch (MqttException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void publish(String message) throws Exception {
-		MqttClient client = new MqttClient("tcp://104.207.133.76:1833", "");
-		client.connect();
-		
-		MqttMessage mqttMessage = new MqttMessage(message.getBytes());
-		client.publish("UNO/1", mqttMessage);
-		client.disconnect();
+
+	public void subscribe(String topic) {
+		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
+		MqttClient client = null;
+		try {
+			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
+
+			client.setCallback(new MqttCallback() {
+
+				@Override
+				public void connectionLost(Throwable arg0) {
+				}
+
+				@Override
+				public void deliveryComplete(IMqttDeliveryToken arg0) {
+				}
+
+				@Override
+				public void messageArrived(String arg0, MqttMessage mqttMessage) throws Exception {
+					System.out.println(new String(mqttMessage.getPayload()));
+				}
+			});
+
+			client.connect();
+			client.subscribe("UNO/" + topic);
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
 	}
 }
