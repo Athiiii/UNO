@@ -14,20 +14,25 @@
 package bzz.it.uno.network;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class GameAction {
 
 	public static void main(String[] args) {
 		GameAction g = new GameAction();
 		try {
-			g.publish();
+			g.publish("Hallo welt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void publish() throws Exception {
-		MqttClient client = new MqttClient("tcp://104.207.133.76", "monty");
+	public void publish(String message) throws Exception {
+		MqttClient client = new MqttClient("tcp://104.207.133.76:1833", "");
 		client.connect();
+		
+		MqttMessage mqttMessage = new MqttMessage(message.getBytes());
+		client.publish("UNO/1", mqttMessage);
+		client.disconnect();
 	}
 }
