@@ -9,11 +9,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 @Entity
 @Table(name = "lobby")
 public class Lobby {
 	private int id;
 	private List<User_Lobby> userLobby;
+	private boolean status;
+	private String name;
+
+	@Column(name = "name")
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Column(name = "status")
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,13 +42,16 @@ public class Lobby {
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	@OneToMany
 	public List<User_Lobby> getUserLobby() {
 		return userLobby;
 	}
+
 	public void setUserLobby(List<User_Lobby> userLobby) {
 		this.userLobby = userLobby;
 	}
