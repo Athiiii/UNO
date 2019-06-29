@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Label;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.model.User;
+import bzz.it.uno.model.User_Lobby;
 
 public class RankingController extends JFrame {
 
@@ -103,5 +107,18 @@ public class RankingController extends JFrame {
 			}
 		});
 		contentPane.add(backBtn);
+		
+		Label titleLabel = new Label("Ranking");
+		titleLabel.setForeground(Color.WHITE);
+		titleLabel.setBounds(258, 38, 240, 69);
+		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
+		contentPane.add(titleLabel);
+		
+	}
+	
+	public void setRankingList() {
+		UserLobbyDao userLobbyDao = new UserLobbyDao();
+		List<User_Lobby> userLobby = userLobbyDao.selectByUser(user.getId());
+		List<User_Lobby> allUserLobbies = userLobbyDao.getAllUserLobbies();
 	}
 }

@@ -105,7 +105,7 @@ public class SpielController extends JFrame {
 		
 		Label titleLabel = new Label("Spiel erstellen");
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(233, 16, 234, 69);
+		titleLabel.setBounds(200, 36, 361, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 	}
