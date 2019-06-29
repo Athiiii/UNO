@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
 public class UserDao {
@@ -12,6 +13,11 @@ public class UserDao {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
 		List<User> users = entityManager.createQuery("from User").getResultList();
+		//Hibernate Lazy load exception catch
+		if(users.size() > 0) {
+			users.get(0).getHistories().size();
+			users.get(0).getUserLobby().size();
+		}
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 		return users;

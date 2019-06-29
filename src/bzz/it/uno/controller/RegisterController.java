@@ -186,11 +186,11 @@ public class RegisterController extends JFrame implements ActionListener {
 				user.setPassword(passwordField.getText());
 				user.setUsername(usernameField.getText());
 				dao.addUser(user);
-				
+
 				// forward to NavigationController
 				this.setVisible(false);
 				new NavigationController(user, frame);
-			} else {
+			} else {	
 				JOptionPane.showMessageDialog(this, "Register failed. Entered username is already given",
 						"Register failed", 0);
 				usernameField.setText("");

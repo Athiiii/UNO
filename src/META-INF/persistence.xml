@@ -15,7 +15,7 @@
 		<class>bzz.it.uno.model.Moves</class>
 		<class>bzz.it.uno.model.User_Lobby</class>
 		<class>bzz.it.uno.model.User</class>
-
+		<class>bzz.it.uno.model.History</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
 				value="com.mysql.jdbc.Driver" />

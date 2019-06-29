@@ -21,6 +21,9 @@ public class User {
 	private byte[] picture;
 	private boolean computer;
 	private FriendList friendList;
+	private List<History> histories;
+
+	
 
 	private List<User_Lobby> userLobbys;
 
@@ -88,6 +91,20 @@ public class User {
 
 	public void setUserLobby(List<User_Lobby> userLobbys) {
 		this.userLobbys = userLobbys;
+	}
+	/**
+	 * @return the histories
+	 */
+	@OneToMany
+	public List<History> getHistories() {
+		return histories;
+	}
+
+	/**
+	 * @param histories the histories to set
+	 */
+	public void setHistories(List<History> histories) {
+		this.histories = histories;
 	}
 
 }
