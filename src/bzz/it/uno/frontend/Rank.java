@@ -1,7 +1,7 @@
 package bzz.it.uno.frontend;
 
 public class Rank {
-	static final String NOVIZE = "novice.png";
+	static final String NOVIZE = "Novize.png";
 	static final String BRONZE = "Bronze.png";
 	static final String SILBER = "Silber.png";
 	static final String GOLD = "Gold.png";
@@ -23,7 +23,7 @@ public class Rank {
 			return GOLD;
 		else if(points >= 600)
 			return SILBER;
-		else if(points > 300)
+		else if(points >= 300)
 			return BRONZE;
 		else
 			return NOVIZE;

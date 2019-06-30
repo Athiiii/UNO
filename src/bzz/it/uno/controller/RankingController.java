@@ -3,16 +3,18 @@ package bzz.it.uno.controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -128,7 +129,17 @@ public class RankingController extends JFrame {
 		contentPane.add(titleLabel);
 
 		String[] columnNames = { "Liga", "User", "Points" };
-		tableModel = new DefaultTableModel(columnNames, 0);
+		tableModel = new DefaultTableModel(columnNames, 0) {
+			@Override
+			public Class<?> getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return ImageIcon.class;
+				default:
+					return String.class;
+				}
+			}
+		};
 		setRankingList();
 		table = new JTable(tableModel) {
 			public boolean isCellEditable(int row, int column) {
@@ -151,6 +162,7 @@ public class RankingController extends JFrame {
 		table.getColumnModel().getColumn(2).setPreferredWidth(200);
 		table.setBounds(73, 145, 548, 333);
 		table.setShowGrid(false);
+		table.setRowHeight(60);
 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -159,8 +171,12 @@ public class RankingController extends JFrame {
 		table.getTableHeader().setOpaque(false);
 		table.getTableHeader().setForeground(Color.white);
 		table.getTableHeader().setBackground(new Color(0, 0, 0, 0.6f));
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setRowSelectionAllowed(true);
 		table.setFocusable(false);
+		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
+		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
+		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -176,6 +192,7 @@ public class RankingController extends JFrame {
 		});
 
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
 		scrollPane.setBounds(0, 128, 700, 372);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
@@ -185,47 +202,57 @@ public class RankingController extends JFrame {
 	public void setRankingList() {
 		UserLobbyDao userLobbyDao = new UserLobbyDao();
 		List<User_Lobby> allUserLobbies = userLobbyDao.getAllUserLobbies();
-		
+
 		List<RankModel> ranks = new ArrayList<RankModel>();
 		for (int i = 0; i < allUserLobbies.size(); ++i) {
 			User_Lobby lobbyGame = allUserLobbies.get(i);
-			int result = checkIfAlreadyInThere(allUserLobbies.get(i).getUser(), ranks);
+			int result = checkIfUserAlreadyInList(allUserLobbies.get(i).getUser(), ranks);
 			if (result == -1) {
-				RankModel model = new RankModel(lobbyGame.getUser().getUsername(), lobbyGame.getPoints(),
-						Rank.getRankImgByPoints(lobbyGame.getPoints()));
+				RankModel model = new RankModel(lobbyGame.getUser().getUsername(), lobbyGame.getPoints(), null);
 				ranks.add(model);
 			} else {
 				ranks.get(result).setPoints(ranks.get(result).getPoints() + lobbyGame.getPoints());
 			}
 		}
-		for(int i = 0; i < ranks.size(); ++i) {
+		for (int i = 0; i < ranks.size(); ++i) {
+			String iconName = Rank.getRankImgByPoints(ranks.get(i).getPoints());
+			System.out.println(iconName);
+			ImageIcon icon = new ImageIcon(RankingController.class.getResource("/images/" + iconName));
+			float height = 60;
+			float iconW = icon.getIconWidth();
+			float iconH = icon.getIconHeight();
+			float width = ((height / iconH) * iconW);
+			icon = new ImageIcon(icon.getImage().getScaledInstance((int) width, (int) height, Image.SCALE_SMOOTH));
+			ranks.get(i).setLiga(icon);
+		}
+		Collections.sort(ranks, Collections.reverseOrder());
+		for (int i = 0; i < ranks.size(); ++i) {
 			double points = ranks.get(i).getPoints();
 			String userName = ranks.get(i).getName();
-			String liga = ranks.get(i).getLiga();
-			Object[] data = {points, userName, liga};
-			tableModel.addRow(data);	
+			ImageIcon liga = ranks.get(i).getLiga();
+			Object[] data = { liga, userName, points };
+			tableModel.addRow(data);
 		}
 	}
 
-	public int checkIfAlreadyInThere(User user, List<RankModel> ranks) {
+	public int checkIfUserAlreadyInList(User user, List<RankModel> ranks) {
 		for (int i = 0; i < ranks.size(); ++i) {
 			if (ranks.get(i).getName().equals(user.getUsername()))
 				return i;
 		}
 		return -1;
 	}
-	
 
-	public class RankModel {
+	public class RankModel implements Comparable<RankModel> {
 		private String name;
-		private double points;
-		private String liga;
+		private Double points;
+		private ImageIcon liga;
 
 		public RankModel() {
 			super();
 		}
 
-		public RankModel(String name, double points, String liga) {
+		public RankModel(String name, Double points, ImageIcon liga) {
 			super();
 			this.name = name;
 			this.points = points;
@@ -240,20 +267,41 @@ public class RankingController extends JFrame {
 			this.name = name;
 		}
 
-		public double getPoints() {
+		public Double getPoints() {
 			return points;
 		}
 
-		public void setPoints(double points) {
+		public void setPoints(Double points) {
 			this.points = points;
 		}
 
-		public String getLiga() {
+		public ImageIcon getLiga() {
 			return liga;
 		}
 
-		public void setLiga(String liga) {
+		public void setLiga(ImageIcon liga) {
 			this.liga = liga;
 		}
+
+		@Override
+		public int compareTo(RankModel o) {
+			return this.getPoints().compareTo(o.getPoints());
+		}
+	}
+	
+	public class TableHeaderRenderer implements TableCellRenderer {
+
+	    private final TableCellRenderer baseRenderer;
+
+	    public TableHeaderRenderer(TableCellRenderer baseRenderer) {
+	        this.baseRenderer = baseRenderer;
+	    }
+
+	    @Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	        JComponent c = (JComponent)baseRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	        c.setBorder(new EmptyBorder(2,2,2,2));
+	        return c;
+	    }
 	}
 }
