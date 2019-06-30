@@ -2,16 +2,31 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import bzz.it.uno.dao.HistoryDao;
+import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
 public class ProfilController extends JFrame {
@@ -20,6 +35,11 @@ public class ProfilController extends JFrame {
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
+	private JTable table;
+	private JTextField name;
+	private JTextField rank;
+	private JTextField position;
+	private JLabel profileImage;
 
 	public ProfilController(User user, NavigationController navigationFrame) {
 		this.user = user;
@@ -73,14 +93,14 @@ public class ProfilController extends JFrame {
 			}
 		});
 		contentPane.add(closeWindow);
-		
+
 		JButton backBtn = new JButton(" Zur\u00FCck");
 		backBtn.setForeground(Color.WHITE);
 		backBtn.setBounds(0, 0, 127, 50);
 		backBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
 		backBtn.setBackground(Color.DARK_GRAY);
-		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png"))
-				.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png")).getImage()
+				.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
 		backBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -100,5 +120,92 @@ public class ProfilController extends JFrame {
 			}
 		});
 		contentPane.add(backBtn);
+
+		JButton btnDelete = new JButton("L\u00F6schen");
+		btnDelete.setBackground(Color.BLACK);
+		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnDelete.setBounds(557, 446, 120, 23);
+		contentPane.add(btnDelete);
+
+		JButton friends = new JButton("Freunde");
+		friends.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		friends.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		friends.setBackground(Color.BLACK);
+		friends.setBounds(23, 449, 104, 23);
+		contentPane.add(friends);
+
+		JButton btnEdit = new JButton("Bearbeiten");
+		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnEdit.setBackground(Color.BLACK);
+		btnEdit.setBounds(429, 446, 118, 23);
+		contentPane.add(btnEdit);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(23, 234, 654, 189);
+		contentPane.add(scrollPane);
+
+		table = new JTable();
+		table.setModel(
+				new DefaultTableModel(new Object[][] {}, new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
+					Class[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
+
+					public Class getColumnClass(int columnIndex) {
+						return columnTypes[columnIndex];
+					}
+				});
+		scrollPane.setViewportView(table);
+
+		name = new JTextField();
+		name.setBounds(160, 61, 154, 55);
+		contentPane.add(name);
+		name.setColumns(10);
+
+		rank = new JTextField();
+		rank.setBounds(160, 143, 96, 20);
+		contentPane.add(rank);
+		rank.setColumns(10);
+
+		position = new JTextField();
+		position.setBounds(452, 96, 170, 67);
+		contentPane.add(position);
+		position.setColumns(10);
+		if (user.getPicture() != null)
+			profileImage = new JLabel(new ImageIcon(getPictureFromUser(user)));
+		profileImage.setBounds(23, 61, 127, 131);
+		contentPane.add(profileImage);
+
+		setTableData();
+		setProfileData();
+	}
+
+	private BufferedImage getPictureFromUser(User user) {
+		ByteArrayInputStream bis = new ByteArrayInputStream(user.getPicture());
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(bis);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return image;
+	}
+
+	private void setProfileData() {
+		name.setText(user.getUsername());
+	}
+
+	private void setTableData() {
+		HistoryDao historyDao = new HistoryDao();
+		List<History> histories = historyDao.selectByUser(user);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		if (histories.size() > 0) {
+			for (History history : histories) {
+				model.addRow(new Object[] { String.valueOf(history.getDate()), Integer.valueOf(history.getSpielerAnz()),
+						Integer.valueOf(history.getPunkte()), Integer.valueOf(history.getRank()) });
+			}
+		}
 	}
 }

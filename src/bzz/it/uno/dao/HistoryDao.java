@@ -1,0 +1,22 @@
+package bzz.it.uno.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import bzz.it.uno.model.History;
+import bzz.it.uno.model.User;
+
+public class HistoryDao {
+	public List<History> selectByUser(User user) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		entityManager.getTransaction().begin();
+		Query query = entityManager.createQuery("from History where user=:user");
+		query.setParameter("user", user);
+		List<History> histories = query.getResultList();
+		entityManager.getTransaction().commit();
+		HandleConnectionToDB.closeEntityManager();
+		return histories;
+	}
+}
