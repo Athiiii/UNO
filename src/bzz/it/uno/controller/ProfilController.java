@@ -7,17 +7,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import bzz.it.uno.dao.HistoryDao;
 import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
@@ -28,6 +36,10 @@ public class ProfilController extends JFrame {
 	private int xy, xx;
 	private NavigationController navigationFrame;
 	private JTable table;
+	private JTextField name;
+	private JTextField rank;
+	private JTextField position;
+	private JLabel profileImage;
 
 	public ProfilController(User user, NavigationController navigationFrame) {
 		this.user = user;
@@ -109,10 +121,6 @@ public class ProfilController extends JFrame {
 		});
 		contentPane.add(backBtn);
 
-		JPanel profileImage = new JPanel();
-		profileImage.setBounds(23, 61, 127, 128);
-		contentPane.add(profileImage);
-
 		JButton btnDelete = new JButton("L\u00F6schen");
 		btnDelete.setBackground(Color.BLACK);
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -149,17 +157,55 @@ public class ProfilController extends JFrame {
 					}
 				});
 		scrollPane.setViewportView(table);
+
+		name = new JTextField();
+		name.setBounds(160, 61, 154, 55);
+		contentPane.add(name);
+		name.setColumns(10);
+
+		rank = new JTextField();
+		rank.setBounds(160, 143, 96, 20);
+		contentPane.add(rank);
+		rank.setColumns(10);
+
+		position = new JTextField();
+		position.setBounds(452, 96, 170, 67);
+		contentPane.add(position);
+		position.setColumns(10);
+		if (user.getPicture() != null)
+			profileImage = new JLabel(new ImageIcon(getPictureFromUser(user)));
+		profileImage.setBounds(23, 61, 127, 131);
+		contentPane.add(profileImage);
+
 		setTableData();
+		setProfileData();
+	}
+
+	private BufferedImage getPictureFromUser(User user) {
+		ByteArrayInputStream bis = new ByteArrayInputStream(user.getPicture());
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(bis);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return image;
+	}
+
+	private void setProfileData() {
+		name.setText(user.getUsername());
 	}
 
 	private void setTableData() {
-		List<History> histories = user.getHistories();
+		HistoryDao historyDao = new HistoryDao();
+		List<History> histories = historyDao.selectByUser(user);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		for (History history : histories) {
-
-			model.addRow(new Object[] { String.valueOf(history.getDate()), Integer.valueOf(history.getSpielerAnz()),
-					Integer.valueOf(history.getPunkte()), Integer.valueOf(history.getRank()) });
+		if (histories.size() > 0) {
+			for (History history : histories) {
+				model.addRow(new Object[] { String.valueOf(history.getDate()), Integer.valueOf(history.getSpielerAnz()),
+						Integer.valueOf(history.getPunkte()), Integer.valueOf(history.getRank()) });
+			}
 		}
-
 	}
 }
