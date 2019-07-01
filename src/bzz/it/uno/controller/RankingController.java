@@ -24,11 +24,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
+import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
@@ -131,12 +133,14 @@ public class RankingController extends JFrame {
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 
-		String[] columnNames = { "Liga", "User", "Points" };
+		String[] columnNames = { "Platz", "Liga", "User", "Points" };
 		tableModel = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public Class<?> getColumnClass(int column) {
 				switch (column) {
 				case 0:
+					return Integer.class;
+				case 1:
 					return ImageIcon.class;
 				default:
 					return String.class;
@@ -160,9 +164,17 @@ public class RankingController extends JFrame {
 				return c;
 			}
 		};
-		table.getColumnModel().getColumn(0).setPreferredWidth(150);
-		table.getColumnModel().getColumn(1).setPreferredWidth(350);
-		table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table.getColumnModel().getColumn(0).setPreferredWidth(75);
+		table.getColumnModel().getColumn(1).setPreferredWidth(125);
+		table.getColumnModel().getColumn(2).setPreferredWidth(300);
+		table.getColumnModel().getColumn(3).setPreferredWidth(200);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+
 		table.setBounds(73, 145, 548, 333);
 		table.setShowGrid(false);
 		table.setRowHeight(60);
@@ -220,12 +232,10 @@ public class RankingController extends JFrame {
 			}
 		}
 		for (int i = 0; i < ranks.size(); ++i) {
-			String iconName = Rank.getRankImgByPoints(ranks.get(i).getPoints());
-			ImageIcon icon = new ImageIcon(RankingController.class.getResource("/images/" + iconName));
+			ImageIcon icon = new ImageIcon(RankingController.class
+					.getResource("/images/" + Rank.getRankImgByPoints(ranks.get(i).getPoints())));
 			float height = 60;
-			float iconW = icon.getIconWidth();
-			float iconH = icon.getIconHeight();
-			float width = ((height / iconH) * iconW);
+			float width = ((height / icon.getIconHeight()) * icon.getIconWidth());
 			icon = new ImageIcon(icon.getImage().getScaledInstance((int) width, (int) height, Image.SCALE_SMOOTH));
 			ranks.get(i).setLiga(icon);
 		}
@@ -234,7 +244,7 @@ public class RankingController extends JFrame {
 			double points = ranks.get(i).getPoints();
 			String userName = ranks.get(i).getName();
 			ImageIcon liga = ranks.get(i).getLiga();
-			Object[] data = { liga, userName, points };
+			Object[] data = { i + 1, liga, userName, (int) points };
 			tableModel.addRow(data);
 		}
 	}
@@ -245,51 +255,5 @@ public class RankingController extends JFrame {
 				return i;
 		}
 		return -1;
-	}
-
-	public class RankModel implements Comparable<RankModel> {
-		private String name;
-		private Double points;
-		private ImageIcon liga;
-
-		public RankModel() {
-			super();
-		}
-
-		public RankModel(String name, Double points, ImageIcon liga) {
-			super();
-			this.name = name;
-			this.points = points;
-			this.liga = liga;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public Double getPoints() {
-			return points;
-		}
-
-		public void setPoints(Double points) {
-			this.points = points;
-		}
-
-		public ImageIcon getLiga() {
-			return liga;
-		}
-
-		public void setLiga(ImageIcon liga) {
-			this.liga = liga;
-		}
-
-		@Override
-		public int compareTo(RankModel o) {
-			return this.getPoints().compareTo(o.getPoints());
-		}
 	}
 }

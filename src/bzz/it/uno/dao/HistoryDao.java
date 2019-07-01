@@ -12,8 +12,8 @@ public class HistoryDao {
 	public List<History> selectByUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createQuery("from History where user=:user");
-		query.setParameter("user", user);
+		Query query = entityManager.createQuery("from History where user_id=:user");
+		query.setParameter("user", user.getId());
 		List<History> histories = query.getResultList();
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();

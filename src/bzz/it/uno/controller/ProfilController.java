@@ -3,6 +3,7 @@ package bzz.it.uno.controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -30,9 +33,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import bzz.it.uno.dao.HistoryDao;
+import bzz.it.uno.dao.UserLobbyDao;
+import bzz.it.uno.frontend.Rank;
+import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
+import bzz.it.uno.model.User_Lobby;
 
 public class ProfilController extends JFrame {
 
@@ -41,9 +48,9 @@ public class ProfilController extends JFrame {
 	private int xy, xx;
 	private NavigationController navigationFrame;
 	private JTable table;
-	private JTextField name;
-	private JTextField rank;
-	private JTextField position;
+	private JLabel name;
+	private JLabel rank;
+	private JLabel liga;
 	private JLabel profileImage;
 	private DefaultTableModel tableModel;
 	private int selectedColumn, selectedRow = -1;
@@ -152,10 +159,10 @@ public class ProfilController extends JFrame {
 
 		Label titleLabel = new Label("Profil");
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(258, 38, 240, 69);
+		titleLabel.setBounds(281, 41, 136, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
 		scrollPane.setBounds(0, 234, 700, 189);
@@ -165,7 +172,8 @@ public class ProfilController extends JFrame {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
 
-		tableModel = new DefaultTableModel(new Object[][] {}, new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
+		tableModel = new DefaultTableModel(new Object[][] {},
+				new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
 			Class[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
 
 			public Class getColumnClass(int columnIndex) {
@@ -201,21 +209,21 @@ public class ProfilController extends JFrame {
 		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
 		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
-		
+
 		table.getColumnModel().getColumn(0).setPreferredWidth(250);
 		table.getColumnModel().getColumn(1).setPreferredWidth(150);
 		table.getColumnModel().getColumn(2).setPreferredWidth(150);
 		table.getColumnModel().getColumn(3).setPreferredWidth(150);
 
 		table.setRowHeight(50);
-		
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		
+
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -230,20 +238,28 @@ public class ProfilController extends JFrame {
 		});
 		scrollPane.setViewportView(table);
 
-		name = new JTextField();
+		name = new JLabel();
 		name.setBounds(160, 112, 154, 55);
+		name.setForeground(Color.WHITE);
+		name.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		contentPane.add(name);
-		name.setColumns(10);
 
-		rank = new JTextField();
+		rank = new JLabel("Platz:" + Integer.toString(getRankOfUser()));
 		rank.setBounds(160, 194, 96, 20);
+		rank.setForeground(Color.WHITE);
+		rank.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		contentPane.add(rank);
-		rank.setColumns(10);
 
-		position = new JTextField();
-		position.setBounds(452, 147, 170, 67);
-		contentPane.add(position);
-		position.setColumns(10);
+		liga = new JLabel("");
+		ImageIcon icon = new ImageIcon(
+				ProfilController.class.getResource("/images/" + Rank.getRankImgByPoints(getPointsByUser())));
+		float height = 140;
+		float width = ((height / icon.getIconHeight()) * icon.getIconWidth());
+		icon = new ImageIcon(icon.getImage().getScaledInstance((int) width, (int) height, Image.SCALE_SMOOTH));
+		liga.setIcon(icon);
+		liga.setBounds(480, 80, 150, 150);
+		contentPane.add(liga);
+
 		if (user.getPicture() != null) {
 			profileImage = new JLabel(new ImageIcon(getPictureFromUser(user)));
 			profileImage.setBounds(23, 61, 127, 131);
@@ -254,13 +270,56 @@ public class ProfilController extends JFrame {
 		setProfileData();
 	}
 
+	private double getPointsByUser() {
+		List<User_Lobby> userGames = new UserLobbyDao().selectByUser(user.getId());
+		double points = 0;
+		for (int i = 0; i < userGames.size(); ++i) {
+			points += userGames.get(i).getPoints();
+		}
+		return points;
+	}
+
+	private int getRankOfUser() {
+		int rank = -1;
+		List<User_Lobby> userGames = new UserLobbyDao().getAllUserLobbies();
+		List<RankModel> ranks = new ArrayList<RankModel>();
+
+		for (int i = 0; i < userGames.size(); ++i) {
+			User_Lobby lobbyGame = userGames.get(i);
+			int result = checkIfUserAlreadyInList(lobbyGame.getUser(), ranks);
+			if (result == -1) {
+				RankModel model = new RankModel();
+				model.setName(lobbyGame.getUser().getUsername());
+				model.setPoints(lobbyGame.getPoints());
+				ranks.add(model);
+			} else {
+				ranks.get(result).setPoints(ranks.get(result).getPoints() + lobbyGame.getPoints());
+			}
+		}
+		Collections.sort(ranks);
+
+		for (int i = 0; i < ranks.size(); ++i) {
+			if (ranks.get(i).getName().equals(user.getUsername()))
+				;
+			rank = i + 1;
+		}
+		return rank;
+	}
+
+	public int checkIfUserAlreadyInList(User user, List<RankModel> ranks) {
+		for (int i = 0; i < ranks.size(); ++i) {
+			if (ranks.get(i).getName().equals(user.getUsername()))
+				return i;
+		}
+		return -1;
+	}
+
 	private BufferedImage getPictureFromUser(User user) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(user.getPicture());
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(bis);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return image;

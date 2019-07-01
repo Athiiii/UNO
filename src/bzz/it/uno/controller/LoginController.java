@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
@@ -46,10 +49,18 @@ public class LoginController extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					HandleConnectionToDB.openDbFactory();
 					LoginController frame = new LoginController();
 					frame.setVisible(true);
+					Runtime.getRuntime().addShutdownHook(new Thread() {
+						@Override
+						public void run() {
+							HandleConnectionToDB.closeDbFactory();
+						}
+					});
 				} catch (Exception e) {
 					e.printStackTrace();
+					HandleConnectionToDB.closeDbFactory();
 				}
 			}
 		});
@@ -149,7 +160,7 @@ public class LoginController extends JFrame implements ActionListener {
 		contentPane.add(missingAccount);
 
 		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(650, 0, 50,50);
+		closeWindow.setBounds(650, 0, 50, 50);
 		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
 		closeWindow.setBackground(Color.WHITE);
 		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
@@ -172,7 +183,6 @@ public class LoginController extends JFrame implements ActionListener {
 			}
 		});
 		contentPane.add(closeWindow);
-
 	}
 
 	/**
@@ -191,9 +201,8 @@ public class LoginController extends JFrame implements ActionListener {
 			passwordField.setText("");
 			usernameInput.setText("");
 		}
-		/// ///
 	}
-	
+
 	public void SetUserName(String username) {
 		this.usernameInput.setText(username);
 		this.passwordField.setText("");
