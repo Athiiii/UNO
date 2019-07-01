@@ -29,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
+import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
@@ -220,7 +221,6 @@ public class RankingController extends JFrame {
 		}
 		for (int i = 0; i < ranks.size(); ++i) {
 			String iconName = Rank.getRankImgByPoints(ranks.get(i).getPoints());
-			System.out.println(iconName);
 			ImageIcon icon = new ImageIcon(RankingController.class.getResource("/images/" + iconName));
 			float height = 60;
 			float iconW = icon.getIconWidth();
@@ -291,21 +291,5 @@ public class RankingController extends JFrame {
 		public int compareTo(RankModel o) {
 			return this.getPoints().compareTo(o.getPoints());
 		}
-	}
-	
-	public class TableHeaderRenderer implements TableCellRenderer {
-
-	    private final TableCellRenderer baseRenderer;
-
-	    public TableHeaderRenderer(TableCellRenderer baseRenderer) {
-	        this.baseRenderer = baseRenderer;
-	    }
-
-	    @Override
-	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-	        JComponent c = (JComponent)baseRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	        c.setBorder(new EmptyBorder(2,2,2,2));
-	        return c;
-	    }
 	}
 }
