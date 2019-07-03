@@ -243,7 +243,7 @@ public class ProfilController extends JFrame {
 		name.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		contentPane.add(name);
 
-		rank = new JLabel("Platz:" + Integer.toString(getRankOfUser()));
+		rank = new JLabel("Platz: " + Integer.toString(getRankOfUser()));
 		rank.setBounds(160, 194, 96, 20);
 		rank.setForeground(Color.WHITE);
 		rank.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
@@ -295,12 +295,11 @@ public class ProfilController extends JFrame {
 				ranks.get(result).setPoints(ranks.get(result).getPoints() + lobbyGame.getPoints());
 			}
 		}
-		Collections.sort(ranks);
+		Collections.sort(ranks, Collections.reverseOrder());
 
 		for (int i = 0; i < ranks.size(); ++i) {
 			if (ranks.get(i).getName().equals(user.getUsername()))
-				;
-			rank = i + 1;
+				rank = i + 1;
 		}
 		return rank;
 	}
