@@ -336,9 +336,9 @@ public class ProfilController extends JFrame {
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {
 				int countedPlayers = countPlayer(userLobby);
-				model.addRow(new Object[] { String.valueOf(userLobby.getLobby().getDate()),
-						Integer.valueOf(userLobby.getPoints()), Integer.valueOf(countedPlayers),
-						Integer.valueOf(userLobby.getRank()) });
+				model.addRow(
+						new Object[] { String.valueOf(userLobby.getLobby().getDate()), Integer.valueOf(countedPlayers),
+								Integer.valueOf(userLobby.getPoints()), Integer.valueOf(userLobby.getRank()) });
 			}
 		}
 	}
@@ -348,7 +348,7 @@ public class ProfilController extends JFrame {
 		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
 		for (User_Lobby user_Lobby : allUserLobbies) {
 			if (user_Lobby.getLobby().getId() == userLobby.getLobby().getId()) {
-				counter *= 1;
+				counter += 1;
 			}
 		}
 		return counter;
