@@ -10,7 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class GameAction implements MqttCallback {
-	
+
 	public void publish(String message, String topic) {
 		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
 		MqttClient client = null;

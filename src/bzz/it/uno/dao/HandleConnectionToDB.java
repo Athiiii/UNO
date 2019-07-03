@@ -17,11 +17,11 @@ public class HandleConnectionToDB {
 	public static void closeEntityManager() {
 		entityManager.close();
 	}
-	
+
 	public static void openDbFactory() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("uno.jpa");
 	}
-	
+
 	public static void closeDbFactory() {
 		entityManagerFactory.close();
 	}

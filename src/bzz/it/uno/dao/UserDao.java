@@ -9,16 +9,16 @@ import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
 public class UserDao {
-	public List<User> getAllUsers(){
+	public List<User> getAllUsers() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
 		List<User> users = entityManager.createQuery("from User").getResultList();
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 		return users;
-		
+
 	}
-	
+
 	public void addUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -26,7 +26,7 @@ public class UserDao {
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 	}
-	
+
 	public User selectByUsername(String username) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -34,7 +34,7 @@ public class UserDao {
 		query.setParameter("user", username);
 		List<User> users = query.getResultList();
 		User user = null;
-		if(users.size() > 0) {
+		if (users.size() > 0) {
 			user = users.get(0);
 		}
 		entityManager.getTransaction().commit();

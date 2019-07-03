@@ -19,7 +19,7 @@ public class UserLobbyDao {
 		HandleConnectionToDB.closeEntityManager();
 		return userLobbys;
 	}
-	
+
 	public List<User_Lobby> getAllUserLobbies() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

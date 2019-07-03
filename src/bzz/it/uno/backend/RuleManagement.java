@@ -14,15 +14,15 @@ public class RuleManagement {
 
 	public boolean checkRules(CardDeck playingDeck, Card settingCard, GameUser user) {
 		boolean result = true;
-		
-		//Sayed UNO?
-		
+
+		// Sayed UNO?
+
 		return result;
 	}
 
 	/**
-	 * Is checking the numbers of the cards
-	 * The cardType will be checked if it is common
+	 * Is checking the numbers of the cards The cardType will be checked if it is
+	 * common
 	 * 
 	 * @param currentCard
 	 * @param comingCard
@@ -35,10 +35,10 @@ public class RuleManagement {
 			result = true;
 		return result;
 	}
-	
+
 	/**
-	 * Is checking the color of the cards
-	 * The cardType will be checked if it is common
+	 * Is checking the color of the cards The cardType will be checked if it is
+	 * common
 	 * 
 	 * @param currentCard
 	 * @param comingCard
@@ -51,7 +51,5 @@ public class RuleManagement {
 			result = true;
 		return result;
 	}
-	
-	
 
 }

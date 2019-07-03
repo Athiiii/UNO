@@ -139,13 +139,13 @@ public class SpielController extends JFrame implements ActionListener {
 		numberPlayers.setFont(new Font("Dialog", Font.PLAIN, 27));
 		numberPlayers.setBounds(233, 253, 137, 39);
 		contentPane.add(numberPlayers);
-		
+
 		Label maxPlayer = new Label("Max Players:");
 		maxPlayer.setForeground(Color.WHITE);
 		maxPlayer.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		maxPlayer.setBounds(90, 253, 137, 39);
 		contentPane.add(maxPlayer);
-		
+
 		JButton startBtn = new JButton("Start");
 		startBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		startBtn.setBackground(new Color(0, 153, 204));
@@ -158,7 +158,7 @@ public class SpielController extends JFrame implements ActionListener {
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(new Color(92,184,92));
+				startBtn.setBackground(new Color(92, 184, 92));
 			}
 		});
 		contentPane.add(startBtn);
@@ -167,6 +167,6 @@ public class SpielController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

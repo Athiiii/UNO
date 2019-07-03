@@ -76,15 +76,14 @@ public class LobbyController extends JFrame {
 			}
 		});
 		contentPane.add(closeWindow);
-		
 
 		JButton backBtn = new JButton(" Zur\u00FCck");
 		backBtn.setForeground(Color.WHITE);
 		backBtn.setBounds(0, 0, 127, 50);
 		backBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
 		backBtn.setBackground(Color.DARK_GRAY);
-		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png"))
-				.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png")).getImage()
+				.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
 		backBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

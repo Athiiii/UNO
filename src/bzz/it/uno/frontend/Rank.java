@@ -9,21 +9,21 @@ public class Rank {
 	static final String DIAMANT = "Diamant.png";
 	static final String MASTER = "Master.png";
 	static final String CHALLANGER = "Challanger.png";
-	
+
 	public static String getRankImgByPoints(double points) {
-		if(points >= 3000)
+		if (points >= 3000)
 			return CHALLANGER;
-		else if(points >= 2500)
+		else if (points >= 2500)
 			return MASTER;
-		else if(points >= 2000)
+		else if (points >= 2000)
 			return DIAMANT;
-		else if(points >= 1500)
+		else if (points >= 1500)
 			return PLATIN;
-		else if(points >= 1000)
+		else if (points >= 1000)
 			return GOLD;
-		else if(points >= 600)
+		else if (points >= 600)
 			return SILBER;
-		else if(points >= 300)
+		else if (points >= 300)
 			return BRONZE;
 		else
 			return NOVIZE;
