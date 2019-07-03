@@ -217,8 +217,7 @@ public class RankingController extends JFrame {
 	}
 
 	public void setRankingList() {
-		UserLobbyDao userLobbyDao = new UserLobbyDao();
-		List<User_Lobby> allUserLobbies = userLobbyDao.getAllUserLobbies();
+		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
 
 		List<RankModel> ranks = new ArrayList<RankModel>();
 		for (int i = 0; i < allUserLobbies.size(); ++i) {
