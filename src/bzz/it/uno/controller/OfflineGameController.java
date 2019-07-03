@@ -1,5 +1,6 @@
 package bzz.it.uno.controller;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -27,7 +28,7 @@ public class OfflineGameController extends JFrame {
 		this.user = user;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 385);
+		setBounds(100, 100, 700, 500);
 		setVisible(true);
 		contentPane = new JPanel();
 
@@ -108,7 +109,7 @@ public class OfflineGameController extends JFrame {
 
 		JLabel titleLabel = new JLabel(lobbyName);
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(160, 36, 438, 69);
+		titleLabel.setBounds(10, 54, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 		

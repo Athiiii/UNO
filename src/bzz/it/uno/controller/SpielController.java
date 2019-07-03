@@ -185,10 +185,10 @@ public class SpielController extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
-			if (onlineMode.isSelected() && maxPlayers >= 30) {
+			if (onlineMode.isSelected() && maxPlayers > 30) {
 				numberPlayers.setText("30");
 				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);
-			} else if (!onlineMode.isSelected() && maxPlayers >= 5) {
+			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
 				numberPlayers.setText("5");
 				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);
 				if (lobbyName.getText().equals("")) {
