@@ -29,7 +29,7 @@ import bzz.it.uno.model.User;
  * @author Athavan Theivakulasingham
  *
  */
-public class FreundesListenController extends JFrame {
+public class FriendsController extends JFrame {
 
 	private User user;
 	private JPanel contentPane;
@@ -39,7 +39,7 @@ public class FreundesListenController extends JFrame {
 	private JTable table;
 	private int selectedColumn, selectedRow = -1;
 	
-	public FreundesListenController(User user, NavigationController navigationFrame) {
+	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +52,7 @@ public class FreundesListenController extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				FreundesListenController.this.setLocation(x - xx, y - xy);
+				FriendsController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {

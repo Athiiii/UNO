@@ -174,7 +174,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new FreundesListenController(user, NavigationController.this);
+				new FriendsController(user, NavigationController.this);
 			}
 		});
 		btnFreunde.setBorderPainted(false);
