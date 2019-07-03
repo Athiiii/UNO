@@ -19,8 +19,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.LobbyDao;
+import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
+import bzz.it.uno.model.User_Lobby;
+
 import javax.swing.JCheckBox;
 
 /**
@@ -65,9 +68,9 @@ public class SpielController extends JFrame implements ActionListener {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-		
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
+				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
@@ -190,18 +193,30 @@ public class SpielController extends JFrame implements ActionListener {
 				}
 			} else {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
-				Lobby lobby = new Lobby(true, lobbyName.getText());
-			
+
 				if (lobbyExist == null) {
 					if (onlineMode.isEnabled()) {
 						// ONLINE MODE
+
+						LobbyDao lobbyDao = LobbyDao.getInstance();
+						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
+						Lobby lobby = new Lobby(true, lobbyName.getText());
+						lobbyDao.addLobby(lobby);
+						lobby = lobbyDao.selectLobbyByName(lobby.getName());
+						User_Lobby userLobby = new User_Lobby();
+						userLobby.setLobby(lobby);
+						userLobby.setUser(user);
+						userLobby.setPoints(0);
+
+						lobbyUser.addUserLobby(userLobby);
+						
 						setVisible(false);
 						new LobbyWaitController(user, navigationFrame, lobby);
 					} else {
 						// OFFLINE MODE
-						new OfflineGameController(user, navigationFrame, lobby);
+						new OfflineGameController(user, navigationFrame);
 					}
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);
 				}
 			}

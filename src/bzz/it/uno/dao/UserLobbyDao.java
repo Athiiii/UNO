@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 public class UserLobbyDao {
@@ -41,4 +42,13 @@ public class UserLobbyDao {
 		HandleConnectionToDB.closeEntityManager();
 		return userLobbies;
 	}
+	
+	public void addUserLobby(User_Lobby userLobby) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(userLobby);
+		entityManager.getTransaction().commit();
+		HandleConnectionToDB.closeEntityManager();
+	}
+
 }
