@@ -1,4 +1,3 @@
-
 package bzz.it.uno.controller;
 
 import java.awt.Color;
@@ -17,16 +16,16 @@ import javax.swing.border.EmptyBorder;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 
-public class LobbyWaitController extends JFrame {
+public class OfflineGameController extends JFrame {
 	private User user;
 	private int xy, xx;
 	private NavigationController navigationFrame;private JPanel contentPane;
 	private Lobby lobby;
 	
-	public LobbyWaitController(User user, NavigationController navigation, Lobby lobby) {
+	public OfflineGameController(User user, NavigationController navigation, Lobby lobby) {
 		this.navigationFrame = navigationFrame;
-		this.lobby = lobby;
 		this.user = user;
+		this.lobby = lobby;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 385);
@@ -38,7 +37,7 @@ public class LobbyWaitController extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				LobbyWaitController.this.setLocation(x - xx, y - xy);
+				OfflineGameController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -105,10 +104,7 @@ public class LobbyWaitController extends JFrame {
 		});
 		contentPane.add(backBtn);
 
-		JLabel titleLabel = new JLabel("Warterraum");
-		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(160, 36, 438, 69);
-		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
-		contentPane.add(titleLabel);
+		
 	}
+	
 }

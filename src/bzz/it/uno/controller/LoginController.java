@@ -97,6 +97,9 @@ public class LoginController extends JFrame implements ActionListener {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
+				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		loginButton.setBackground(new Color(0, 153, 204));

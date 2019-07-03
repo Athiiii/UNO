@@ -17,6 +17,11 @@ public class Lobby {
 	private List<User_Lobby> userLobby;
 	private boolean status;
 	private String name;
+	
+	public Lobby(boolean status, String name) {
+		this.status = status;
+		this.name = name;
+	}
 
 	@Column(name = "name")
 	public String getName() {
