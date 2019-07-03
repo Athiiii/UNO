@@ -8,27 +8,34 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.text.NumberFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
 
+import bzz.it.uno.dao.LobbyDao;
+import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
+import javax.swing.JCheckBox;
 
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class SpielController extends JFrame implements ActionListener {
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
 	private JTextField lobbyName;
-	private JFormattedTextField numberPlayers;
+	private JTextField numberPlayers;
+	private JCheckBox onlineMode;
 
 	public SpielController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
@@ -128,19 +135,12 @@ public class SpielController extends JFrame implements ActionListener {
 		usernameLabel.setForeground(Color.WHITE);
 		contentPane.add(usernameLabel);
 
-		NumberFormat format = NumberFormat.getInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0);
-		formatter.setMaximum(30);
-		formatter.setAllowsInvalid(false);
-		formatter.setCommitsOnValidEdit(true);
-		numberPlayers = new JFormattedTextField(formatter);
+		numberPlayers = new JTextField();
 		numberPlayers.setFont(new Font("Dialog", Font.PLAIN, 27));
 		numberPlayers.setBounds(233, 253, 137, 39);
 		contentPane.add(numberPlayers);
 
-		Label maxPlayer = new Label("Max Players:");
+		Label maxPlayer = new Label("Max Spieler:");
 		maxPlayer.setForeground(Color.WHITE);
 		maxPlayer.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		maxPlayer.setBounds(90, 253, 137, 39);
@@ -162,11 +162,50 @@ public class SpielController extends JFrame implements ActionListener {
 			}
 		});
 		contentPane.add(startBtn);
+
+		onlineMode = new JCheckBox("online");
+		onlineMode.setBackground(Color.DARK_GRAY);
+		onlineMode.setBounds(90, 312, 137, 39);
+		onlineMode.setForeground(Color.WHITE);
+		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		contentPane.add(onlineMode);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		try {
+			int maxPlayers = Integer.parseInt(numberPlayers.getText());
+			if (onlineMode.isEnabled() && maxPlayers >= 30) {
+				numberPlayers.setText("30");
+				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);
+			} else if (!onlineMode.isEnabled() && maxPlayers >= 5) {
+				numberPlayers.setText("5");
+				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);
+				if (lobbyName.getText().equals("")) {
+					JOptionPane.showMessageDialog(this, "Lobbyname kann darf nicht leer sein", "Lobbyname", 1);
+				}
+			} else {
+				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
+				Lobby lobby = new Lobby(true, lobbyName.getText());
+			
+				if (lobbyExist == null) {
+					if (onlineMode.isEnabled()) {
+						// ONLINE MODE
+						setVisible(false);
+						new LobbyWaitController(user, navigationFrame, lobby);
+					} else {
+						// OFFLINE MODE
+						new OfflineGameController(user, navigationFrame, lobby);
+					}
+				}else {
+					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);
+				}
+			}
+		} catch (Exception ex) {
+			numberPlayers.setText("");
+			JOptionPane.showMessageDialog(this, "Ungültige Zahl bei Max. Spieler", "Ungültige Max. Spieler", 0);
+		}
 
 	}
 }
