@@ -1,10 +1,8 @@
+
 package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Label;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -13,29 +11,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.model.User;
-import javax.swing.JCheckBox;
 
-/**
- * 
- * @author Athavan Theivakulasingham
- *
- */
-public class SpielController extends JFrame implements ActionListener {
+public class LobbyWaitController extends JFrame {
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
-	private JTextField lobbyName;
-	private JTextField numberPlayers;
-	private JCheckBox onlineMode;
-
-	public SpielController(User user, NavigationController navigationFrame) {
+	
+	public LobbyWaitController(User user, NavigationController navigation) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
 		setUndecorated(true);
@@ -49,7 +36,7 @@ public class SpielController extends JFrame implements ActionListener {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				SpielController.this.setLocation(x - xx, y - xy);
+				LobbyWaitController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -121,79 +108,5 @@ public class SpielController extends JFrame implements ActionListener {
 		titleLabel.setBounds(160, 36, 438, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-
-		lobbyName = new JTextField();
-		lobbyName.setBounds(233, 180, 273, 39);
-		lobbyName.setFont(new Font("Dialog", Font.PLAIN, 27));
-		contentPane.add(lobbyName);
-
-		Label usernameLabel = new Label("Lobbyname: ");
-		usernameLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		usernameLabel.setBounds(90, 180, 137, 39);
-		usernameLabel.setForeground(Color.WHITE);
-		contentPane.add(usernameLabel);
-
-		numberPlayers = new JTextField();
-		numberPlayers.setFont(new Font("Dialog", Font.PLAIN, 27));
-		numberPlayers.setBounds(233, 253, 137, 39);
-		contentPane.add(numberPlayers);
-
-		Label maxPlayer = new Label("Max Spieler:");
-		maxPlayer.setForeground(Color.WHITE);
-		maxPlayer.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		maxPlayer.setBounds(90, 253, 137, 39);
-		contentPane.add(maxPlayer);
-
-		JButton startBtn = new JButton("Start");
-		startBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		startBtn.setBackground(new Color(0, 153, 204));
-		startBtn.addActionListener(this);
-		startBtn.setBounds(507, 320, 142, 39);
-		startBtn.setBorderPainted(false);
-		startBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(startBtn.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(new Color(92, 184, 92));
-			}
-		});
-		contentPane.add(startBtn);
-		
-		onlineMode = new JCheckBox("online");
-		onlineMode.setBackground(Color.DARK_GRAY);
-		onlineMode.setBounds(90, 312, 137, 39);
-		onlineMode.setForeground(Color.WHITE);
-		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		contentPane.add(onlineMode);
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		try {
-			int maxPlayers = Integer.parseInt(numberPlayers.getText());
-			if(onlineMode.isEnabled() && maxPlayers >= 30) {
-				numberPlayers.setText("30");
-				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);				
-			} else if(!onlineMode.isEnabled() && maxPlayers >= 5) {
-				numberPlayers.setText("5");
-				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);	
-			} else {
-				
-				if(onlineMode.isEnabled()) {
-					// ONLINE MODE
-					setVisible(false);
-					new LobbyController(user, navigationFrame);
-				}else {
-					//OFFLINE MODE
-				}
-			}
-		}catch(Exception ex) {
-			numberPlayers.setText("");
-			JOptionPane.showMessageDialog(this, "Ungültige Zahl bei Max. Spieler", "Ungültige Max. Spieler", 0);
-		}
-
 	}
 }
