@@ -20,12 +20,10 @@ public class OfflineGameController extends JFrame {
 	private User user;
 	private int xy, xx;
 	private NavigationController navigationFrame;private JPanel contentPane;
-	private Lobby lobby;
 	
-	public OfflineGameController(User user, NavigationController navigation, Lobby lobby) {
+	public OfflineGameController(User user, NavigationController navigationlobby) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
-		this.lobby = lobby;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 385);
