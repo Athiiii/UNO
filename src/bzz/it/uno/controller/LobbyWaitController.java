@@ -20,10 +20,11 @@ import bzz.it.uno.model.User;
 public class LobbyWaitController extends JFrame {
 	private User user;
 	private int xy, xx;
-	private NavigationController navigationFrame;private JPanel contentPane;
+	private NavigationController navigationFrame;
+	private JPanel contentPane;
 	private Lobby lobby;
 	
-	public LobbyWaitController(User user, NavigationController navigation, Lobby lobby) {
+	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby) {
 		this.navigationFrame = navigationFrame;
 		this.lobby = lobby;
 		this.user = user;

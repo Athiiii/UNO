@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -200,7 +202,7 @@ public class SpielController extends JFrame implements ActionListener {
 
 						LobbyDao lobbyDao = LobbyDao.getInstance();
 						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
-						Lobby lobby = new Lobby(true, lobbyName.getText());
+						Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
 						lobbyDao.addLobby(lobby);
 						lobby = lobbyDao.selectLobbyByName(lobby.getName());
 						User_Lobby userLobby = new User_Lobby();

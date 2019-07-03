@@ -24,9 +24,10 @@ public class Lobby {
 		
 	}
 	
-	public Lobby(boolean status, String name) {
+	public Lobby(boolean status, String name, LocalDate date) {
 		this.status = status;
 		this.name = name;
+		this.date = date;
 	}
 
 	@Id
