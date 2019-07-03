@@ -1,6 +1,5 @@
 package bzz.it.uno.controller;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -178,7 +177,7 @@ public class RegisterController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (repeatPasswordField.getText().equals(passwordField.getText())) {
-			UserDao dao = new UserDao();
+			UserDao dao = UserDao.getInstance();
 			User user = dao.selectByUsername(usernameField.getText());
 			if (user == null) {
 				user = new User();

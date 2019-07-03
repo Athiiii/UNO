@@ -5,9 +5,22 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import bzz.it.uno.model.Lobby;
-import bzz.it.uno.model.User;
 
 public class LobbyDao {
+	
+	private static LobbyDao lobbyDao;
+	
+	private LobbyDao() {
+		
+	}
+	
+	public static LobbyDao getInstance() {
+		if (lobbyDao == null) {
+			lobbyDao = new LobbyDao();
+		}
+		return lobbyDao;
+	}
+	
 	public List<Lobby> getAllLobbys() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

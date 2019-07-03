@@ -5,10 +5,23 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 public class UserLobbyDao {
+	private static UserLobbyDao userLobbyDao;
+
+	private UserLobbyDao() {
+
+	}
+
+	public static UserLobbyDao getInstance() {
+		if (userLobbyDao == null) {
+			userLobbyDao = new UserLobbyDao();
+		}
+		return userLobbyDao;
+	}
+
+	
 	public List<User_Lobby> selectByUser(int userId) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
