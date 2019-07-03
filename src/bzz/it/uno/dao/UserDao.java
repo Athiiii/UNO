@@ -25,7 +25,12 @@ public class UserDao {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
 		List<User> users = entityManager.createQuery("from User").getResultList();
+		if(users.size() > 0) {
+			users.get(0).getFriendList().size();
+			users.get(0).getUserLobby().size();
+		}
 		entityManager.getTransaction().commit();
+		
 		HandleConnectionToDB.closeEntityManager();
 		return users;
 
@@ -48,6 +53,8 @@ public class UserDao {
 		User user = null;
 		if (users.size() > 0) {
 			user = users.get(0);
+			user.getFriendList().size();
+			user.getUserLobby().size();
 		}
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();

@@ -4,14 +4,14 @@ import javax.swing.ImageIcon;
 
 public class RankModel implements Comparable<RankModel> {
 	private String name;
-	private Double points;
+	private Integer points;
 	private ImageIcon liga;
 
 	public RankModel() {
 		super();
 	}
 
-	public RankModel(String name, Double points, ImageIcon liga) {
+	public RankModel(String name, Integer points, ImageIcon liga) {
 		super();
 		this.name = name;
 		this.points = points;
@@ -26,11 +26,11 @@ public class RankModel implements Comparable<RankModel> {
 		this.name = name;
 	}
 
-	public Double getPoints() {
+	public Integer getPoints() {
 		return points;
 	}
 
-	public void setPoints(Double points) {
+	public void setPoints(Integer points) {
 		this.points = points;
 	}
 

@@ -23,8 +23,6 @@ public class User {
 	private byte[] picture;
 	private boolean computer;
 	private List<User> friends;
-	private List<History> histories;
-
 	private List<User_Lobby> userLobbys;
 
 	@Id
@@ -92,20 +90,4 @@ public class User {
 	public void setUserLobby(List<User_Lobby> userLobbys) {
 		this.userLobbys = userLobbys;
 	}
-
-	/**
-	 * @return the histories
-	 */
-	@OneToMany(mappedBy = "user", orphanRemoval = true)
-	public List<History> getHistories() {
-		return histories;
-	}
-
-	/**
-	 * @param histories the histories to set
-	 */
-	public void setHistories(List<History> histories) {
-		this.histories = histories;
-	}
-
 }
