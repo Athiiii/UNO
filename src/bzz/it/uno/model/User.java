@@ -84,7 +84,7 @@ public class User {
 		this.friends = friends;
 	}
 
-	@OneToMany
+	@OneToMany(mappedBy = "user", orphanRemoval = true)
 	public List<User_Lobby> getUserLobby() {
 		return userLobbys;
 	}
@@ -96,7 +96,7 @@ public class User {
 	/**
 	 * @return the histories
 	 */
-	@OneToMany
+	@OneToMany(mappedBy = "user", orphanRemoval = true)
 	public List<History> getHistories() {
 		return histories;
 	}

@@ -52,7 +52,7 @@ public class Lobby {
 		this.status = status;
 	}
 
-	@OneToMany(mappedBy = "userLobby", orphanRemoval = true)
+	@OneToMany(mappedBy = "lobby", orphanRemoval = true)
 	public List<User_Lobby> getUserLobby() {
 		return userLobby;
 	}
