@@ -342,6 +342,9 @@ public class ProfilController extends JFrame {
 	private void setTableData() {
 		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(showedUser.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		User selectByUsername = UserDao.getInstance().selectByUsername("alex");
+		showedUser.getFriendList().add(selectByUsername);
+		UserDao.getInstance().updateUser(showedUser);
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {
 				int countedPlayers = countPlayer(userLobby);

@@ -43,6 +43,15 @@ public class UserDao {
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 	}
+	
+	public void updateUser(User user) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		entityManager.getTransaction().begin();
+		user = entityManager.merge(user);
+		entityManager.persist(user);
+		entityManager.getTransaction().commit();
+		HandleConnectionToDB.closeEntityManager();
+	}
 
 	public User selectByUsername(String username) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();

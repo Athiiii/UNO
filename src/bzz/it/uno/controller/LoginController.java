@@ -180,6 +180,7 @@ public class LoginController extends JFrame implements ActionListener {
 			}
 		});
 		contentPane.add(closeWindow);
+		
 	}
 
 	/**
