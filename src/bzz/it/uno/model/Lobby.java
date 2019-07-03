@@ -1,5 +1,6 @@
 package bzz.it.uno.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,6 +18,11 @@ public class Lobby {
 	private List<User_Lobby> userLobby;
 	private boolean status;
 	private String name;
+	private LocalDate date;
+
+	public Lobby() {
+		
+	}
 	
 	public Lobby(boolean status, String name) {
 		this.status = status;
@@ -59,5 +65,14 @@ public class Lobby {
 
 	public void setUserLobby(List<User_Lobby> userLobby) {
 		this.userLobby = userLobby;
+	}
+	
+	@Column(name="date")
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 }
