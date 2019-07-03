@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.JTableButtonMouseListener;
 import bzz.it.uno.frontend.JTableButtonRenderer;
 import bzz.it.uno.frontend.TableHeaderRenderer;
@@ -228,7 +229,20 @@ public class FriendsController extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						removeFriend(removeFriendBtn);
+						
+					}
 
+					private void removeFriend(JButton removeFriendBtn) {
+						if(user.getFriendList()!= null) {
+							for (User user : user.getFriendList()) {
+								if(user.getUsername().equals(removeFriendBtn.getName())) {
+									user.getFriendList().remove(user);
+									UserDao.getInstance().addUser(user);
+								}
+							}
+							
+						}
 					}
 				});
 			}
