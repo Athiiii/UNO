@@ -1,6 +1,5 @@
 package bzz.it.uno.controller;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -12,15 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -104,6 +97,7 @@ public class LoginController extends JFrame implements ActionListener {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
+
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		loginButton.setBackground(new Color(0, 153, 204));
@@ -158,6 +152,9 @@ public class LoginController extends JFrame implements ActionListener {
 		missingAccount.setBounds(501, 382, 153, 39);
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
+		
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(650, 0, 50, 50);
@@ -183,6 +180,7 @@ public class LoginController extends JFrame implements ActionListener {
 			}
 		});
 		contentPane.add(closeWindow);
+		
 	}
 
 	/**
@@ -190,7 +188,7 @@ public class LoginController extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		User currentUser = new UserDao().selectByUsername(usernameInput.getText());
+		User currentUser = UserDao.getInstance().selectByUsername(usernameInput.getText());
 
 		if (currentUser != null && currentUser.getPassword().equals(passwordField.getText())) {
 			// forward to NavigationController

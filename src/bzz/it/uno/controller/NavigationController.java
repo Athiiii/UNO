@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
 /**
@@ -65,6 +66,9 @@ public class NavigationController extends JFrame {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+		
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
 		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
@@ -124,7 +128,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new ProfilController(user, NavigationController.this);
+				new ProfilController(user, NavigationController.this, null);
 			}
 		});
 		btnProfil.setBorderPainted(false);
@@ -174,7 +178,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new FreundesListenController(user, NavigationController.this);
+				new FriendsController(user, NavigationController.this);
 			}
 		});
 		btnFreunde.setBorderPainted(false);

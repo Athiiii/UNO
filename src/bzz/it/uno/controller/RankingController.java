@@ -74,6 +74,9 @@ public class RankingController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
+		
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
@@ -177,7 +180,7 @@ public class RankingController extends JFrame {
 
 		table.setBounds(73, 145, 548, 333);
 		table.setShowGrid(false);
-		table.setRowHeight(60);
+		table.setRowHeight(65);
 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -217,8 +220,7 @@ public class RankingController extends JFrame {
 	}
 
 	public void setRankingList() {
-		UserLobbyDao userLobbyDao = new UserLobbyDao();
-		List<User_Lobby> allUserLobbies = userLobbyDao.getAllUserLobbies();
+		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
 
 		List<RankModel> ranks = new ArrayList<RankModel>();
 		for (int i = 0; i < allUserLobbies.size(); ++i) {

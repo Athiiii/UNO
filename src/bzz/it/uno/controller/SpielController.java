@@ -8,27 +8,39 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.text.NumberFormat;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
-
-import bzz.it.uno.model.User;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
+import bzz.it.uno.dao.LobbyDao;
+import bzz.it.uno.dao.UserLobbyDao;
+import bzz.it.uno.model.Lobby;
+import bzz.it.uno.model.User;
+import bzz.it.uno.model.User_Lobby;
+
+import javax.swing.JCheckBox;
+
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class SpielController extends JFrame implements ActionListener {
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
 	private JTextField lobbyName;
-	private JFormattedTextField numberPlayers;
+	private JTextField numberPlayers;
+	private JCheckBox onlineMode;
 
 	public SpielController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
@@ -58,6 +70,9 @@ public class SpielController extends JFrame implements ActionListener {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
+
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
+				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
@@ -128,24 +143,17 @@ public class SpielController extends JFrame implements ActionListener {
 		usernameLabel.setForeground(Color.WHITE);
 		contentPane.add(usernameLabel);
 
-		NumberFormat format = NumberFormat.getInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0);
-		formatter.setMaximum(30);
-		formatter.setAllowsInvalid(false);
-		formatter.setCommitsOnValidEdit(true);
-		numberPlayers = new JFormattedTextField(formatter);
+		numberPlayers = new JTextField();
 		numberPlayers.setFont(new Font("Dialog", Font.PLAIN, 27));
 		numberPlayers.setBounds(233, 253, 137, 39);
 		contentPane.add(numberPlayers);
-		
-		Label maxPlayer = new Label("Max Players:");
+
+		Label maxPlayer = new Label("Max Spieler:");
 		maxPlayer.setForeground(Color.WHITE);
 		maxPlayer.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		maxPlayer.setBounds(90, 253, 137, 39);
 		contentPane.add(maxPlayer);
-		
+
 		JButton startBtn = new JButton("Start");
 		startBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		startBtn.setBackground(new Color(0, 153, 204));
@@ -158,15 +166,67 @@ public class SpielController extends JFrame implements ActionListener {
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(new Color(92,184,92));
+				startBtn.setBackground(new Color(92, 184, 92));
 			}
 		});
 		contentPane.add(startBtn);
+
+		onlineMode = new JCheckBox("online");
+		onlineMode.setBackground(Color.DARK_GRAY);
+		onlineMode.setBounds(90, 312, 137, 39);
+		onlineMode.setForeground(Color.WHITE);
+		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		onlineMode.setSelected(true);
+		contentPane.add(onlineMode);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		try {
+			int maxPlayers = Integer.parseInt(numberPlayers.getText());
+			if (onlineMode.isSelected() && maxPlayers > 30) {
+				numberPlayers.setText("30");
+				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);
+			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
+				numberPlayers.setText("5");
+				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);
+				if (lobbyName.getText().equals("")) {
+					JOptionPane.showMessageDialog(this, "Lobbyname kann darf nicht leer sein", "Lobbyname", 1);
+				}
+			} else {
+				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
+
+				if (lobbyExist == null) {
+					if (onlineMode.isSelected()) {
+						// ONLINE MODE
+
+						LobbyDao lobbyDao = LobbyDao.getInstance();
+						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
+						Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
+						lobbyDao.addLobby(lobby);
+						lobby = lobbyDao.selectLobbyByName(lobby.getName());
+						User_Lobby userLobby = new User_Lobby();
+						userLobby.setLobby(lobby);
+						userLobby.setUser(user);
+						userLobby.setPoints(0);
+
+						lobbyUser.addUserLobby(userLobby);
+						
+						setVisible(false);
+						new LobbyWaitController(user, navigationFrame, lobby);
+					} else {
+						// OFFLINE MODE
+						new OfflineGameController(user, navigationFrame, lobbyName.getText());
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);
+				}
+			}
+		} catch (Exception ex) {
+			numberPlayers.setText("");
+			JOptionPane.showMessageDialog(this, "Ungültige Zahl bei Max. Spieler", "Ungültige Max. Spieler", 0);
+		}
+
 	}
 }

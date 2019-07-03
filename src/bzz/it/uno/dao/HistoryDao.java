@@ -9,6 +9,19 @@ import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
 public class HistoryDao {
+	private static HistoryDao historyDao;
+	
+	private HistoryDao() {
+		
+	}
+	
+	public static HistoryDao getInstance() {
+		if (historyDao == null) {
+			historyDao = new HistoryDao();
+		}
+		return historyDao;
+	}
+	
 	public List<History> selectByUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
