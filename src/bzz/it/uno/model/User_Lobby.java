@@ -18,8 +18,9 @@ public class User_Lobby {
 	private int id;
 	private User user;
 	private Lobby lobby;
-	private double points;
+	private int points;
 	private List<Message> message;
+	private int rank;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,11 +52,11 @@ public class User_Lobby {
 	}
 
 	@Column(name = "points")
-	public double getPoints() {
+	public int getPoints() {
 		return points;
 	}
 
-	public void setPoints(double points) {
+	public void setPoints(int points) {
 		this.points = points;
 	}
 
@@ -66,5 +67,13 @@ public class User_Lobby {
 
 	public void setMessages(List<Message> messages) {
 		this.message = messages;
+	}
+	@Column(name = "rank")
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 }

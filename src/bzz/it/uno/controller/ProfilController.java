@@ -31,12 +31,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import bzz.it.uno.dao.HistoryDao;
+import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
-import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
@@ -81,9 +80,9 @@ public class ProfilController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-		
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
+				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
@@ -332,13 +331,26 @@ public class ProfilController extends JFrame {
 	}
 
 	private void setTableData() {
-		List<History> histories = HistoryDao.getInstance().selectByUser(user);
+		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(user.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		if (histories.size() > 0) {
-			for (History history : histories) {
-				model.addRow(new Object[] { String.valueOf(history.getDate()), Integer.valueOf(history.getSpielerAnz()),
-						Integer.valueOf(history.getPunkte()), Integer.valueOf(history.getRank()) });
+		if (userLobbies.size() > 0) {
+			for (User_Lobby userLobby : userLobbies) {
+				int countedPlayers = countPlayer(userLobby);
+				model.addRow(new Object[] { String.valueOf(userLobby.getLobby().getDate()),
+						Integer.valueOf(userLobby.getPoints()), Integer.valueOf(countedPlayers),
+						Integer.valueOf(userLobby.getRank()) });
 			}
 		}
+	}
+
+	private int countPlayer(User_Lobby userLobby) {
+		int counter = 0;
+		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+		for (User_Lobby user_Lobby : allUserLobbies) {
+			if (user_Lobby.getLobby().getId() == userLobby.getLobby().getId()) {
+				counter *= 1;
+			}
+		}
+		return counter;
 	}
 }
