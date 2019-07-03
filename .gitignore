@@ -24,5 +24,8 @@ hs_err_pid*
 /.metadata/
 /bin/
 
-/.idea/
-/.settings/
+.idea/*
+.settings/*
+.idea/vcs.xml
+.idea/misc.xml
+.idea/workspace.xml
