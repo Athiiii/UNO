@@ -43,7 +43,7 @@ public class FriendsController extends JFrame {
 	private DefaultTableModel tableModel;
 	private JTable table;
 	private int selectedColumn, selectedRow = -1;
-	
+
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
 		setUndecorated(true);
@@ -134,7 +134,7 @@ public class FriendsController extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
-		
+
 		String[] columnNames = { "Username", "Punkte", "Action" };
 		tableModel = new DefaultTableModel(columnNames, 0) {
 			@Override
@@ -148,7 +148,8 @@ public class FriendsController extends JFrame {
 					return String.class;
 				}
 			}
-		};;
+		};
+		;
 		table = new JTable(tableModel) {
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -160,7 +161,7 @@ public class FriendsController extends JFrame {
 
 				if (selectedRow == row)
 					color = color.brighter();
-				if(column != 2) {
+				if (column != 2) {
 					c.setBackground(color);
 					c.setForeground(Color.white);
 				}
@@ -192,7 +193,7 @@ public class FriendsController extends JFrame {
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(new JTableButtonRenderer());
-		
+
 		table.addMouseListener(new JTableButtonMouseListener(table));
 
 		table.addMouseListener(new MouseAdapter() {
@@ -210,23 +211,27 @@ public class FriendsController extends JFrame {
 		scrollPane.setViewportView(table);
 		setTableData();
 	}
+
 	private void setTableData() {
-	
-		List<User> friends = user.getFriendList();	
+
+		List<User> friends = user.getFriendList();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		for (User friend : friends) {
-			JButton removeFriendBtn = new JButton("Entfernen");
-			//Hier wird der username gesetzt damit nacher anhand von ihm dann der Freund entfert werden kann
-			removeFriendBtn.setName(friend.getUsername());
-			
-			model.addRow(new Object[] { friend.getUsername(), friend.getUserLobby().get(0), removeFriendBtn });
-			removeFriendBtn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-				}
-			});	
+		if (friends != null) {
+			for (User friend : friends) {
+				JButton removeFriendBtn = new JButton("Entfernen");
+				// Hier wird der username gesetzt damit nacher anhand von ihm dann der Freund
+				// entfert werden kann
+				removeFriendBtn.setName(friend.getUsername());
+
+				model.addRow(new Object[] { friend.getUsername(), friend.getUserLobby().get(0), removeFriendBtn });
+				removeFriendBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+
+					}
+				});
+			}
 		}
 	}
 }
