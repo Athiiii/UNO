@@ -16,11 +16,11 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 
 import bzz.it.uno.model.User;
-import javax.swing.JTextField;
 
 public class SpielController extends JFrame implements ActionListener {
 	private User user;

@@ -1,17 +1,27 @@
 package bzz.it.uno.controller;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
+import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.model.User;
 
 /**
@@ -25,7 +35,10 @@ public class FreundesListenController extends JFrame {
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
-
+	private DefaultTableModel tableModel;
+	private JTable table;
+	private int selectedColumn, selectedRow = -1;
+	
 	public FreundesListenController(User user, NavigationController navigationFrame) {
 		this.user = user;
 		setUndecorated(true);
@@ -105,5 +118,88 @@ public class FreundesListenController extends JFrame {
 			}
 		});
 		contentPane.add(backBtn);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
+		scrollPane.setBounds(0, 234, 700, 189);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		contentPane.add(scrollPane);
+
+		tableModel = new DefaultTableModel(new Object[][] {},
+				new String[] {"Username", "Punkte", "Action" }) {
+			Class[] columnTypes = new Class[] { String.class, Integer.class, JButton.class};
+
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
+		table = new JTable(tableModel) {
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+				Color color = Color.DARK_GRAY;
+
+				if (selectedRow == row)
+					color = color.brighter();
+				c.setBackground(color);
+				c.setForeground(Color.white);
+				return c;
+			}
+		};
+		table.setShowGrid(false);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setForeground(Color.white);
+		table.setOpaque(false);
+		table.getTableHeader().setOpaque(false);
+		table.getTableHeader().setForeground(Color.white);
+		table.getTableHeader().setBackground(new Color(0, 0, 0, 0.6f));
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setRowSelectionAllowed(true);
+		table.setFocusable(false);
+		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
+		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
+		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(300);
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
+		table.getColumnModel().getColumn(2).setPreferredWidth(250);
+
+		table.setRowHeight(50);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				super.mouseClicked(arg0);
+				// get the clicked cell's row and column
+				selectedRow = table.getSelectedRow();
+				selectedColumn = table.getSelectedColumn();
+
+				// Repaints JTable
+				table.repaint();
+			}
+		});
+		scrollPane.setViewportView(table);
+		setTableData();
+	}
+	private void setTableData() {
+	
+		List<User> users = null;		
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		if (users.size() > 0) {
+			for (User user: users) {
+				model.addRow(new Object[] { });
+			}
+		}
 	}
 }

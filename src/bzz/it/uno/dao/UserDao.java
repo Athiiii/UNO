@@ -5,10 +5,22 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
 public class UserDao {
+	private static UserDao userDao;
+
+	private UserDao() {
+
+	}
+
+	public static UserDao getInstance() {
+		if (userDao == null) {
+			userDao = new UserDao();
+		}
+		return userDao;
+	}
+
 	public List<User> getAllUsers() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

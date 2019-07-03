@@ -270,7 +270,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private double getPointsByUser() {
-		List<User_Lobby> userGames = new UserLobbyDao().selectByUser(user.getId());
+		List<User_Lobby> userGames = UserLobbyDao.getInstance().selectByUser(user.getId());
 		double points = 0;
 		for (int i = 0; i < userGames.size(); ++i) {
 			points += userGames.get(i).getPoints();
@@ -280,7 +280,7 @@ public class ProfilController extends JFrame {
 
 	private int getRankOfUser() {
 		int rank = -1;
-		List<User_Lobby> userGames = new UserLobbyDao().getAllUserLobbies();
+		List<User_Lobby> userGames = UserLobbyDao.getInstance().getAllUserLobbies();
 		List<RankModel> ranks = new ArrayList<RankModel>();
 
 		for (int i = 0; i < userGames.size(); ++i) {
@@ -329,8 +329,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private void setTableData() {
-		HistoryDao historyDao = new HistoryDao();
-		List<History> histories = historyDao.selectByUser(user);
+		List<History> histories = HistoryDao.getInstance().selectByUser(user);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		if (histories.size() > 0) {
 			for (History history : histories) {
