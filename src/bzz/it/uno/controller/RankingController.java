@@ -180,7 +180,7 @@ public class RankingController extends JFrame {
 
 		table.setBounds(73, 145, 548, 333);
 		table.setShowGrid(false);
-		table.setRowHeight(60);
+		table.setRowHeight(65);
 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
