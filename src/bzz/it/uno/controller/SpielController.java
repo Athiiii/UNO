@@ -176,6 +176,7 @@ public class SpielController extends JFrame implements ActionListener {
 		onlineMode.setBounds(90, 312, 137, 39);
 		onlineMode.setForeground(Color.WHITE);
 		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		onlineMode.setSelected(true);
 		contentPane.add(onlineMode);
 
 	}
@@ -184,10 +185,10 @@ public class SpielController extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
-			if (onlineMode.isEnabled() && maxPlayers >= 30) {
+			if (onlineMode.isSelected() && maxPlayers >= 30) {
 				numberPlayers.setText("30");
 				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);
-			} else if (!onlineMode.isEnabled() && maxPlayers >= 5) {
+			} else if (!onlineMode.isSelected() && maxPlayers >= 5) {
 				numberPlayers.setText("5");
 				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);
 				if (lobbyName.getText().equals("")) {
@@ -197,7 +198,7 @@ public class SpielController extends JFrame implements ActionListener {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
 
 				if (lobbyExist == null) {
-					if (onlineMode.isEnabled()) {
+					if (onlineMode.isSelected()) {
 						// ONLINE MODE
 
 						LobbyDao lobbyDao = LobbyDao.getInstance();
@@ -216,7 +217,7 @@ public class SpielController extends JFrame implements ActionListener {
 						new LobbyWaitController(user, navigationFrame, lobby);
 					} else {
 						// OFFLINE MODE
-						new OfflineGameController(user, navigationFrame);
+						new OfflineGameController(user, navigationFrame, lobbyName.getText());
 					}
 				} else {
 					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);

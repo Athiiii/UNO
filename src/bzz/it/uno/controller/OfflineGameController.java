@@ -19,9 +19,10 @@ import bzz.it.uno.model.User;
 public class OfflineGameController extends JFrame {
 	private User user;
 	private int xy, xx;
-	private NavigationController navigationFrame;private JPanel contentPane;
+	private NavigationController navigationFrame;
+	private JPanel contentPane;
 	
-	public OfflineGameController(User user, NavigationController navigationlobby) {
+	public OfflineGameController(User user, NavigationController navigationFrame, String lobbyName) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
 		setUndecorated(true);
@@ -68,11 +69,11 @@ public class OfflineGameController extends JFrame {
 		closeWindow.setBorderPainted(false);
 		closeWindow.setFocusPainted(false);
 		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+			public void mouseEntered(MouseEvent evt) {
 				closeWindow.setBackground(closeWindow.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				closeWindow.setBackground(Color.DARK_GRAY);
 			}
 		});
@@ -94,17 +95,22 @@ public class OfflineGameController extends JFrame {
 		});
 		backBtn.setBorderPainted(false);
 		backBtn.setFocusPainted(false);
-		backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		backBtn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				backBtn.setBackground(backBtn.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				backBtn.setBackground(Color.DARK_GRAY);
 			}
 		});
 		contentPane.add(backBtn);
 
+		JLabel titleLabel = new JLabel(lobbyName);
+		titleLabel.setForeground(Color.WHITE);
+		titleLabel.setBounds(160, 36, 438, 69);
+		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
+		contentPane.add(titleLabel);
 		
 	}
 	
