@@ -97,8 +97,6 @@ public class LoginController extends JFrame implements ActionListener {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
-				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -154,6 +152,9 @@ public class LoginController extends JFrame implements ActionListener {
 		missingAccount.setBounds(501, 382, 153, 39);
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
+		
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(650, 0, 50, 50);

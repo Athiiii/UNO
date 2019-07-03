@@ -65,6 +65,9 @@ public class SpielController extends JFrame implements ActionListener {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
+		
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);

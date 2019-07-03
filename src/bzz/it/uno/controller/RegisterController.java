@@ -70,6 +70,9 @@ public class RegisterController extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(38, 38, 38));
 		panel.setBounds(0, 0, 195, 500);
