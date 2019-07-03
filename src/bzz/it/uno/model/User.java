@@ -2,14 +2,16 @@ package bzz.it.uno.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,10 +22,8 @@ public class User {
 	private String password;
 	private byte[] picture;
 	private boolean computer;
-	private FriendList friendList;
+	private List<User> friends;
 	private List<History> histories;
-
-	
 
 	private List<User_Lobby> userLobbys;
 
@@ -74,14 +74,14 @@ public class User {
 		this.computer = computer;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "friend")
-	public FriendList getFriendList() {
-		return friendList;
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "USER_FRIEND", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "FRIEND_ID"))
+	public List<User> getFriendList() {
+		return friends;
 	}
 
-	public void setFriendList(FriendList friendList) {
-		this.friendList = friendList;
+	public void setFriendList(List<User> friends) {
+		this.friends = friends;
 	}
 
 	@OneToMany
@@ -92,6 +92,7 @@ public class User {
 	public void setUserLobby(List<User_Lobby> userLobbys) {
 		this.userLobbys = userLobbys;
 	}
+
 	/**
 	 * @return the histories
 	 */

@@ -3,8 +3,11 @@ package bzz.it.uno.controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
@@ -21,6 +24,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import bzz.it.uno.frontend.JTableButtonMouseListener;
+import bzz.it.uno.frontend.JTableButtonRenderer;
 import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.model.User;
 
@@ -126,15 +131,21 @@ public class FriendsController extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
-
-		tableModel = new DefaultTableModel(new Object[][] {},
-				new String[] {"Username", "Punkte", "Action" }) {
-			Class[] columnTypes = new Class[] { String.class, Integer.class, JButton.class};
-
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
+		
+		String[] columnNames = { "Username", "Punkte", "Action" };
+		tableModel = new DefaultTableModel(columnNames, 0) {
+			@Override
+			public Class<?> getColumnClass(int column) {
+				switch (column) {
+				case 1:
+					return Integer.class;
+				case 2:
+					return JButton.class;
+				default:
+					return String.class;
+				}
 			}
-		};
+		};;
 		table = new JTable(tableModel) {
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -146,8 +157,10 @@ public class FriendsController extends JFrame {
 
 				if (selectedRow == row)
 					color = color.brighter();
-				c.setBackground(color);
-				c.setForeground(Color.white);
+				if(column != 2) {
+					c.setBackground(color);
+					c.setForeground(Color.white);
+				}
 				return c;
 			}
 		};
@@ -166,8 +179,8 @@ public class FriendsController extends JFrame {
 		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(300);
-		table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		table.getColumnModel().getColumn(2).setPreferredWidth(250);
+		table.getColumnModel().getColumn(1).setPreferredWidth(250);
+		table.getColumnModel().getColumn(2).setPreferredWidth(150);
 
 		table.setRowHeight(50);
 
@@ -175,7 +188,9 @@ public class FriendsController extends JFrame {
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(new JTableButtonRenderer());
+		
+		table.addMouseListener(new JTableButtonMouseListener(table));
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -194,12 +209,21 @@ public class FriendsController extends JFrame {
 	}
 	private void setTableData() {
 	
-		List<User> users = null;		
+		List<User> friends = user.getFriendList();	
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		if (users.size() > 0) {
-			for (User user: users) {
-				model.addRow(new Object[] { });
-			}
+		for (User friend : friends) {
+			JButton removeFriendBtn = new JButton("Entfernen");
+			//Hier wird der username gesetzt damit nacher anhand von ihm dann der Freund entfert werden kann
+			removeFriendBtn.setName(friend.getUsername());
+			
+			model.addRow(new Object[] { friend.getUsername(), friend.getUserLobby().get(0), removeFriendBtn });
+			removeFriendBtn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});	
 		}
 	}
 }

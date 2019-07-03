@@ -18,6 +18,17 @@ public class Lobby {
 	private boolean status;
 	private String name;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Column(name = "name")
 	public String getName() {
 		return name;
@@ -36,18 +47,7 @@ public class Lobby {
 		this.status = status;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	@OneToMany
+	@OneToMany(mappedBy = "userLobby", orphanRemoval = true)
 	public List<User_Lobby> getUserLobby() {
 		return userLobby;
 	}

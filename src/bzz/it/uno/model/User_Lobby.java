@@ -18,7 +18,7 @@ public class User_Lobby {
 	private User user;
 	private Lobby lobby;
 	private double points;
-	private List<Message> messages;
+	private List<Message> message;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,12 +58,12 @@ public class User_Lobby {
 		this.points = points;
 	}
 
-	@OneToMany
+	@OneToMany(mappedBy="userLobby", orphanRemoval=true)
 	public List<Message> getMessages() {
-		return messages;
+		return message;
 	}
 
 	public void setMessages(List<Message> messages) {
-		this.messages = messages;
+		this.message = messages;
 	}
 }
