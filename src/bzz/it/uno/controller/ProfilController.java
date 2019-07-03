@@ -41,7 +41,7 @@ import bzz.it.uno.model.User_Lobby;
 
 public class ProfilController extends JFrame {
 
-	private User user;
+	private User showedUser;
 	private JPanel contentPane;
 	private int xy, xx;
 	private NavigationController navigationFrame;
@@ -53,8 +53,13 @@ public class ProfilController extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedColumn, selectedRow = -1;
 
-	public ProfilController(User user, NavigationController navigationFrame) {
-		this.user = user;
+	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
+		if (otherUser != null) {
+			this.showedUser = otherUser;
+		} else {
+			this.showedUser = user;
+		}
+
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 500);
@@ -125,44 +130,48 @@ public class ProfilController extends JFrame {
 		});
 		backBtn.setBorderPainted(false);
 		backBtn.setFocusPainted(false);
-		backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		backBtn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				backBtn.setBackground(backBtn.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				backBtn.setBackground(Color.DARK_GRAY);
 			}
 		});
 		contentPane.add(backBtn);
-
-		JButton btnDelete = new JButton("L\u00F6schen");
-		btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnDelete.setBackground(new Color(244, 67, 54));
-		btnDelete.setBounds(557, 446, 120, 40);
-		contentPane.add(btnDelete);
-
-		JButton friends = new JButton("Freunde");
-		friends.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		friends.setBackground(new Color(166, 166, 166));
-		friends.setBounds(23, 449, 136, 40);
-		contentPane.add(friends);
-
-		JButton btnEdit = new JButton("Bearbeiten");
-		btnEdit.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnEdit.setBackground(new Color(41, 204, 22));
-		btnEdit.setBounds(393, 446, 154, 40);
-		contentPane.add(btnEdit);
 
 		Label titleLabel = new Label("Profil");
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(281, 41, 136, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
+
+		if (otherUser != null) {
+			JButton friends = new JButton("Freund Hinzufügen");
+			friends.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+			friends.setBackground(new Color(166, 166, 166));
+			friends.setBounds(23, 449, 230, 40);
+			contentPane.add(friends);
+		} else {
+
+			JButton btnEdit = new JButton("Bearbeiten");
+			btnEdit.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+			btnEdit.setBackground(new Color(41, 204, 22));
+			btnEdit.setBounds(393, 446, 154, 40);
+			contentPane.add(btnEdit);
+
+			JButton btnDelete = new JButton("L\u00F6schen");
+			btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+			btnDelete.setBackground(new Color(244, 67, 54));
+			btnDelete.setBounds(557, 446, 120, 40);
+
+			contentPane.add(btnDelete);
+		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
@@ -272,7 +281,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private double getPointsByUser() {
-		List<User_Lobby> userGames = UserLobbyDao.getInstance().selectByUser(user.getId());
+		List<User_Lobby> userGames = UserLobbyDao.getInstance().selectByUser(showedUser.getId());
 		double points = 0;
 		for (int i = 0; i < userGames.size(); ++i) {
 			points += userGames.get(i).getPoints();
@@ -300,7 +309,7 @@ public class ProfilController extends JFrame {
 		Collections.sort(ranks);
 
 		for (int i = 0; i < ranks.size(); ++i) {
-			if (ranks.get(i).getName().equals(user.getUsername()))
+			if (ranks.get(i).getName().equals(showedUser.getUsername()))
 				;
 			rank = i + 1;
 		}
@@ -327,11 +336,11 @@ public class ProfilController extends JFrame {
 	}
 
 	private void setProfileData() {
-		name.setText(user.getUsername());
+		name.setText(showedUser.getUsername());
 	}
 
 	private void setTableData() {
-		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(user.getUsername()).getUserLobby();
+		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(showedUser.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {

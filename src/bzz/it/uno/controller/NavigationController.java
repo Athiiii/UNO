@@ -127,7 +127,7 @@ public class NavigationController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new ProfilController(user, NavigationController.this);
+				new ProfilController(user, NavigationController.this, null);
 			}
 		});
 		btnProfil.setBorderPainted(false);
