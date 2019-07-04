@@ -71,6 +71,7 @@ public class SpielController extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
 				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 

@@ -44,7 +44,7 @@ public class RuleManagement {
 	 * @param comingCard
 	 * @return if both cards have the same number
 	 */
-	private boolean isSameColorr(Card currentCard, Card comingCard) {
+	private boolean isSameColor(Card currentCard, Card comingCard) {
 		boolean result = false;
 		if (currentCard.getCardType() == comingCard.getCardType() && currentCard.getCardType() == CardType.COMMON
 				&& comingCard.getFarbe().equals(currentCard.getFarbe()))

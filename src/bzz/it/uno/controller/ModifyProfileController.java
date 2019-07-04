@@ -13,9 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 
+/**
+ * 
+ * @author Severin Hersche
+ *
+ */
 public class ModifyProfileController extends JFrame {
 	private User user;
 	private int xy, xx;
@@ -50,7 +54,8 @@ public class ModifyProfileController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-		
+
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 

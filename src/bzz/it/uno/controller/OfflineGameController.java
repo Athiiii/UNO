@@ -1,6 +1,5 @@
 package bzz.it.uno.controller;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -14,9 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class OfflineGameController extends JFrame {
 	private User user;
 	private int xy, xx;
@@ -52,6 +55,7 @@ public class OfflineGameController extends JFrame {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 		

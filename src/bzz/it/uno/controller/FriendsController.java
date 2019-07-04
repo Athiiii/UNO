@@ -32,7 +32,7 @@ import bzz.it.uno.model.User;
 
 /**
  * 
- * @author Athavan Theivakulasingham
+ * @author Severin Hersche
  *
  */
 public class FriendsController extends JFrame {
@@ -73,6 +73,7 @@ public class FriendsController extends JFrame {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 		
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 

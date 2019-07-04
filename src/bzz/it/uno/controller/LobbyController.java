@@ -1,8 +1,6 @@
 package bzz.it.uno.controller;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +14,11 @@ import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.model.User;
 
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class LobbyController extends JFrame {
 
 	private JPanel contentPane;
@@ -51,7 +54,8 @@ public class LobbyController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-		
+
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 

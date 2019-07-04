@@ -152,7 +152,8 @@ public class LoginController extends JFrame implements ActionListener {
 		missingAccount.setBounds(501, 382, 153, 39);
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
-		
+
+		//set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
