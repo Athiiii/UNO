@@ -11,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author Severin Hersche
+ *
+ */
 @Entity
 @Table(name = "lobby")
 public class Lobby {

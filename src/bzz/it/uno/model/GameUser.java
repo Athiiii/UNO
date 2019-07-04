@@ -1,5 +1,10 @@
 package bzz.it.uno.model;
 
+/**
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class GameUser {
 	private User user;
 	private CardDeck userDeck;

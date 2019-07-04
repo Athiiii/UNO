@@ -6,6 +6,7 @@ import bzz.it.uno.model.CardType;
 import bzz.it.uno.model.GameUser;
 
 /**
+ * Controls the different Card Rules
  * 
  * @author Athavan Theivakulasingham
  *

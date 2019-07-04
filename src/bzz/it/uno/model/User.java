@@ -14,6 +14,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author Severin Hersche
+ *
+ */
 @Entity
 @Table(name = "user")
 public class User {

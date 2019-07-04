@@ -2,6 +2,7 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,31 +14,34 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
-import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
 /**
+ * Navigate beween the different views:
+ * <ul>
+ * <li>New Game</li>
+ * <li>Ranking</li>
+ * <li>Friends</li>
+ * <li>Open Lobbies</li>
+ * <li>Profile</li>
+ * </ul>
  * 
  * @author Athavan Theivakulasingham
  *
  */
 public class NavigationController extends JFrame {
 
-	private User user;
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private LoginController frame;
 	private int xy, xx;
 
 	public NavigationController(User user, LoginController frame) {
-		this.user = user;
-		this.frame = frame;
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 500);
-		setVisible(true);
 		contentPane = new JPanel();
+
+		ViewSettings.setupFrame(this);
+		ViewSettings.setupPanel(contentPane);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -54,47 +58,18 @@ public class NavigationController extends JFrame {
 				xy = e.getY();
 			}
 		});
-		contentPane.setLayout(null);
+		setContentPane(contentPane);
 
+		//title label
 		Label titleLabel = new Label("Welcome");
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(233, 16, 234, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 
-		contentPane.setBackground(Color.DARK_GRAY);
-		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
-		setContentPane(contentPane);
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 
-		//set Frame icon
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
-		
-		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(653, 0, 50, 50);
-		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(Color.DARK_GRAY);
-		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeWhite.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
-		closeWindow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.exit(0);
-			}
-		});
-		closeWindow.setBorderPainted(false);
-		closeWindow.setFocusPainted(false);
-		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(closeWindow.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(Color.DARK_GRAY);
-			}
-		});
-		contentPane.add(closeWindow);
-
+		//new Game Button
 		JButton newGame = new JButton("Neues Spiel");
 		newGame.setBounds(187, 101, 344, 40);
 		newGame.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -103,23 +78,25 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
 				new SpielController(user, NavigationController.this);
 			}
 		});
 		newGame.setBorderPainted(false);
 		newGame.setFocusPainted(false);
-		newGame.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		newGame.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				newGame.setBackground(newGame.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				newGame.setBackground(new Color(244, 67, 54));
 			}
 		});
 		contentPane.add(newGame);
 
+		//profile Button
 		JButton btnProfil = new JButton("Profil");
 		btnProfil.setBounds(187, 399, 344, 40);
 		btnProfil.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -128,23 +105,25 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
 				new ProfilController(user, NavigationController.this, null);
 			}
 		});
 		btnProfil.setBorderPainted(false);
 		btnProfil.setFocusPainted(false);
-		btnProfil.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		btnProfil.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				btnProfil.setBackground(btnProfil.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				btnProfil.setBackground(new Color(103, 58, 183));
 			}
 		});
 		contentPane.add(btnProfil);
-
+		
+		//ranking view Button
 		JButton btnRanking = new JButton("Ranking");
 		btnRanking.setBounds(187, 174, 344, 40);
 		btnRanking.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -153,6 +132,7 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
 				new RankingController(user, NavigationController.this);
 			}
@@ -160,89 +140,97 @@ public class NavigationController extends JFrame {
 		btnRanking.setBorderPainted(false);
 		btnRanking.setFocusPainted(false);
 		btnRanking.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+			public void mouseEntered(MouseEvent evt) {
 				btnRanking.setBackground(btnRanking.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				btnRanking.setBackground(new Color(0, 150, 136));
 			}
 		});
 		contentPane.add(btnRanking);
 
-		JButton btnFreunde = new JButton("Freunde");
-		btnFreunde.setBounds(187, 248, 344, 40);
-		btnFreunde.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnFreunde.setBackground(new Color(255, 152, 0));
-		btnFreunde.addActionListener(new ActionListener() {
+		//friend view Button
+		JButton btnFriends = new JButton("Freunde");
+		btnFriends.setBounds(187, 248, 344, 40);
+		btnFriends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btnFriends.setBackground(new Color(255, 152, 0));
+		btnFriends.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
 				new FriendsController(user, NavigationController.this);
 			}
 		});
-		btnFreunde.setBorderPainted(false);
-		btnFreunde.setFocusPainted(false);
-		btnFreunde.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnFreunde.setBackground(btnFreunde.getBackground().brighter());
+		btnFriends.setBorderPainted(false);
+		btnFriends.setFocusPainted(false);
+		btnFriends.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				btnFriends.setBackground(btnFriends.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				btnFreunde.setBackground(new Color(255, 152, 0));
+			public void mouseExited(MouseEvent evt) {
+				btnFriends.setBackground(new Color(255, 152, 0));
 			}
 		});
-		contentPane.add(btnFreunde);
+		contentPane.add(btnFriends);
 
-		JButton btnOffeneLobbies = new JButton("Offene Lobbies");
-		btnOffeneLobbies.setBounds(187, 321, 344, 40);
-		btnOffeneLobbies.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnOffeneLobbies.setBackground(new Color(96, 125, 139));
-		btnOffeneLobbies.addActionListener(new ActionListener() {
+		
+		//open Lobbies Button
+		JButton btnOpenLobbies = new JButton("Offene Lobbies");
+		btnOpenLobbies.setBounds(187, 321, 344, 40);
+		btnOpenLobbies.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btnOpenLobbies.setBackground(new Color(96, 125, 139));
+		btnOpenLobbies.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
 				new LobbyController(user, NavigationController.this);
 			}
 		});
-		btnOffeneLobbies.setBorderPainted(false);
-		btnOffeneLobbies.setFocusPainted(false);
-		btnOffeneLobbies.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnOffeneLobbies.setBackground(btnOffeneLobbies.getBackground().brighter());
+		btnOpenLobbies.setBorderPainted(false);
+		btnOpenLobbies.setFocusPainted(false);
+		btnOpenLobbies.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				btnOpenLobbies.setBackground(btnOpenLobbies.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				btnOffeneLobbies.setBackground(new Color(96, 125, 139));
+			public void mouseExited(MouseEvent evt) {
+				btnOpenLobbies.setBackground(new Color(96, 125, 139));
 			}
 		});
-		contentPane.add(btnOffeneLobbies);
-
+		contentPane.add(btnOpenLobbies);
+		
+		
+		//create Logout Button
 		JButton btnLogout = new JButton("");
 		btnLogout.setBounds(603, 0, 50, 50);
 		btnLogout.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
 		btnLogout.setBackground(Color.DARK_GRAY);
 		btnLogout.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/logout.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+				.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 		btnLogout.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//forward
 				setVisible(false);
-				frame.SetUserName(user.getUsername());
+				frame.setUserName(user.getUsername());
 				frame.setVisible(true);
 			}
 		});
 		btnLogout.setBorderPainted(false);
 		btnLogout.setFocusPainted(false);
-		btnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		btnLogout.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				btnLogout.setBackground(btnLogout.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				btnLogout.setBackground(Color.DARK_GRAY);
 			}
 		});

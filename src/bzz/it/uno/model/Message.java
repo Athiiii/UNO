@@ -9,6 +9,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author Severin Hersche
+ *
+ */
 @Entity
 @Table(name = "message")
 public class Message {

@@ -11,6 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author Severin Hersche
+ *
+ */
 @Entity
 @Table(name = "user_Lobby")
 public class User_Lobby {

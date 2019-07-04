@@ -24,17 +24,22 @@ import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
 /**
+ * Login with user Credentials
  * 
  * @author Athavan Theivakulasingham
  *
  */
 public class LoginController extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xx, xy;
+	
+	//user input fields
 	private TextField usernameInput;
 	private JPasswordField passwordField;
 
@@ -43,9 +48,9 @@ public class LoginController extends JFrame implements ActionListener {
 			public void run() {
 				try {
 					HandleConnectionToDB.openDbFactory();
-					LoginController frame = new LoginController();
-					frame.setVisible(true);
+					new LoginController();
 					Runtime.getRuntime().addShutdownHook(new Thread() {
+						//call before application will be closed
 						@Override
 						public void run() {
 							HandleConnectionToDB.closeDbFactory();
@@ -60,9 +65,7 @@ public class LoginController extends JFrame implements ActionListener {
 	}
 
 	public LoginController() {
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 500);
+		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
@@ -82,9 +85,10 @@ public class LoginController extends JFrame implements ActionListener {
 		});
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setContentPane(contentPane);
 
+		//panel for image
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(38, 38, 38));
 		panel.setBounds(0, 0, 195, 500);
@@ -97,7 +101,7 @@ public class LoginController extends JFrame implements ActionListener {
 				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
-
+		//set up login Button
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		loginButton.setBackground(new Color(0, 153, 204));
@@ -105,17 +109,18 @@ public class LoginController extends JFrame implements ActionListener {
 		loginButton.setBounds(243, 382, 142, 39);
 		loginButton.setBorderPainted(false);
 		loginButton.setFocusPainted(false);
-		loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		loginButton.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				loginButton.setBackground(loginButton.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(MouseEvent evt) {
 				loginButton.setBackground(new Color(0, 153, 204));
 			}
 		});
 		contentPane.add(loginButton);
 
+		//set up fields
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(381, 301, 273, 39);
@@ -126,6 +131,7 @@ public class LoginController extends JFrame implements ActionListener {
 		usernameInput.setBounds(381, 195, 273, 39);
 		contentPane.add(usernameInput);
 
+		//set up labels
 		Label titleLabel = new Label("UNO Login");
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		titleLabel.setBounds(243, 74, 306, 57);
@@ -140,11 +146,13 @@ public class LoginController extends JFrame implements ActionListener {
 		passwordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		passwordLabel.setBounds(243, 301, 107, 39);
 		contentPane.add(passwordLabel);
-
+		
+		//link for register
 		JLabel missingAccount = new JLabel("Noch kein Konto?");
 		missingAccount.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				//open register frame
 				new RegisterController(LoginController.this);
 			}
 		});
@@ -153,35 +161,7 @@ public class LoginController extends JFrame implements ActionListener {
 		missingAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(missingAccount);
 
-		//set Frame icon
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
-
-		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(650, 0, 50, 50);
-		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(Color.WHITE);
-		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
-		closeWindow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.exit(0);
-			}
-		});
-		closeWindow.setBorderPainted(false);
-		closeWindow.setFocusPainted(false);
-		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(closeWindow.getBackground().darker());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(Color.WHITE);
-			}
-		});
-		contentPane.add(closeWindow);
-		
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.BLACK));		
 	}
 
 	/**
@@ -190,8 +170,8 @@ public class LoginController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		User currentUser = UserDao.getInstance().selectByUsername(usernameInput.getText());
-
-		if (currentUser != null && currentUser.getPassword().equals(passwordField.getText())) {
+		//validation
+		if (currentUser != null && currentUser.getPassword().equals(passwordField.getPassword().toString())) {
 			// forward to NavigationController
 			this.setVisible(false);
 			new NavigationController(currentUser, this);
@@ -201,8 +181,13 @@ public class LoginController extends JFrame implements ActionListener {
 			usernameInput.setText("");
 		}
 	}
-
-	public void SetUserName(String username) {
+	
+	/**
+	 * define username input
+	 * 
+	 * @param username
+	 */
+	public void setUserName(String username) {
 		this.usernameInput.setText(username);
 		this.passwordField.setText("");
 	}

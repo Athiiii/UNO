@@ -36,10 +36,13 @@ import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
+import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
+ * See profile data, your liga and your playing history.
+ * You can also delete and edit your profile in this view
  * 
  * @author Severin Hersche
  *
@@ -48,15 +51,16 @@ public class ProfilController extends JFrame {
 
 	private User showedUser;
 	private JPanel contentPane;
+
 	private int xy, xx;
-	private NavigationController navigationFrame;
+	private int selectedRow = -1;
+
 	private JTable table;
 	private JLabel name;
 	private JLabel rank;
 	private JLabel liga;
 	private JLabel profileImage;
 	private DefaultTableModel tableModel;
-	private int selectedColumn, selectedRow = -1;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
 		if (otherUser != null) {
@@ -65,10 +69,7 @@ public class ProfilController extends JFrame {
 			this.showedUser = user;
 		}
 
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 500);
-		setVisible(true);
+		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
@@ -91,62 +92,10 @@ public class ProfilController extends JFrame {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
-		//set Frame icon
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
-				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
+		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
 
-		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(653, 0, 50, 50);
-		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(Color.DARK_GRAY);
-		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeWhite.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
-		closeWindow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.exit(0);
-			}
-		});
-		closeWindow.setBorderPainted(false);
-		closeWindow.setFocusPainted(false);
-		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(closeWindow.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(Color.DARK_GRAY);
-			}
-		});
-		contentPane.add(closeWindow);
-
-		JButton backBtn = new JButton(" Zur\u00FCck");
-		backBtn.setForeground(Color.WHITE);
-		backBtn.setBounds(0, 0, 127, 50);
-		backBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
-		backBtn.setBackground(Color.DARK_GRAY);
-		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png")).getImage()
-				.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-		backBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				dispose();
-				navigationFrame.setVisible(true);
-			}
-		});
-		backBtn.setBorderPainted(false);
-		backBtn.setFocusPainted(false);
-		backBtn.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent evt) {
-				backBtn.setBackground(backBtn.getBackground().brighter());
-			}
-
-			public void mouseExited(MouseEvent evt) {
-				backBtn.setBackground(Color.DARK_GRAY);
-			}
-		});
-		contentPane.add(backBtn);
-
+		// title
 		Label titleLabel = new Label("Profil");
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(281, 41, 136, 69);
@@ -154,6 +103,7 @@ public class ProfilController extends JFrame {
 		contentPane.add(titleLabel);
 
 		if (otherUser != null) {
+			// Button for adding a new Friend
 			JButton friends = new JButton("Freund Hinzuf\u00fcgen");
 			friends.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -166,13 +116,14 @@ public class ProfilController extends JFrame {
 			friends.setBounds(23, 449, 230, 40);
 			contentPane.add(friends);
 		} else {
-
+			// Button to edit the profile
 			JButton btnEdit = new JButton("Bearbeiten");
 			btnEdit.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 			btnEdit.setBackground(new Color(41, 204, 22));
 			btnEdit.setBounds(393, 446, 154, 40);
 			contentPane.add(btnEdit);
 
+			// button to delete the profile
 			JButton btnDelete = new JButton("L\u00F6schen");
 			btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 			btnDelete.setBackground(new Color(244, 67, 54));
@@ -181,24 +132,22 @@ public class ProfilController extends JFrame {
 			contentPane.add(btnDelete);
 		}
 
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
-		scrollPane.setBounds(0, 234, 700, 189);
-		scrollPane.setOpaque(false);
-		scrollPane.getViewport().setOpaque(false);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane scrollPane = ViewSettings.createDefaultScrollPane(table);
 		contentPane.add(scrollPane);
 
 		tableModel = new DefaultTableModel(new Object[][] {},
 				new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
-			Class[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
+			private static final long serialVersionUID = 1L;
+			//Define column datatype
+			Class<?>[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
 
-			public Class getColumnClass(int columnIndex) {
+			public Class<?> getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		};
 		table = new JTable(tableModel) {
+			private static final long serialVersionUID = 1L;
+
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
@@ -214,19 +163,9 @@ public class ProfilController extends JFrame {
 				return c;
 			}
 		};
-		table.setShowGrid(false);
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setForeground(Color.white);
-		table.setOpaque(false);
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setForeground(Color.white);
-		table.getTableHeader().setBackground(new Color(0, 0, 0, 0.6f));
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.setRowSelectionAllowed(true);
-		table.setFocusable(false);
+		ViewSettings.setupTableDesign(table);
 		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
-		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(250);
 		table.getColumnModel().getColumn(1).setPreferredWidth(150);
@@ -248,13 +187,11 @@ public class ProfilController extends JFrame {
 				super.mouseClicked(arg0);
 				// get the clicked cell's row and column
 				selectedRow = table.getSelectedRow();
-				selectedColumn = table.getSelectedColumn();
 
 				// Repaints JTable
 				table.repaint();
 			}
 		});
-		scrollPane.setViewportView(table);
 
 		name = new JLabel();
 		name.setBounds(160, 112, 154, 55);

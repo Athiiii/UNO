@@ -25,6 +25,7 @@ import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
 /**
+ * Create a new User Profile
  * 
  * @author Athavan Theivakulasingham
  *
@@ -38,12 +39,10 @@ public class RegisterController extends JFrame implements ActionListener {
 	private JPasswordField repeatPasswordField;
 	private TextField usernameField;
 
-	/**
-	 * Create the frame.
-	 */
 	public RegisterController(LoginController frame) {
 		this.frame = frame;
 		frame.setVisible(false);
+		
 		this.setUndecorated(true);
 		this.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -180,13 +179,13 @@ public class RegisterController extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (repeatPasswordField.getText().equals(passwordField.getText())) {
+		if (repeatPasswordField.getText().equals(passwordField.getPassword().toString())) {
 			UserDao dao = UserDao.getInstance();
 			User user = dao.selectByUsername(usernameField.getText());
 			if (user == null) {
 				user = new User();
 				user.setComputer(false);
-				user.setPassword(passwordField.getText());
+				user.setPassword(passwordField.getPassword().toString());
 				user.setUsername(usernameField.getText());
 				dao.addUser(user);
 
@@ -207,8 +206,5 @@ public class RegisterController extends JFrame implements ActionListener {
 			passwordField.setText("");
 			repeatPasswordField.setText("");
 		}
-		/*
-		 * - check if this user already exists - add user to db - forward to navigation
-		 */
 	}
 }
