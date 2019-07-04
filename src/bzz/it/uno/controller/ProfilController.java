@@ -154,9 +154,11 @@ public class ProfilController extends JFrame {
 		contentPane.add(titleLabel);
 
 		if (otherUser != null) {
-			JButton friends = new JButton("Freund Hinzuf�gen");
+			JButton friends = new JButton("Freund Hinzuf\u00fcgen");
 			friends.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					user.getFriendList().add(showedUser);
+					UserDao.getInstance().updateUser(user);
 				}
 			});
 			friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -348,9 +350,6 @@ public class ProfilController extends JFrame {
 	private void setTableData() {
 		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(showedUser.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		User selectByUsername = UserDao.getInstance().selectByUsername("alex");
-		showedUser.getFriendList().add(selectByUsername);
-		UserDao.getInstance().updateUser(showedUser);
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {
 				int countedPlayers = countPlayer(userLobby);
