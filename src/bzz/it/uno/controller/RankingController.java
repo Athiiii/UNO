@@ -149,7 +149,7 @@ public class RankingController extends JFrame {
 			}
 		});
 		
-		contentPane.add(ViewSettings.createDefaultScrollPane(table, 500, 548));
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 400, 700, 200));
 	}
 
 	private void setRankingList() {

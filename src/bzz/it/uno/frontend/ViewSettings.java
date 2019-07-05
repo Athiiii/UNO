@@ -148,10 +148,10 @@ public class ViewSettings {
 	 * @param view which should be in it
 	 * @return designed Scrollpane
 	 */
-	public static JScrollPane createDefaultScrollPane(Component view, int height, int width) {
+	public static JScrollPane createDefaultScrollPane(Component view, int height, int width, int yCord) {
 		JScrollPane scrollPane = new JScrollPane(view);
 		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
-		scrollPane.setBounds(0, 234, height, width);
+		scrollPane.setBounds(0, yCord, width, height);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -179,5 +179,4 @@ public class ViewSettings {
 		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
 		return table;
 	}
-
 }

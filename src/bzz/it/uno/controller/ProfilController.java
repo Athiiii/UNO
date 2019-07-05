@@ -132,9 +132,6 @@ public class ProfilController extends JFrame {
 			contentPane.add(btnDelete);
 		}
 
-		JScrollPane scrollPane = ViewSettings.createDefaultScrollPane(table, 120, 40 );
-		contentPane.add(scrollPane);
-
 		tableModel = new DefaultTableModel(new Object[][] {},
 				new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
 			private static final long serialVersionUID = 1L;
@@ -192,6 +189,8 @@ public class ProfilController extends JFrame {
 				table.repaint();
 			}
 		});
+		
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 230));
 
 		name = new JLabel();
 		name.setBounds(160, 112, 154, 55);
