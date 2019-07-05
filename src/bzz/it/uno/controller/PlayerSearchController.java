@@ -6,42 +6,32 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+
+import com.sun.glass.ui.View;
 
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
-/**
- * 
- * @author Athavan Theivakulasingham
- *
- */
-public class OfflineGameController extends JFrame {
-	private User user;
-	private int xy, xx;
-	private NavigationController navigationFrame;
-	private JPanel contentPane;
-	
-	public OfflineGameController(User user, NavigationController navigationFrame, String lobbyName) {
-		this.navigationFrame = navigationFrame;
-		this.user = user;
+public class PlayerSearchController extends JFrame {
 
+	private JPanel contentPane;
+	private int xx, xy;
+	
+	public PlayerSearchController(User user, NavigationController naviationFrame) {
 		contentPane = new JPanel();
 		
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
-	
+		
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				OfflineGameController.this.setLocation(x - xx, y - xy);
+				PlayerSearchController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -54,14 +44,13 @@ public class OfflineGameController extends JFrame {
 		setContentPane(contentPane);
 		
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
-		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
+		contentPane.add(ViewSettings.createReturnButton(this, naviationFrame));
 
-		JLabel titleLabel = new JLabel(lobbyName);
+		JLabel titleLabel = new JLabel("Spieler suchen");
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(10, 54, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
 	}
 	
 }
