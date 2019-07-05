@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -118,6 +120,13 @@ public class ProfilController extends JFrame {
 		} else {
 			// Button to edit the profile
 			JButton btnEdit = new JButton("Bearbeiten");
+			btnEdit.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					getImageFromFileSystem();
+				}
+			});
 			btnEdit.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 			btnEdit.setBackground(new Color(41, 204, 22));
 			btnEdit.setBounds(393, 446, 154, 40);
@@ -197,8 +206,8 @@ public class ProfilController extends JFrame {
 		name.setForeground(Color.WHITE);
 		name.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		contentPane.add(name);
-
-		rank = new JLabel("Platz: " + Integer.toString(getRankOfUser()));
+		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+		rank = new JLabel("Platz: " + Integer.toString(getRankOfUser(allUserLobbies)));
 		rank.setBounds(160, 194, 96, 20);
 		rank.setForeground(Color.WHITE);
 		rank.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
@@ -214,13 +223,14 @@ public class ProfilController extends JFrame {
 		liga.setBounds(480, 80, 150, 150);
 		contentPane.add(liga);
 
+		profileImage = new JLabel();
+		profileImage.setBounds(23, 61, 127, 131);
+		contentPane.add(profileImage);
 		if (user.getPicture() != null) {
-			profileImage = new JLabel(new ImageIcon(getPictureFromUser(user)));
-			profileImage.setBounds(23, 61, 127, 131);
-			contentPane.add(profileImage);
+			profileImage.setIcon(new ImageIcon(getPictureFromUser(user)));
 		}
 
-		setTableData();
+		setTableData(allUserLobbies);
 		setProfileData();
 	}
 
@@ -233,9 +243,9 @@ public class ProfilController extends JFrame {
 		return points;
 	}
 
-	private int getRankOfUser() {
+	private int getRankOfUser(List<User_Lobby> userGames) {
 		int rank = -1;
-		List<User_Lobby> userGames = UserLobbyDao.getInstance().getAllUserLobbies();
+
 		List<RankModel> ranks = new ArrayList<RankModel>();
 
 		for (int i = 0; i < userGames.size(); ++i) {
@@ -254,8 +264,7 @@ public class ProfilController extends JFrame {
 
 		for (int i = 0; i < ranks.size(); ++i) {
 			if (ranks.get(i).getName().equals(showedUser.getUsername()))
-				;
-			rank = i + 1;
+				rank = i + 1;
 		}
 		return rank;
 	}
@@ -283,12 +292,12 @@ public class ProfilController extends JFrame {
 		name.setText(showedUser.getUsername());
 	}
 
-	private void setTableData() {
+	private void setTableData(List<User_Lobby> allUserLobbies) {
 		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(showedUser.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {
-				int countedPlayers = countPlayer(userLobby);
+				int countedPlayers = countPlayer(userLobby, allUserLobbies);
 				model.addRow(
 						new Object[] { String.valueOf(userLobby.getLobby().getDate()), Integer.valueOf(countedPlayers),
 								Integer.valueOf(userLobby.getPoints()), Integer.valueOf(userLobby.getRank()) });
@@ -296,14 +305,31 @@ public class ProfilController extends JFrame {
 		}
 	}
 
-	private int countPlayer(User_Lobby userLobby) {
+	private int countPlayer(User_Lobby userLobby, List<User_Lobby> allUserLobbies) {
 		int counter = 0;
-		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+
 		for (User_Lobby user_Lobby : allUserLobbies) {
 			if (user_Lobby.getLobby().getId() == userLobby.getLobby().getId()) {
 				counter += 1;
 			}
 		}
 		return counter;
+	}
+	private void getImageFromFileSystem() {
+		final JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showOpenDialog(null);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            BufferedImage img = null;
+			try {
+			    img = ImageIO.read(file);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			Image dimg = img.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
+			        Image.SCALE_SMOOTH);
+			profileImage.setIcon(new ImageIcon(dimg));
+        }
 	}
 }
