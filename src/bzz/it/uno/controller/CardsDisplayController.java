@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import com.sun.prism.paint.ImagePattern;
 
 import bzz.it.uno.backend.UNOBasicLogic;
+import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.ViewSettings;
 
@@ -24,6 +25,18 @@ public class CardsDisplayController extends JFrame {
 	private OfflineGameController[] playersController;
 	private UNOBasicLogic unoLogic;
 	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					new CardsDisplayController(1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	public CardsDisplayController(int players) {
 		unoLogic = new UNOBasicLogic();
 		contentPane = new JPanel();
@@ -32,7 +45,7 @@ public class CardsDisplayController extends JFrame {
 		setBounds(100, 100, 150, 202);
 		
 		imgCanvas = new ImageCanvas();
-		imgCanvas.putImage("card_back_alt.png");
+		imgCanvas.putImage("blue_2.png");
 		imgCanvas.setBounds(10, 10, 130, 182);
 		contentPane.add(imgCanvas, BorderLayout.CENTER);
 		

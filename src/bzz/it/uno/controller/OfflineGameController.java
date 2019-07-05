@@ -27,7 +27,7 @@ public class OfflineGameController extends JFrame {
 	
 	public OfflineGameController(String userName) {
 		contentPane = new JPanel();
-		
+		System.out.println(userName);
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
 
