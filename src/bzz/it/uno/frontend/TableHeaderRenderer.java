@@ -3,7 +3,6 @@ package bzz.it.uno.frontend;
 import java.awt.Component;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;

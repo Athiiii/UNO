@@ -152,7 +152,7 @@ public class LoginController extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		User currentUser = UserDao.getInstance().selectByUsername(usernameInput.getText());
 		//validation
-		if (currentUser != null && currentUser.getPassword().equals(passwordField.getPassword().toString())) {
+		if (currentUser != null && currentUser.getPassword().equals(passwordField.getText())) {
 			// forward to NavigationController
 			this.setVisible(false);
 			new NavigationController(currentUser, this);

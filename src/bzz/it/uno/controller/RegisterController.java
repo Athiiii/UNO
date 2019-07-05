@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
 /**
@@ -32,6 +33,7 @@ import bzz.it.uno.model.User;
  */
 public class RegisterController extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private LoginController frame;
 	private int xAxis, yAxis;
@@ -42,11 +44,8 @@ public class RegisterController extends JFrame implements ActionListener {
 	public RegisterController(LoginController frame) {
 		this.frame = frame;
 		frame.setVisible(false);
-		
-		this.setUndecorated(true);
-		this.setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 742, 500);
+
+		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
@@ -69,10 +68,6 @@ public class RegisterController extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		//set Frame icon
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
-		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(38, 38, 38));
 		panel.setBounds(0, 0, 195, 500);
@@ -145,31 +140,7 @@ public class RegisterController extends JFrame implements ActionListener {
 		alreadyAccount.setBounds(501, 382, 153, 39);
 		alreadyAccount.setForeground(Color.BLUE.darker());
 		contentPane.add(alreadyAccount);
-
-		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(692, 0, 50, 50);
-		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(Color.WHITE);
-		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeDark.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
-		closeWindow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.exit(0);
-			}
-		});
-		closeWindow.setBorderPainted(false);
-		closeWindow.setFocusPainted(false);
-		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(closeWindow.getBackground().darker());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(Color.WHITE);
-			}
-		});
-		contentPane.add(closeWindow);
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.BLACK));
 
 		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
 		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
@@ -179,7 +150,7 @@ public class RegisterController extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (repeatPasswordField.getText().equals(passwordField.getPassword().toString())) {
+		if (repeatPasswordField.getText().equals(passwordField.getText())) {
 			UserDao dao = UserDao.getInstance();
 			User user = dao.selectByUsername(usernameField.getText());
 			if (user == null) {

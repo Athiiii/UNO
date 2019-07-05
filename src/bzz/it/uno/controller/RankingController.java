@@ -127,12 +127,13 @@ public class RankingController extends JFrame {
 		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 
-		table.setBounds(73, 145, 548, 333);
+		ViewSettings.setupTableDesign(table);
+
+		table.setBounds(73, 145, 548, 500);
 		table.setRowHeight(65);
 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		ViewSettings.setupTableDesign(table);
 		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
 
@@ -147,8 +148,8 @@ public class RankingController extends JFrame {
 				table.repaint();
 			}
 		});
-
-		contentPane.add(ViewSettings.createDefaultScrollPane(table));
+		
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 500, 548));
 	}
 
 	private void setRankingList() {
