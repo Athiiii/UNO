@@ -22,20 +22,16 @@ import bzz.it.uno.model.User;
  *
  */
 public class OfflineGameController extends JFrame {
-	private User user;
 	private int xy, xx;
-	private NavigationController navigationFrame;
 	private JPanel contentPane;
 	
-	public OfflineGameController(User user, NavigationController navigationFrame, String lobbyName) {
-		this.navigationFrame = navigationFrame;
-		this.user = user;
-
+	public OfflineGameController(String userName) {
 		contentPane = new JPanel();
 		
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
-	
+
+		setBounds(100, 100, 400, 300);
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -53,12 +49,9 @@ public class OfflineGameController extends JFrame {
 		});
 		setContentPane(contentPane);
 		
-		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
-		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
-
-		JLabel titleLabel = new JLabel(lobbyName);
+		JLabel titleLabel = new JLabel(userName);
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(10, 54, 680, 69);
+		titleLabel.setBounds(10, 10, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 		
