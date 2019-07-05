@@ -71,7 +71,7 @@ public class SpielController extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
-		//set Frame icon
+		// set Frame icon
 		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
 				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
 
@@ -213,12 +213,12 @@ public class SpielController extends JFrame implements ActionListener {
 						userLobby.setPoints(0);
 
 						lobbyUser.addUserLobby(userLobby);
-						
+
 						setVisible(false);
 						new LobbyWaitController(user, navigationFrame, lobby);
 					} else {
 						// OFFLINE MODE
-						new OfflineGameController(user, navigationFrame, lobbyName.getText());
+						new CardsDisplayController(maxPlayers);
 					}
 				} else {
 					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);
