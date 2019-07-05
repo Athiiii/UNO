@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import com.sun.prism.paint.ImagePattern;
 
+import bzz.it.uno.backend.UNOBasicLogic;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.ViewSettings;
 
@@ -21,8 +22,10 @@ public class CardsDisplayController extends JFrame {
 	private int xx, xy;
 	private ImageCanvas imgCanvas;
 	private OfflineGameController[] playersController;
+	private UNOBasicLogic unoLogic;
 	
 	public CardsDisplayController(int players) {
+		unoLogic = new UNOBasicLogic();
 		contentPane = new JPanel();
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);

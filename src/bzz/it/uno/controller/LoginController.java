@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -38,16 +39,16 @@ public class LoginController extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xx, xy;
-	
-	//user input fields
+
+	// user input fields
 	private TextField usernameInput;
 	private JPasswordField passwordField;
 
-	
-
 	public LoginController() {
-		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
+		JFrame frame = this;
+		ViewSettings.setupFrame(this);
+		ViewSettings.setupPanel(contentPane);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -64,25 +65,22 @@ public class LoginController extends JFrame implements ActionListener {
 				xy = e.getY();
 			}
 		});
-		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
 		setContentPane(contentPane);
 
-		//panel for image
+		// panel for image
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(38, 38, 38));
-		panel.setBounds(0, 0, 195, 500);
+		panel.setBackground(Color.DARK_GRAY);
+		panel.setBounds(0, 140, 233, 500);
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/login.png")).getImage()
-				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
+		loginView.setIcon(new ImageIcon(
+				new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+						.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
 		panel.add(loginView);
-
-		//set up login Button
+		// set up login Button
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		loginButton.setBackground(new Color(0, 153, 204));
@@ -101,7 +99,7 @@ public class LoginController extends JFrame implements ActionListener {
 		});
 		contentPane.add(loginButton);
 
-		//set up fields
+		// set up fields
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(381, 301, 273, 39);
@@ -112,37 +110,40 @@ public class LoginController extends JFrame implements ActionListener {
 		usernameInput.setBounds(381, 195, 273, 39);
 		contentPane.add(usernameInput);
 
-		//set up labels
+		// set up labels
 		Label titleLabel = new Label("UNO Login");
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		titleLabel.setBounds(243, 74, 306, 57);
+		titleLabel.setForeground(Color.WHITE);
 		contentPane.add(titleLabel);
 
 		Label usernameLabel = new Label("Username");
 		usernameLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		usernameLabel.setBounds(243, 195, 107, 39);
+		usernameLabel.setForeground(Color.WHITE);
 		contentPane.add(usernameLabel);
 
 		Label passwordLabel = new Label("Password");
 		passwordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		passwordLabel.setBounds(243, 301, 107, 39);
+		passwordLabel.setForeground(Color.WHITE);
 		contentPane.add(passwordLabel);
-		
-		//link for register
+
+		// link for register
 		JLabel missingAccount = new JLabel("Noch kein Konto?");
 		missingAccount.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//open register frame
+				// open register frame
 				new RegisterController(LoginController.this);
 			}
 		});
 		missingAccount.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		missingAccount.setBounds(501, 382, 153, 39);
-		missingAccount.setForeground(Color.BLUE.darker());
+		missingAccount.setForeground(new Color(55, 145, 221));
 		contentPane.add(missingAccount);
 
-		contentPane.add(ViewSettings.createCloseButton(ViewSettings.BLACK));		
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class LoginController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		User currentUser = UserDao.getInstance().selectByUsername(usernameInput.getText());
-		//validation
+		// validation
 		if (currentUser != null && currentUser.getPassword().equals(passwordField.getText())) {
 			// forward to NavigationController
 			this.setVisible(false);
@@ -162,7 +163,7 @@ public class LoginController extends JFrame implements ActionListener {
 			usernameInput.setText("");
 		}
 	}
-	
+
 	/**
 	 * define username input
 	 * 

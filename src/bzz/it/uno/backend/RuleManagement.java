@@ -11,7 +11,7 @@ import bzz.it.uno.model.GameUser;
  * @author Athavan Theivakulasingham
  *
  */
-public class RuleManagement {
+class RuleManagement {
 
 	public boolean checkRules(CardDeck playingDeck, Card settingCard, GameUser user) {
 		boolean result = true;

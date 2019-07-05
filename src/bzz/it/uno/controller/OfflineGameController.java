@@ -50,6 +50,7 @@ public class OfflineGameController extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel titleLabel = new JLabel(userName);
+		
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(10, 10, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));

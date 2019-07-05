@@ -3,6 +3,7 @@ package bzz.it.uno.controller;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -45,9 +46,11 @@ public class RegisterController extends JFrame implements ActionListener {
 		this.frame = frame;
 		frame.setVisible(false);
 
-		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
 
+		ViewSettings.setupFrame(this);
+		ViewSettings.setupPanel(contentPane);
+		
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -63,37 +66,36 @@ public class RegisterController extends JFrame implements ActionListener {
 				yAxis = e.getY();
 			}
 		});
-		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(38, 38, 38));
-		panel.setBounds(0, 0, 195, 500);
+		panel.setBackground(Color.DARK_GRAY);
+		panel.setBounds(0, 140, 233, 500);
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/login.png")).getImage()
-				.getScaledInstance(195, 500, java.awt.Image.SCALE_SMOOTH)));
+		loginView.setIcon(new ImageIcon(
+				new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+						.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
 		JButton registerBtn = new JButton("Registrieren");
 		registerBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		registerBtn.setBackground(new Color(0, 153, 204));
+		registerBtn.setBackground(new Color(66, 164, 245));
 		registerBtn.addActionListener(this);
 		registerBtn.setBorderPainted(false);
 		registerBtn.setFocusPainted(false);
 		registerBtn.setBounds(243, 382, 169, 39);
-		registerBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
+		registerBtn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
 				registerBtn.setBackground(registerBtn.getBackground().brighter());
 			}
 
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				registerBtn.setBackground(new Color(0, 153, 204));
+			public void mouseExited(MouseEvent evt) {
+				registerBtn.setBackground(new Color(66, 164, 245));
 			}
 		});
 		contentPane.add(registerBtn);
@@ -115,17 +117,20 @@ public class RegisterController extends JFrame implements ActionListener {
 
 		Label titleLabel = new Label("UNO Register");
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
+		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(243, 74, 349, 57);
 		contentPane.add(titleLabel);
 
 		Label usernameLabel = new Label("Username");
 		usernameLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		usernameLabel.setForeground(Color.WHITE);
 		usernameLabel.setBounds(243, 195, 107, 39);
 		contentPane.add(usernameLabel);
 
 		Label passwordLabel = new Label("Password");
 		passwordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		passwordLabel.setBounds(243, 256, 107, 39);
+		passwordLabel.setForeground(Color.WHITE);
 		contentPane.add(passwordLabel);
 
 		JLabel alreadyAccount = new JLabel("Bereits ein Konto?");
@@ -138,11 +143,12 @@ public class RegisterController extends JFrame implements ActionListener {
 		});
 		alreadyAccount.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		alreadyAccount.setBounds(501, 382, 153, 39);
-		alreadyAccount.setForeground(Color.BLUE.darker());
+		alreadyAccount.setForeground(new Color(55,145,221));
 		contentPane.add(alreadyAccount);
-		contentPane.add(ViewSettings.createCloseButton(ViewSettings.BLACK));
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 
 		JLabel repeatPasswordLabel = new JLabel("<html>Passwort <br/> wiederholen</html>");
+		repeatPasswordLabel.setForeground(Color.WHITE);
 		repeatPasswordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		repeatPasswordLabel.setBounds(243, 321, 131, 39);
 		contentPane.add(repeatPasswordLabel);
@@ -156,7 +162,7 @@ public class RegisterController extends JFrame implements ActionListener {
 			if (user == null) {
 				user = new User();
 				user.setComputer(false);
-				user.setPassword(passwordField.getPassword().toString());
+				user.setPassword(passwordField.getText());
 				user.setUsername(usernameField.getText());
 				dao.addUser(user);
 

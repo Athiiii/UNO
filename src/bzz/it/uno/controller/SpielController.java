@@ -219,6 +219,8 @@ public class SpielController extends JFrame implements ActionListener {
 					} else {
 						// OFFLINE MODE
 						new CardsDisplayController(maxPlayers);
+						dispose();
+						navigationFrame.setVisible(true);
 					}
 				} else {
 					JOptionPane.showMessageDialog(this, "Ein Lobby mit diesem Namen gibt es schon", "Lobbyname", 1);
