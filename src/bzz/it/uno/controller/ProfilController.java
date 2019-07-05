@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -43,8 +42,8 @@ import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
- * See profile data, your liga and your playing history.
- * You can also delete and edit your profile in this view
+ * See profile data, your liga and your playing history. You can also delete and
+ * edit your profile in this view
  * 
  * @author Severin Hersche
  *
@@ -121,7 +120,7 @@ public class ProfilController extends JFrame {
 			// Button to edit the profile
 			JButton btnEdit = new JButton("Bearbeiten");
 			btnEdit.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					getImageFromFileSystem();
@@ -144,7 +143,7 @@ public class ProfilController extends JFrame {
 		tableModel = new DefaultTableModel(new Object[][] {},
 				new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
 			private static final long serialVersionUID = 1L;
-			//Define column datatype
+			// Define column datatype
 			Class<?>[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
 
 			public Class<?> getColumnClass(int columnIndex) {
@@ -198,7 +197,7 @@ public class ProfilController extends JFrame {
 				table.repaint();
 			}
 		});
-		
+
 		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 230));
 
 		name = new JLabel();
@@ -277,17 +276,6 @@ public class ProfilController extends JFrame {
 		return -1;
 	}
 
-	private BufferedImage getPictureFromUser(User user) {
-		ByteArrayInputStream bis = new ByteArrayInputStream(user.getPicture());
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(bis);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return image;
-	}
-
 	private void setProfileData() {
 		name.setText(showedUser.getUsername());
 	}
@@ -315,21 +303,44 @@ public class ProfilController extends JFrame {
 		}
 		return counter;
 	}
+
+	private Image getPictureFromUser(User user) {
+		ByteArrayInputStream bis = new ByteArrayInputStream(null);
+		
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(bis);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		Image scaledInstance = image.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
+				Image.SCALE_SMOOTH);
+		profileImage.setIcon(new ImageIcon(scaledInstance));
+		return scaledInstance;
+	}
+
 	private void getImageFromFileSystem() {
 		final JFileChooser fc = new JFileChooser();
 		int returnVal = fc.showOpenDialog(null);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            BufferedImage img = null;
+			File file = fc.getSelectedFile();
+
+			BufferedImage img = null;
 			try {
-			    img = ImageIO.read(file);
+				img = ImageIO.read(file);
 			} catch (IOException e) {
-			    e.printStackTrace();
+				e.printStackTrace();
 			}
-			Image dimg = img.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
-			        Image.SCALE_SMOOTH);
-			profileImage.setIcon(new ImageIcon(dimg));
-        }
+			Image scaledInstance = img.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
+					Image.SCALE_SMOOTH);
+			
+			profileImage.setIcon(new ImageIcon(scaledInstance));
+		}
+	}
+
+	private String getType(String fileName) {
+		String[] split = fileName.split("\\.");
+		return split[1];
 	}
 }

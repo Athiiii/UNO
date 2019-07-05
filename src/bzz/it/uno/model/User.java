@@ -25,7 +25,7 @@ public class User {
 	private int id;
 	private String username;
 	private String password;
-	private byte[] picture;
+	private String picture;
 	private boolean computer;
 	private List<User> friends;
 	private List<User_Lobby> userLobbys;
@@ -59,12 +59,12 @@ public class User {
 		this.password = password;
 	}
 
-	@Column(name = "picture")
-	public byte[] getPicture() {
+	@Column(name = "picture", length = 500)
+	public String getPicture() {
 		return picture;
 	}
 
-	public void setPicture(byte[] picture) {
+	public void setPicture(String picture) {
 		this.picture = picture;
 	}
 

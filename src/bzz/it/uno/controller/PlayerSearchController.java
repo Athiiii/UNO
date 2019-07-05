@@ -10,8 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.glass.ui.View;
-
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
