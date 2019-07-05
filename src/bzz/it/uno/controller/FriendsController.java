@@ -2,6 +2,7 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -13,7 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -141,7 +144,7 @@ public class FriendsController extends JFrame {
 		ViewSettings.setupTableDesign(table);
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
-		contentPane.add(ViewSettings.createDefaultScrollPane(table, 500, 700));
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 200));
 		setTableData();
 	}
 
