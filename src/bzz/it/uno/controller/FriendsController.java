@@ -141,7 +141,7 @@ public class FriendsController extends JFrame {
 		ViewSettings.setupTableDesign(table);
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
-		contentPane.add(ViewSettings.createDefaultScrollPane(table));
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 500, 700));
 		setTableData();
 	}
 

@@ -16,7 +16,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
-
 /**
  * Setting default settings from Swing Components
  * 
@@ -25,12 +24,11 @@ import javax.swing.border.EmptyBorder;
  */
 public class ViewSettings {
 	public static final int WHITE = 1, BLACK = 2;
+	private static Color color = null;
 
 	/**
 	 * <p>
-	 * Setting up <br>
-	 * default settings</br>
-	 * for main JPanel
+	 * Setting up default settings for main JPanel
 	 * </p>
 	 * 
 	 * @param contentPane
@@ -43,9 +41,7 @@ public class ViewSettings {
 
 	/**
 	 * <p>
-	 * Setting up <br>
-	 * default settings</br>
-	 * for JFrame
+	 * Setting up default settings for JFrame
 	 * </p>
 	 * 
 	 * @param frame
@@ -56,34 +52,33 @@ public class ViewSettings {
 		frame.setBounds(100, 100, 700, 500);
 		frame.setVisible(true);
 		frame.setIconImage(new ImageIcon(new ImageIcon(ViewSettings.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
+				.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)).getImage());
 	}
 
 	/**
 	 * <p>
 	 * Creates a Closebutton<br>
 	 * <li><b>ViewSettings.BLACK</b> as Parameter gives a black Button</li>
-	 * <li><b>ViewSettings.WHITE</b> as Parameter gives a white Button</li> If
-	 * parameter is invalid a black Button would be provided
+	 * <li><b>ViewSettings.WHITE</b> as Parameter gives a white Button</li> 
+	 * If parameter is invalid a black Button would be provided
 	 * </p>
 	 * 
 	 * @param color
 	 * @return a close Button
 	 */
-	public static JButton createCloseButton(int color) {
+	public static JButton createCloseButton(int colorId) {
 		String imgPath = "";
-		Color bgColor = null;
-		if (color == 1) {
+		if (colorId == 1) {
 			imgPath = "/images/closeWhite.png";
-			bgColor = Color.DARK_GRAY;
+			color = Color.DARK_GRAY;
 		} else {
 			imgPath = "/images/closeDark.png";
-			bgColor = Color.WHITE;
+			color = Color.WHITE;
 		}
 		JButton closeWindow = new JButton("");
 		closeWindow.setBounds(653, 0, 50, 50);
 		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(bgColor);
+		closeWindow.setBackground(color);
 		closeWindow.setIcon(new ImageIcon(new ImageIcon(ViewSettings.class.getResource(imgPath)).getImage()
 				.getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 		closeWindow.addMouseListener(new MouseAdapter() {
@@ -103,7 +98,7 @@ public class ViewSettings {
 
 			public void mouseExited(MouseEvent evt) {
 				// set back the background
-				closeWindow.setBackground(Color.DARK_GRAY);
+				closeWindow.setBackground(color);
 			}
 		});
 		return closeWindow;
@@ -153,10 +148,10 @@ public class ViewSettings {
 	 * @param view which should be in it
 	 * @return designed Scrollpane
 	 */
-	public static JScrollPane createDefaultScrollPane(Component view) {
+	public static JScrollPane createDefaultScrollPane(Component view, int height, int width) {
 		JScrollPane scrollPane = new JScrollPane(view);
 		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
-		scrollPane.setBounds(0, 234, 700, 189);
+		scrollPane.setBounds(0, 234, height, width);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

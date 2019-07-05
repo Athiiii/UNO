@@ -132,7 +132,7 @@ public class ProfilController extends JFrame {
 			contentPane.add(btnDelete);
 		}
 
-		JScrollPane scrollPane = ViewSettings.createDefaultScrollPane(table);
+		JScrollPane scrollPane = ViewSettings.createDefaultScrollPane(table, 120, 40 );
 		contentPane.add(scrollPane);
 
 		tableModel = new DefaultTableModel(new Object[][] {},
