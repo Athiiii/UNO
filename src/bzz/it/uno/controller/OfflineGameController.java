@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -18,6 +20,8 @@ import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.frontend.WrapLayout;
+import bzz.it.uno.model.Card;
+import bzz.it.uno.model.CardType;
 
 /**
  * 
@@ -27,8 +31,13 @@ import bzz.it.uno.frontend.WrapLayout;
 public class OfflineGameController extends JFrame {
 	private int xy, xx;
 	private JPanel contentPane;
+	private List<JButton> cardBtns;
+	private List<Card> cards;
+	private JPanel cardPanel;
 
 	public OfflineGameController(String userName) {
+		cardBtns = new ArrayList<JButton>();
+		cards = new ArrayList<Card>();
 		contentPane = new JPanel();
 		// ViewSettings.setupFrame(this);
 		JFrame frame = this;
@@ -67,21 +76,29 @@ public class OfflineGameController extends JFrame {
 		titleLabel.setBounds(10, 10, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.DARK_GRAY);
-		panel.setBounds(0, 92, 400, 175);
-		panel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
+	}
 
-		for (int i = 0; i < 9; ++i) {
-			JButton btnNewButton = new JButton(new ImageIcon(
-					new ImageIcon(OfflineGameController.class.getResource("/images/cards/small/red_2.png")).getImage()
-							.getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
-			btnNewButton.setSize(97, 136);
-			btnNewButton.setBorder(BorderFactory.createEmptyBorder());
-			btnNewButton.setContentAreaFilled(false);
-			panel.add(btnNewButton);
-		}		
-		contentPane.add(ViewSettings.createDefaultScrollPane(panel, 175, 400, 92));
+	public void addCards(List<Card> cards) {
+		this.cards.addAll(cards);
+		updateView();
+	}
+
+	private void updateView() {
+		cardPanel = new JPanel();
+		cardPanel.setBackground(Color.DARK_GRAY);
+		cardPanel.setBounds(0, 92, 400, 175);
+		cardPanel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
+
+		for (int i = 0; i < cards.size(); ++i) {
+			JButton cardBtn = new JButton(new ImageIcon(new ImageIcon(
+					OfflineGameController.class.getResource("/images/cards/small/" + cards.get(i).getFilename()))
+							.getImage().getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
+			cardBtn.setSize(97, 136);
+			cardBtn.setBorder(BorderFactory.createEmptyBorder());
+			cardBtn.setContentAreaFilled(false);
+			cardBtns.add(cardBtn);
+			cardPanel.add(cardBtn);
+		}
+		contentPane.add(ViewSettings.createDefaultScrollPane(cardPanel, 175, 400, 92));
 	}
 }

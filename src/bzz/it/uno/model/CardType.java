@@ -6,5 +6,5 @@ package bzz.it.uno.model;
  *
  */
 public enum CardType {
-	COMMON, PLUSTWO, BACK, EXPOSE, CHANGECOLOR, PLUSFOUR
+	COMMON, PLUSTWO, BACK, SKIP, CHANGECOLOR, PLUSFOUR
 }

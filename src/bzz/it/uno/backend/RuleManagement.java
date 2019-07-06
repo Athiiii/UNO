@@ -32,7 +32,7 @@ class RuleManagement {
 	private boolean isSameNumber(Card currentCard, Card comingCard) {
 		boolean result = false;
 		if (currentCard.getCardType() == comingCard.getCardType() && currentCard.getCardType() == CardType.COMMON
-				&& comingCard.getWert() == currentCard.getWert())
+				&& comingCard.getValue() == currentCard.getValue())
 			result = true;
 		return result;
 	}
@@ -48,7 +48,7 @@ class RuleManagement {
 	private boolean isSameColor(Card currentCard, Card comingCard) {
 		boolean result = false;
 		if (currentCard.getCardType() == comingCard.getCardType() && currentCard.getCardType() == CardType.COMMON
-				&& comingCard.getFarbe().equals(currentCard.getFarbe()))
+				&& comingCard.getColor().equals(currentCard.getColor()))
 			result = true;
 		return result;
 	}

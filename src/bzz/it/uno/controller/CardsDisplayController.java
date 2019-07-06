@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import bzz.it.uno.backend.UNOBasicLogic;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.ViewSettings;
+import bzz.it.uno.model.Card;
 
 public class CardsDisplayController extends JFrame {
 
@@ -40,14 +41,18 @@ public class CardsDisplayController extends JFrame {
 		ViewSettings.setupFrame(this);
 		setBounds(100, 100, 150, 202);
 		
+		Card card = unoLogic.getCardsFromStack(1).get(0);
+		unoLogic.playCard(null, card);
+		
 		imgCanvas = new ImageCanvas();
-		imgCanvas.putImage("blue_2.png");
+		imgCanvas.putImage(card.getFilename());
 		imgCanvas.setBounds(10, 10, 130, 182);
 		contentPane.add(imgCanvas, BorderLayout.CENTER);
 		
 		playersController = new OfflineGameController[players];
 		for(int i = 0; i < players; ++i) {
 			playersController[i] = new OfflineGameController("Player " + (i + 1));
+			playersController[i].addCards(unoLogic.getCardsFromStack(7));
 		}
 		
 		imgCanvas.addMouseMotionListener(new MouseMotionAdapter() {
