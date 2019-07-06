@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.LobbyDao;
 import bzz.it.uno.dao.UserLobbyDao;
+import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
@@ -188,12 +189,13 @@ public class SpielController extends JFrame implements ActionListener {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
 			if (onlineMode.isSelected() && maxPlayers > 30) {
 				numberPlayers.setText("30");
-				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 30 gesetzt", "Zu viele Max. Players", 1);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt",
+						UNODialog.INFORMATION);
 			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
 				numberPlayers.setText("5");
-				JOptionPane.showMessageDialog(this, "Max. Spieler wurde auf 5 gesetzt", "Zu viele Max. Players", 1);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION);
 				if (lobbyName.getText().equals("")) {
-					JOptionPane.showMessageDialog(this, "Lobbyname kann darf nicht leer sein", "Lobbyname", 1);
+					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION);
 				}
 			} else {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());

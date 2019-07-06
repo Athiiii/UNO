@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -16,7 +18,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.frontend.WrapLayout;
@@ -43,7 +47,7 @@ public class OfflineGameController extends JFrame {
 		JFrame frame = this;
 		frame.setUndecorated(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 700, 500);
+		frame.setBounds(100, 100, 450, 400);
 		frame.setVisible(true);
 		frame.setIconImage(new ImageIcon(new ImageIcon(ViewSettings.class.getResource("/images/uno_logo.png"))
 				.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)).getImage());
@@ -52,7 +56,6 @@ public class OfflineGameController extends JFrame {
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 
-		setBounds(100, 100, 400, 300);
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -86,10 +89,11 @@ public class OfflineGameController extends JFrame {
 	private void updateView() {
 		cardPanel = new JPanel();
 		cardPanel.setBackground(Color.DARK_GRAY);
-		cardPanel.setBounds(0, 92, 400, 175);
+		cardPanel.setBounds(0, 100, 450, 300);
 		cardPanel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
+		cardBtns = new ArrayList<JButton>();
 
-		for (int i = 0; i < cards.size(); ++i) {
+		for (int i = 0; i < cards.size(); i++) {
 			JButton cardBtn = new JButton(new ImageIcon(new ImageIcon(
 					OfflineGameController.class.getResource("/images/cards/small/" + cards.get(i).getFilename()))
 							.getImage().getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
@@ -97,8 +101,19 @@ public class OfflineGameController extends JFrame {
 			cardBtn.setBorder(BorderFactory.createEmptyBorder());
 			cardBtn.setContentAreaFilled(false);
 			cardBtns.add(cardBtn);
+			cardBtn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (cardBtn.getBorder() instanceof TitledBorder) {
+						cardBtn.setBorder(BorderFactory.createEmptyBorder());
+					}else {
+						cardBtn.setBorder(BorderFactory.createTitledBorder(""));
+					}
+				}
+			});
 			cardPanel.add(cardBtn);
 		}
-		contentPane.add(ViewSettings.createDefaultScrollPane(cardPanel, 175, 400, 92));
+		contentPane.add(ViewSettings.createDefaultScrollPane(cardPanel, 300, 450, 100));
 	}
 }

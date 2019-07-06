@@ -28,8 +28,8 @@ public class UNOBasicLogic {
 
 	public UNOBasicLogic() {
 		ruleManagement = new RuleManagement();
-		playedCards = new CardDeck(generateAllUnoCards());
-		cardStacks = new CardDeck(new ArrayList<Card>());
+		cardStacks = new CardDeck(generateAllUnoCards());
+		playedCards = new CardDeck(new ArrayList<Card>());
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class UNOBasicLogic {
 				cards.add(new Card(50, "", CardType.PLUSFOUR));
 			} else {
 				// COLORCHANGE
-				cards.add(new Card(50, "", CardType.SKIP));
+				cards.add(new Card(50, "", CardType.CHANGECOLOR));
 				color = i - 4;
 			}
 			// NUMBERS

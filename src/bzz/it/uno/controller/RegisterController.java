@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
@@ -50,7 +51,7 @@ public class RegisterController extends JFrame implements ActionListener {
 
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
-		
+
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -77,9 +78,8 @@ public class RegisterController extends JFrame implements ActionListener {
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(
-				new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-						.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
+		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
 		JButton registerBtn = new JButton("Registrieren");
@@ -143,7 +143,7 @@ public class RegisterController extends JFrame implements ActionListener {
 		});
 		alreadyAccount.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		alreadyAccount.setBounds(501, 382, 153, 39);
-		alreadyAccount.setForeground(new Color(55,145,221));
+		alreadyAccount.setForeground(new Color(55, 145, 221));
 		contentPane.add(alreadyAccount);
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 
@@ -170,16 +170,16 @@ public class RegisterController extends JFrame implements ActionListener {
 				this.setVisible(false);
 				new NavigationController(user, frame);
 			} else {
-				JOptionPane.showMessageDialog(this, "Register failed. Entered username is already given",
-						"Register failed", 0);
+				new UNODialog(this, "Register failed", "Register failed. Entered username is already given.",
+						UNODialog.ERROR);
 				usernameField.setText("");
 				passwordField.setText("");
 				repeatPasswordField.setText("");
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(this, "Register failed. Entered passwords are different.", "Register failed",
-					0);
+			new UNODialog(this, "Register failed", "Register failed. Entered passwords are different.",
+					UNODialog.ERROR);
 			passwordField.setText("");
 			repeatPasswordField.setText("");
 		}

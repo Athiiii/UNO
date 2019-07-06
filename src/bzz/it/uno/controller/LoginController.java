@@ -25,8 +25,10 @@ import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.dao.UserDao;
+import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
+import javafx.scene.control.Dialog;
 
 /**
  * Login with user Credentials
@@ -158,7 +160,7 @@ public class LoginController extends JFrame implements ActionListener {
 			this.setVisible(false);
 			new NavigationController(currentUser, this);
 		} else {
-			JOptionPane.showMessageDialog(this, "Login is failed. Invalid username or password", "Login failed", 0);
+			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR);
 			passwordField.setText("");
 			usernameInput.setText("");
 		}
