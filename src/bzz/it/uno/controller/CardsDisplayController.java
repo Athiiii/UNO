@@ -1,7 +1,6 @@
 package bzz.it.uno.controller;
 
 import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,10 +9,7 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sun.prism.paint.ImagePattern;
-
 import bzz.it.uno.backend.UNOBasicLogic;
-import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.ViewSettings;
 
@@ -29,7 +25,7 @@ public class CardsDisplayController extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					new CardsDisplayController(1);
+					new CardsDisplayController(2);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

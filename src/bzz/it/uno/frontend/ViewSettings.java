@@ -2,11 +2,13 @@ package bzz.it.uno.frontend;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 /**
  * Setting default settings from Swing Components
@@ -150,12 +153,39 @@ public class ViewSettings {
 	 */
 	public static JScrollPane createDefaultScrollPane(Component view, int height, int width, int yCord) {
 		JScrollPane scrollPane = new JScrollPane(view);
-		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.darker());
+		scrollPane.getVerticalScrollBar().setBackground(Color.DARK_GRAY.brighter());
 		scrollPane.setBounds(0, yCord, width, height);
 		scrollPane.setOpaque(false);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI()
+        {
+            @Override
+            protected void configureScrollBarColors()
+            {
+                this.thumbColor = Color.BLACK;
+            }
+            
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createEmptyButton();
+            }
+
+            @Override    
+            protected JButton createIncreaseButton(int orientation) {
+                return createEmptyButton();
+            }
+
+            private JButton createEmptyButton() {
+                JButton arrowBtn = new JButton();
+                arrowBtn.setPreferredSize(new Dimension(0, 0));
+                arrowBtn.setMinimumSize(new Dimension(0, 0));
+                arrowBtn.setMaximumSize(new Dimension(0, 0));
+                return arrowBtn;
+            }
+        });
 		return scrollPane;
 	}
 
