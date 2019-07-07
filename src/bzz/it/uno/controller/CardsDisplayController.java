@@ -51,7 +51,7 @@ public class CardsDisplayController extends JFrame {
 		
 		playersController = new OfflineGameController[players];
 		for(int i = 0; i < players; ++i) {
-			playersController[i] = new OfflineGameController("Player " + (i + 1));
+			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
 			playersController[i].addCards(unoLogic.getCardsFromStack(7));
 		}
 		
@@ -76,6 +76,10 @@ public class CardsDisplayController extends JFrame {
 	
 	public void SetImage(String name) {
 		imgCanvas.putImage(name);
+	}
+	
+	public void giveCard(OfflineGameController offlineGameController) {
+		offlineGameController.addCards(unoLogic.getCardsFromStack(1));
 	}
 
 }

@@ -1,6 +1,7 @@
 package bzz.it.uno.controller;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
@@ -39,11 +40,21 @@ public class OfflineGameController extends JFrame {
 	private List<CardButton> cardBtns;
 	private List<Card> cards;
 	private JPanel cardPanel;
+	private CardsDisplayController parent;
+	private Component displayCardComponent;
 
-	public OfflineGameController(String userName) {
+	public OfflineGameController(String userName, CardsDisplayController parent) {
+		this.parent = parent;
+
+		cardPanel = new JPanel();
+		cardPanel.setBackground(Color.DARK_GRAY);
+		cardPanel.setBounds(0, 110, 450, 290);
+		cardPanel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
+
 		cardBtns = new ArrayList<CardButton>();
 		cards = new ArrayList<Card>();
 		contentPane = new JPanel();
+
 		// ViewSettings.setupFrame(this);
 		JFrame frame = this;
 		frame.setUndecorated(true);
@@ -81,20 +92,21 @@ public class OfflineGameController extends JFrame {
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 
-		JButton btnKartenSetzten = new JButton("Karte(n) setzten");
-		btnKartenSetzten.setBounds(280, 10, 150, 40);
-		btnKartenSetzten.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		btnKartenSetzten.setBorderPainted(false);
-		btnKartenSetzten.setFocusPainted(false);
-		btnKartenSetzten.setBackground(new Color(255, 152, 0));
+		JButton btnKartenSetzten = ViewSettings.createButton(280, 10, 150, 40, new Color(76, 175, 80),
+				"Karte(n) setzten");
+		btnKartenSetzten.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
 		contentPane.add(btnKartenSetzten);
 
-		JButton btnKarteZiehen = new JButton("Karte ziehen");
-		btnKarteZiehen.setBounds(280, 60, 150, 40);
-		btnKarteZiehen.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		btnKarteZiehen.setBorderPainted(false);
-		btnKarteZiehen.setFocusPainted(false);
-		btnKarteZiehen.setBackground(new Color(255, 152, 0));
+		JButton btnKarteZiehen = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
+		btnKarteZiehen.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		OfflineGameController mainFrame = this;
+		btnKarteZiehen.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.giveCard(mainFrame);
+			}
+		});
 		contentPane.add(btnKarteZiehen);
 
 	}
@@ -105,17 +117,18 @@ public class OfflineGameController extends JFrame {
 	}
 
 	private void updateView() {
-		cardPanel = new JPanel();
-		cardPanel.setBackground(Color.DARK_GRAY);
-		cardPanel.setBounds(0, 100, 450, 300);
-		cardPanel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
+		System.out.println("here " + cards.size());
 		cardBtns = new ArrayList<CardButton>();
-
+		cardPanel.removeAll();
 		for (int i = 0; i < cards.size(); i++) {
 			CardButton cardBtn = new CardButton(cards.get(i).getFilename(), cards.get(i));
 			cardBtns.add(cardBtn);
 			cardPanel.add(cardBtn);
 		}
-		contentPane.add(ViewSettings.createDefaultScrollPane(cardPanel, 300, 450, 100));
+		if(displayCardComponent != null)
+			contentPane.remove(displayCardComponent);
+		displayCardComponent = ViewSettings.createDefaultScrollPane(cardPanel, 290, 450, 110);
+		contentPane.add(displayCardComponent);
+		contentPane.updateUI();
 	}
 }
