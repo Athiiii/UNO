@@ -38,6 +38,7 @@ public class OfflineGameController extends JFrame {
 	private List<Card> cards;
 	private JPanel cardPanel;
 	private CardsDisplayController parent;
+	private boolean onlyPlayingCards = false;
 	private Component displayCardComponent;
 
 	public OfflineGameController(String userName, CardsDisplayController parent) {
@@ -102,36 +103,45 @@ public class OfflineGameController extends JFrame {
 				}
 
 				if (cards.size() != 0) {
-					parent.playCards(OfflineGameController.this, cards);
-					OfflineGameController.this.cards.removeAll(cards);
-					updateView();
+					if (parent.playCards(OfflineGameController.this, cards)) {
+						OfflineGameController.this.cards.removeAll(cards);
+						updateView();
+					}
 				} else {
-					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING);
+					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING,
+							UNODialog.OK_BUTTON);
 				}
 			}
 		});
 		contentPane.add(btnSetCard);
 
-		JButton btnpullCard = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
-		btnpullCard.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
-		btnpullCard.addActionListener(new ActionListener() {
+		JButton btnPullCard = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
+		btnPullCard.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		btnPullCard.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parent.giveCard(OfflineGameController.this);
+				if (!onlyPlayingCards) {
+					onlyPlayingCards = parent.giveCard(OfflineGameController.this);
+				} else {
+					if (new UNODialog(parent, "Unerlaubt", "Nicht erlaubt. Weitergeben?", UNODialog.QUESTION,
+							UNODialog.YES_NO_BUTTON).getReponse()) {
+						parent.nextPlayer();
+					}
+				}
 			}
+
 		});
-		contentPane.add(btnpullCard);
+		contentPane.add(btnPullCard);
 
 	}
 
 	public void addCards(List<Card> cards) {
-		this.cards.addAll(cards);
+		this.cards.addAll(0, cards);
 		updateView();
 	}
 
 	private void updateView() {
-		System.out.println("here " + cards.size());
 		cardBtns = new ArrayList<CardButton>();
 		cardPanel.removeAll();
 		for (int i = 0; i < cards.size(); i++) {

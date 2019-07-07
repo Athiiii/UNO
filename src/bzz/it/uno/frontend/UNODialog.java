@@ -2,14 +2,13 @@ package bzz.it.uno.frontend;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.lang.reflect.Field;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,9 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import com.sun.glass.ui.View;
+
+import bzz.it.uno.controller.SpielController;
 
 /**
  * Template for all Dialog Messages
@@ -29,26 +29,40 @@ import java.awt.event.ActionEvent;
  *
  */
 public class UNODialog extends JDialog {
-
+	
 	private final JPanel contentPanel = new JPanel();
 	private int xx, xy;
-	public static final String ERROR = "error", WARNING = "warning", INFORMATION = "info";
+
+	// Used for YES - NO Button
+	private boolean response = true;
+
+	// For Message Type
+	public static final String ERROR = "error", WARNING = "warning", INFORMATION = "info", QUESTION = "question";
+
+	// For Button Type
+	public static final int OK_BUTTON = 1, YES_NO_BUTTON = 2;
 
 	/**
 	 * Display a predefined dialog <br>
 	 * messageType can be either:
 	 * <li>ERROR</li>
 	 * <li>WARNING</li>
+	 * <li>QUESTION</li>
 	 * <li>INFORMATION</li> <br>
 	 * Per default it is INFORMATION <br>
 	 * <br>
+	 * buttonType can be either:
+	 * <li>OK_BUTTON</li>
+	 * <li>YES_NO_BUTTON</li> <br>
+	 * Per default it is OK_BUTTON
 	 * 
 	 * @param parent
 	 * @param message
 	 * @param content
 	 * @param messageType
+	 * @param buttonType
 	 */
-	public UNODialog(JFrame parent, String message, String content, String messageType) {
+	public UNODialog(JFrame parent, String message, String content, String messageType, int buttonType) {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		setLocationRelativeTo(parent);
 		setUndecorated(true);
@@ -116,31 +130,48 @@ public class UNODialog extends JDialog {
 		contentLabel.setForeground(Color.WHITE);
 		panel.add(contentLabel, BorderLayout.CENTER);
 
-		JButton btnOk = new JButton("Ok");
-		btnOk.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
-		btnOk.setBackground(new Color(32, 152, 209));
-		btnOk.addActionListener(new ActionListener() {
+		if (buttonType == YES_NO_BUTTON) {
+			JButton btnYes = ViewSettings.createButton(180, 156, 70, 30, new Color(50,205,50), "Ja");
+			btnYes.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
+			btnYes.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnOk.setBorderPainted(false);
-		btnOk.setFocusPainted(false);
-		btnOk.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent evt) {
-				btnOk.setBackground(btnOk.getBackground().brighter());
-			}
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					response = true;
+					dispose();
+				}
+			});
+			contentPanel.add(btnYes);
+			JButton btnNo = ViewSettings.createButton(260, 156, 70, 30, new Color(216, 0, 12), "Nein");
+			btnNo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
+			btnNo.addActionListener(new ActionListener() {
 
-			public void mouseExited(MouseEvent evt) {
-				btnOk.setBackground(new Color(32, 152, 209));
-			}
-		});
-		btnOk.setBounds(241, 156, 90, 30);
-		contentPanel.add(btnOk);
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					response = false;
+					dispose();
+				}
+			});
+			contentPanel.add(btnNo);			
+		} else {
+			
+			JButton btnOk = ViewSettings.createButton(241, 156, 90, 30, new Color(32, 152, 209), "Ok");
+			btnOk.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
+			btnOk.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			contentPanel.add(btnOk);
+		}
 
 		setVisible(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	}
+
+	public boolean getReponse() {
+		return response;
 	}
 }

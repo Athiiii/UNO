@@ -14,9 +14,11 @@ import javax.swing.JPanel;
 
 import bzz.it.uno.backend.UNOBasicLogic;
 import bzz.it.uno.frontend.ImageCanvas;
+import bzz.it.uno.frontend.SelectColorDialog;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Card;
+import bzz.it.uno.model.CardType;
 
 public class CardsDisplayController extends JFrame {
 
@@ -25,6 +27,7 @@ public class CardsDisplayController extends JFrame {
 	private ImageCanvas imgCanvas;
 	private OfflineGameController[] playersController;
 	private int currentPlayer = 0;
+	private int direction = 1;
 	private UNOBasicLogic unoLogic;
 
 	public static void main(String[] args) {
@@ -84,30 +87,65 @@ public class CardsDisplayController extends JFrame {
 		imgCanvas.repaint();
 	}
 
-	public void giveCard(OfflineGameController offlineGameController) {
+	public boolean giveCard(OfflineGameController offlineGameController) {
+		boolean response = false;
 		if (offlineGameController == playersController[currentPlayer]) {
 			offlineGameController.addCards(unoLogic.getCardsFromStack(1));
-			nextPlayer();
+			if (!new UNODialog(this, "Weitergeben?", "Wills du noch eine Karte setzen", UNODialog.QUESTION,
+					UNODialog.YES_NO_BUTTON).getReponse()) {
+				nextPlayer();
+			} else {
+				response = true;
+			}
 		} else {
-			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING);
+			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING,
+					UNODialog.OK_BUTTON);
 		}
+		return response;
 	}
-	
-	public void playCards(OfflineGameController offlineGameController, List<Card> cards) {
+
+	public boolean playCards(OfflineGameController offlineGameController, List<Card> cards) {
 		if (offlineGameController == playersController[currentPlayer]) {
-			unoLogic.playCards(null, cards);
-			displayCurrentCard();
-			nextPlayer();
+			if (unoLogic.playedCorrect(null, cards)) {
+				unoLogic.playCards(null, cards);
+				Card lastCard = cards.get(0);
+				if(lastCard.getCardType() == CardType.BACK)
+					switchDirection();
+				else if(lastCard.getCardType() == CardType.SKIP)
+					nextPlayer();
+				else if(lastCard.getCardType() == CardType.CHANGECOLOR)
+					lastCard.setColor(new SelectColorDialog(this).getColor());
+				else if(lastCard.getCardType() == CardType.PLUSFOUR)
+					lastCard.setColor(new SelectColorDialog(this).getColor());
+				else if(lastCard.getCardType() == CardType.PLUSTWO)
+					System.out.println("TODO");
+				
+				displayCurrentCard();
+				nextPlayer();
+				return true;
+			} else {
+				new UNODialog(this, "Ungültig", "Diese Eingabe ist nicht gültig. Bitte neu versuchen", UNODialog.ERROR,
+						UNODialog.OK_BUTTON);
+				return false;
+			}
 		} else {
-			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING);
+			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING,
+					UNODialog.OK_BUTTON);
+			return false;
 		}
 	}
 
 	public void nextPlayer() {
-		if (playersController.length == currentPlayer + 1)
+		if (playersController.length == currentPlayer + direction)
 			currentPlayer = 0;
+		else if(currentPlayer + direction == -1)
+			currentPlayer = playersController.length -1;
 		else
-			++currentPlayer;
+			currentPlayer += direction;
+	}
+	
+	public void switchDirection() {
+		direction *= -1;
 	}
 
 }

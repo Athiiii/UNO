@@ -171,7 +171,7 @@ public class RegisterController extends JFrame implements ActionListener {
 				new NavigationController(user, frame);
 			} else {
 				new UNODialog(this, "Register failed", "Register failed. Entered username is already given.",
-						UNODialog.ERROR);
+						UNODialog.ERROR, UNODialog.OK_BUTTON);
 				usernameField.setText("");
 				passwordField.setText("");
 				repeatPasswordField.setText("");
@@ -179,7 +179,7 @@ public class RegisterController extends JFrame implements ActionListener {
 
 		} else {
 			new UNODialog(this, "Register failed", "Register failed. Entered passwords are different.",
-					UNODialog.ERROR);
+					UNODialog.ERROR, UNODialog.OK_BUTTON);
 			passwordField.setText("");
 			repeatPasswordField.setText("");
 		}

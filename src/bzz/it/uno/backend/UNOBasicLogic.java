@@ -67,8 +67,8 @@ public class UNOBasicLogic {
 	 * @param card
 	 * @return if playing card is valid
 	 */
-	public boolean playedCorrect(GameUser user, Card card) {
-		return ruleManagement.checkRules(playedCards, card, user);
+	public boolean playedCorrect(GameUser user, List<Card> cards) {
+		return ruleManagement.checkRules(playedCards, cards, user);
 	}
 
 	/**

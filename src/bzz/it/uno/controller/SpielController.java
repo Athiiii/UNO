@@ -190,12 +190,12 @@ public class SpielController extends JFrame implements ActionListener {
 			if (onlineMode.isSelected() && maxPlayers > 30) {
 				numberPlayers.setText("30");
 				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt",
-						UNODialog.INFORMATION);
+						UNODialog.INFORMATION, UNODialog.OK_BUTTON);
 			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
 				numberPlayers.setText("5");
-				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
 				if (lobbyName.getText().equals("")) {
-					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION);
+					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
 				}
 			} else {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());

@@ -160,7 +160,7 @@ public class LoginController extends JFrame implements ActionListener {
 			this.setVisible(false);
 			new NavigationController(currentUser, this);
 		} else {
-			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR);
+			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR, UNODialog.OK_BUTTON);
 			passwordField.setText("");
 			usernameInput.setText("");
 		}
