@@ -22,6 +22,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import bzz.it.uno.frontend.CardButton;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.frontend.WrapLayout;
 import bzz.it.uno.model.Card;
@@ -35,12 +36,12 @@ import bzz.it.uno.model.CardType;
 public class OfflineGameController extends JFrame {
 	private int xy, xx;
 	private JPanel contentPane;
-	private List<JButton> cardBtns;
+	private List<CardButton> cardBtns;
 	private List<Card> cards;
 	private JPanel cardPanel;
 
 	public OfflineGameController(String userName) {
-		cardBtns = new ArrayList<JButton>();
+		cardBtns = new ArrayList<CardButton>();
 		cards = new ArrayList<Card>();
 		contentPane = new JPanel();
 		// ViewSettings.setupFrame(this);
@@ -79,6 +80,14 @@ public class OfflineGameController extends JFrame {
 		titleLabel.setBounds(10, 10, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
+		
+		JButton btnKartenSetzten = new JButton("Karte(n) setzten");
+		btnKartenSetzten.setBounds(280, 10, 150, 40);
+		contentPane.add(btnKartenSetzten);
+		
+		JButton btnKarteZiehen = new JButton("Karte ziehen");
+		btnKarteZiehen.setBounds(280, 60, 150, 40);
+		contentPane.add(btnKarteZiehen);
 	}
 
 	public void addCards(List<Card> cards) {
@@ -91,27 +100,11 @@ public class OfflineGameController extends JFrame {
 		cardPanel.setBackground(Color.DARK_GRAY);
 		cardPanel.setBounds(0, 100, 450, 300);
 		cardPanel.setLayout(new WrapLayout(FlowLayout.CENTER, 5, 5));
-		cardBtns = new ArrayList<JButton>();
+		cardBtns = new ArrayList<CardButton>();
 
 		for (int i = 0; i < cards.size(); i++) {
-			JButton cardBtn = new JButton(new ImageIcon(new ImageIcon(
-					OfflineGameController.class.getResource("/images/cards/small/" + cards.get(i).getFilename()))
-							.getImage().getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
-			cardBtn.setSize(97, 136);
-			cardBtn.setBorder(BorderFactory.createEmptyBorder());
-			cardBtn.setContentAreaFilled(false);
+			CardButton cardBtn = new CardButton(cards.get(i).getFilename(), cards.get(i));
 			cardBtns.add(cardBtn);
-			cardBtn.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (cardBtn.getBorder() instanceof TitledBorder) {
-						cardBtn.setBorder(BorderFactory.createEmptyBorder());
-					}else {
-						cardBtn.setBorder(BorderFactory.createTitledBorder(""));
-					}
-				}
-			});
 			cardPanel.add(cardBtn);
 		}
 		contentPane.add(ViewSettings.createDefaultScrollPane(cardPanel, 300, 450, 100));

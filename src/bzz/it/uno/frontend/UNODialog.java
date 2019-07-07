@@ -3,6 +3,7 @@ package bzz.it.uno.frontend;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -51,10 +52,11 @@ public class UNODialog extends JDialog {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		setLocationRelativeTo(parent);
 		setUndecorated(true);
+		setLocation(100, 100);
 		setIconImage(new ImageIcon(new ImageIcon(ViewSettings.class.getResource("/images/uno_logo.png")).getImage()
 				.getScaledInstance(40, 40, Image.SCALE_SMOOTH)).getImage());
-		setBounds(100, 100, 350, 200);
-
+		setBounds(parent.getX() + parent.getWidth() / 2 - 350 / 2, parent.getY() + parent.getHeight() / 2 - 200 / 2,
+				350, 200);
 		ViewSettings.setupPanel(contentPanel);
 
 		contentPanel.addMouseMotionListener(new MouseMotionAdapter() {
@@ -130,7 +132,7 @@ public class UNODialog extends JDialog {
 		});
 		btnOk.setBounds(241, 156, 90, 30);
 		contentPanel.add(btnOk);
-
+		
 		setVisible(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
