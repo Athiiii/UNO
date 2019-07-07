@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,6 +20,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+
+import bzz.it.uno.controller.NavigationController;
+import bzz.it.uno.controller.ProfilController;
 
 /**
  * Setting default settings from Swing Components
@@ -62,8 +67,8 @@ public class ViewSettings {
 	 * <p>
 	 * Creates a Closebutton<br>
 	 * <li><b>ViewSettings.BLACK</b> as Parameter gives a black Button</li>
-	 * <li><b>ViewSettings.WHITE</b> as Parameter gives a white Button</li> 
-	 * If parameter is invalid a black Button would be provided
+	 * <li><b>ViewSettings.WHITE</b> as Parameter gives a white Button</li> If
+	 * parameter is invalid a black Button would be provided
 	 * </p>
 	 * 
 	 * @param color
@@ -160,32 +165,30 @@ public class ViewSettings {
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI()
-        {
-            @Override
-            protected void configureScrollBarColors()
-            {
-                this.thumbColor = Color.BLACK;
-            }
-            
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return createEmptyButton();
-            }
+		scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Color.BLACK;
+			}
 
-            @Override    
-            protected JButton createIncreaseButton(int orientation) {
-                return createEmptyButton();
-            }
+			@Override
+			protected JButton createDecreaseButton(int orientation) {
+				return createEmptyButton();
+			}
 
-            private JButton createEmptyButton() {
-                JButton arrowBtn = new JButton();
-                arrowBtn.setPreferredSize(new Dimension(0, 0));
-                arrowBtn.setMinimumSize(new Dimension(0, 0));
-                arrowBtn.setMaximumSize(new Dimension(0, 0));
-                return arrowBtn;
-            }
-        });
+			@Override
+			protected JButton createIncreaseButton(int orientation) {
+				return createEmptyButton();
+			}
+
+			private JButton createEmptyButton() {
+				JButton arrowBtn = new JButton();
+				arrowBtn.setPreferredSize(new Dimension(0, 0));
+				arrowBtn.setMinimumSize(new Dimension(0, 0));
+				arrowBtn.setMaximumSize(new Dimension(0, 0));
+				return arrowBtn;
+			}
+		});
 		return scrollPane;
 	}
 
@@ -208,5 +211,24 @@ public class ViewSettings {
 		table.setFocusable(false);
 		table.setFont(new Font(table.getFont().getName(), table.getFont().getStyle(), 25));
 		return table;
+	}
+
+	public static JButton createButton(int x, int y, int width, int height, Color color, String text) {
+		JButton btn = new JButton(text);
+		btn.setBounds(x, y, width, height);
+		btn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btn.setBackground(color);
+		btn.setBorderPainted(false);
+		btn.setFocusPainted(false);
+		btn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				btn.setBackground(btn.getBackground().brighter());
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				btn.setBackground(color);
+			}
+		});
+		return btn;
 	}
 }

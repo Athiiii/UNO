@@ -80,14 +80,23 @@ public class OfflineGameController extends JFrame {
 		titleLabel.setBounds(10, 10, 680, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
+
 		JButton btnKartenSetzten = new JButton("Karte(n) setzten");
 		btnKartenSetzten.setBounds(280, 10, 150, 40);
+		btnKartenSetzten.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+		btnKartenSetzten.setBorderPainted(false);
+		btnKartenSetzten.setFocusPainted(false);
+		btnKartenSetzten.setBackground(new Color(255, 152, 0));
 		contentPane.add(btnKartenSetzten);
-		
+
 		JButton btnKarteZiehen = new JButton("Karte ziehen");
 		btnKarteZiehen.setBounds(280, 60, 150, 40);
+		btnKarteZiehen.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+		btnKarteZiehen.setBorderPainted(false);
+		btnKarteZiehen.setFocusPainted(false);
+		btnKarteZiehen.setBackground(new Color(255, 152, 0));
 		contentPane.add(btnKarteZiehen);
+
 	}
 
 	public void addCards(List<Card> cards) {
