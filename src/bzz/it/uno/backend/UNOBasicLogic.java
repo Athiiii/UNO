@@ -96,16 +96,16 @@ public class UNOBasicLogic {
 	}
 
 	/**
-	 * assign card to user
+	 * set cards to playeddcard stack
 	 * 
 	 * @param user
 	 * @param card
 	 */
-	public void playCard(GameUser user, Card card) {
+	public void playCards(GameUser user, List<Card> cards) {
 		if (user != null) {
-			user.getUserDeck().removeCard(card);
+			user.getUserDeck().getCards().removeAll(cards);
 		}
-		playedCards.addCard(card);
+		playedCards.getCards().addAll(cards);
 	}
 
 	/**
@@ -204,5 +204,13 @@ public class UNOBasicLogic {
 			cardStacks.removeCard(card);
 		}
 		return cards;
+	}
+	
+	/**
+	 * Returns the last played card
+	 * @return
+	 */
+	public Card getLastPlayedCard() {
+		return playedCards.getCards().get(playedCards.getCards().size() -1);
 	}
 }

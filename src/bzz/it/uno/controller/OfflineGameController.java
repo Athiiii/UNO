@@ -13,21 +13,18 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 import bzz.it.uno.frontend.CardButton;
+import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.frontend.WrapLayout;
 import bzz.it.uno.model.Card;
-import bzz.it.uno.model.CardType;
 
 /**
  * 
@@ -95,16 +92,32 @@ public class OfflineGameController extends JFrame {
 		JButton btnKartenSetzten = ViewSettings.createButton(280, 10, 150, 40, new Color(76, 175, 80),
 				"Karte(n) setzten");
 		btnKartenSetzten.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		btnKartenSetzten.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<Card> cards = new ArrayList<Card>();
+				for(int i = 0; i < cardBtns.size(); ++i) {
+					if(cardBtns.get(i).isSelected())
+						cards.add(cardBtns.get(i).getCard());
+				}
+				
+				if (cards.size() != 0) {
+					parent.playCards(OfflineGameController.this, cards);
+				} else {
+					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING);
+				}
+			}
+		});
 		contentPane.add(btnKartenSetzten);
 
 		JButton btnKarteZiehen = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
 		btnKarteZiehen.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
-		OfflineGameController mainFrame = this;
 		btnKarteZiehen.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parent.giveCard(mainFrame);
+				parent.giveCard(OfflineGameController.this);
 			}
 		});
 		contentPane.add(btnKarteZiehen);
@@ -125,7 +138,7 @@ public class OfflineGameController extends JFrame {
 			cardBtns.add(cardBtn);
 			cardPanel.add(cardBtn);
 		}
-		if(displayCardComponent != null)
+		if (displayCardComponent != null)
 			contentPane.remove(displayCardComponent);
 		displayCardComponent = ViewSettings.createDefaultScrollPane(cardPanel, 290, 450, 110);
 		contentPane.add(displayCardComponent);
