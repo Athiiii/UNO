@@ -77,6 +77,13 @@ public class UNODialog extends JDialog {
 
 		JButton closeBtn = ViewSettings.createCloseButton(ViewSettings.WHITE);
 		closeBtn.setBounds(320, 0, 30, 30);
+		closeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		contentPanel.add(closeBtn);
 
 		JPanel panel = new JPanel();
@@ -132,7 +139,7 @@ public class UNODialog extends JDialog {
 		});
 		btnOk.setBounds(241, 156, 90, 30);
 		contentPanel.add(btnOk);
-		
+
 		setVisible(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}

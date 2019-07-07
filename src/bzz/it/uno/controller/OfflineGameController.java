@@ -89,38 +89,39 @@ public class OfflineGameController extends JFrame {
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 
-		JButton btnKartenSetzten = ViewSettings.createButton(280, 10, 150, 40, new Color(76, 175, 80),
-				"Karte(n) setzten");
-		btnKartenSetzten.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
-		btnKartenSetzten.addActionListener(new ActionListener() {
+		JButton btnSetCard = ViewSettings.createButton(280, 10, 150, 40, new Color(76, 175, 80), "Karte(n) setzten");
+		btnSetCard.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		btnSetCard.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				List<Card> cards = new ArrayList<Card>();
-				for(int i = 0; i < cardBtns.size(); ++i) {
-					if(cardBtns.get(i).isSelected())
+				for (int i = 0; i < cardBtns.size(); ++i) {
+					if (cardBtns.get(i).isSelected())
 						cards.add(cardBtns.get(i).getCard());
 				}
-				
+
 				if (cards.size() != 0) {
 					parent.playCards(OfflineGameController.this, cards);
+					OfflineGameController.this.cards.removeAll(cards);
+					updateView();
 				} else {
 					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING);
 				}
 			}
 		});
-		contentPane.add(btnKartenSetzten);
+		contentPane.add(btnSetCard);
 
-		JButton btnKarteZiehen = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
-		btnKarteZiehen.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
-		btnKarteZiehen.addActionListener(new ActionListener() {
+		JButton btnpullCard = ViewSettings.createButton(280, 60, 150, 40, new Color(255, 152, 0), "Karte ziehen");
+		btnpullCard.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		btnpullCard.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.giveCard(OfflineGameController.this);
 			}
 		});
-		contentPane.add(btnKarteZiehen);
+		contentPane.add(btnpullCard);
 
 	}
 
