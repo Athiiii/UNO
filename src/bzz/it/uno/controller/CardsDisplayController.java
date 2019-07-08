@@ -20,8 +20,14 @@ import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardType;
 
+/**
+ * Main controller for offline UNO Version Display current Card
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class CardsDisplayController extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xx, xy;
 	private ImageCanvas imgCanvas;
@@ -37,33 +43,25 @@ public class CardsDisplayController extends JFrame {
 	// Take 1 Card is default
 	private int takeCards = 1;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new CardsDisplayController(2);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public CardsDisplayController(int players) {
 		unoLogic = new UNOBasicLogic();
+
 		contentPane = new JPanel();
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);
 		setBounds(100, 100, 150, 202);
 
+		// define first card
 		Card card = unoLogic.getCardsFromStack(1).get(0);
 		unoLogic.playCards(null, Arrays.asList(card));
 
+		// display first card
 		imgCanvas = new ImageCanvas();
 		displayCurrentCard();
 		imgCanvas.setBounds(10, 10, 130, 182);
 		contentPane.add(imgCanvas, BorderLayout.CENTER);
 
+		// create players
 		playersController = new OfflineGameController[players];
 		for (int i = 0; i < players; ++i) {
 			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
@@ -89,11 +87,20 @@ public class CardsDisplayController extends JFrame {
 		setContentPane(contentPane);
 	}
 
+	/**
+	 * Used to update View of the current card
+	 */
 	private void displayCurrentCard() {
 		imgCanvas.putImage(unoLogic.getLastPlayedCard().getFilename());
 		imgCanvas.repaint();
 	}
 
+	/**
+	 * gives a card from stack to user
+	 * 
+	 * @param offlineGameController
+	 * @return boolean if players wants to continuee
+	 */
 	public boolean giveCard(OfflineGameController offlineGameController) {
 		boolean response = false;
 		if (offlineGameController == playersController[currentPlayer]) {
@@ -108,6 +115,7 @@ public class CardsDisplayController extends JFrame {
 					response = true;
 				}
 			} else {
+				// if player had to take more than 1 card he has not the possibility to continue
 				nextPlayer();
 			}
 			takeCards = 0;
@@ -118,6 +126,13 @@ public class CardsDisplayController extends JFrame {
 		return response;
 	}
 
+	/**
+	 * Plays a card. Also checks all UNO Rules and arrange action for special cards
+	 * 
+	 * @param offlineGameController
+	 * @param cards
+	 * @return boolean - if successful
+	 */
 	public boolean playCards(OfflineGameController offlineGameController, List<Card> cards) {
 		if (offlineGameController == playersController[currentPlayer]) {
 			if (unoLogic.playedCorrect(null, cards)) {
@@ -126,16 +141,26 @@ public class CardsDisplayController extends JFrame {
 
 				// Feature of special cards
 				if (lastCard.getCardType() == CardType.BACK) {
-					switchDirection();
+					// switch direction
+					direction *= -1;
 				} else if (lastCard.getCardType() == CardType.SKIP) {
-					nextPlayer();
+					// affects that players(s) will be skiped
+					for (int i = 0; i < cards.size(); ++i)
+						nextPlayer();
 				} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
+					// displays view to choose color
 					lastCard.setColor(new SelectColorDialog(this).getColor());
 				} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
+					// displays view to choose color
 					lastCard.setColor(new SelectColorDialog(this).getColor());
-					takeCards += 4;
+
+					// define how many cards the next player has to take
+					for (int i = 0; i < cards.size(); ++i)
+						takeCards += 4;
 				} else if (lastCard.getCardType() == CardType.PLUSTWO) {
-					takeCards += 2;
+					// define how many cards the next player has to take
+					for (int i = 0; i < cards.size(); ++i)
+						takeCards += 2;
 				}
 
 				displayCurrentCard();
@@ -153,6 +178,9 @@ public class CardsDisplayController extends JFrame {
 		}
 	}
 
+	/**
+	 * goes to next player. The direction will be considered
+	 */
 	public void nextPlayer() {
 		if (playersController.length == currentPlayer + direction)
 			currentPlayer = 0;
@@ -161,9 +189,4 @@ public class CardsDisplayController extends JFrame {
 		else
 			currentPlayer += direction;
 	}
-
-	public void switchDirection() {
-		direction *= -1;
-	}
-
 }

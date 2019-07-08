@@ -8,6 +8,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Canvas to display Cards
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class ImageCanvas extends Canvas {
 
 	private static final long serialVersionUID = 1L;

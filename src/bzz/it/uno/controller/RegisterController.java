@@ -16,11 +16,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
@@ -82,22 +80,8 @@ public class RegisterController extends JFrame implements ActionListener {
 				.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 
-		JButton registerBtn = new JButton("Registrieren");
-		registerBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		registerBtn.setBackground(new Color(66, 164, 245));
+		JButton registerBtn = ViewSettings.createButton(243, 382, 169, 39, new Color(66, 164, 245), "Registrieren");
 		registerBtn.addActionListener(this);
-		registerBtn.setBorderPainted(false);
-		registerBtn.setFocusPainted(false);
-		registerBtn.setBounds(243, 382, 169, 39);
-		registerBtn.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent evt) {
-				registerBtn.setBackground(registerBtn.getBackground().brighter());
-			}
-
-			public void mouseExited(MouseEvent evt) {
-				registerBtn.setBackground(new Color(66, 164, 245));
-			}
-		});
 		contentPane.add(registerBtn);
 
 		passwordField = new JPasswordField();
@@ -132,7 +116,8 @@ public class RegisterController extends JFrame implements ActionListener {
 		passwordLabel.setBounds(243, 256, 107, 39);
 		passwordLabel.setForeground(Color.WHITE);
 		contentPane.add(passwordLabel);
-
+		
+		//switch to login view
 		JLabel alreadyAccount = new JLabel("Bereits ein Konto?");
 		alreadyAccount.addMouseListener(new MouseAdapter() {
 			@Override

@@ -4,6 +4,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ * Manage Entity Manager and Factory
+ * 
+ * @author Severin Hersche
+ *
+ */
 public class HandleConnectionToDB {
 
 	private static EntityManagerFactory entityManagerFactory;

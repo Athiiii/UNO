@@ -2,6 +2,9 @@ package bzz.it.uno.frontend;
 
 import javax.swing.ImageIcon;
 
+/**
+ * @author Athavan Theivakulasingham
+ */
 public class RankModel implements Comparable<RankModel> {
 	private String name;
 	private Integer points;

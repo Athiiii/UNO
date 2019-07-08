@@ -8,6 +8,9 @@ import javax.persistence.Query;
 import bzz.it.uno.model.History;
 import bzz.it.uno.model.User;
 
+/**
+ * @author Severin Hersche
+ */
 public class HistoryDao {
 	private static HistoryDao historyDao;
 	

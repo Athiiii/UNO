@@ -2,7 +2,6 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,9 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -33,6 +30,7 @@ import bzz.it.uno.model.User;
  * <li>remove friends</li>
  * <li>add new friends</li>
  * <br>
+ * 
  * @author Severin Hersche
  *
  */
@@ -47,8 +45,10 @@ public class FriendsController extends JFrame {
 
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
-		ViewSettings.setupFrame(this);
+		
 		contentPane = new JPanel();
+		ViewSettings.setupPanel(contentPane);
+		ViewSettings.setupFrame(this);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -69,7 +69,6 @@ public class FriendsController extends JFrame {
 				xy = e.getY();
 			}
 		});
-		ViewSettings.setupPanel(contentPane);
 		setContentPane(contentPane);
 
 		String[] columnNames = { "Username", "Punkte", "Action" };

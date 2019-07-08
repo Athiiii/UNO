@@ -11,8 +11,14 @@ import javax.swing.border.TitledBorder;
 
 import bzz.it.uno.model.Card;
 
+/**
+ * Displays a card with some styling
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class CardButton extends JButton {
-
+	private static final long serialVersionUID = 1L;
 	private Card card;
 	private boolean selected;
 	
@@ -31,9 +37,11 @@ public class CardButton extends JButton {
 			public void actionPerformed(ActionEvent e) {
 				if (getBorder() instanceof TitledBorder) {
 					setSelected(false);
+					//remove border
 					setBorder(BorderFactory.createEmptyBorder());
 				}else {
 					setSelected(true);
+					//show border
 					setBorder(BorderFactory.createTitledBorder(""));
 				}
 			}

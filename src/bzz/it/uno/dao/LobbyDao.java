@@ -8,6 +8,9 @@ import javax.persistence.Query;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 
+/**
+ * @author Severin Hersche, Athavan Theivakulasingham
+ */
 public class LobbyDao {
 	
 	private static LobbyDao lobbyDao;

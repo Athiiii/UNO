@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 
 import bzz.it.uno.dao.HandleConnectionToDB;
 
+/**
+ * Start application
+ * @author Severin Hersche
+ */
 public class StartApp {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

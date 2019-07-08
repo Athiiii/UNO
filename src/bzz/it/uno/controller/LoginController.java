@@ -1,7 +1,6 @@
 package bzz.it.uno.controller;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
@@ -17,18 +16,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
-import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
-import javafx.scene.control.Dialog;
 
 /**
  * Login with user Credentials
@@ -48,7 +43,6 @@ public class LoginController extends JFrame implements ActionListener {
 
 	public LoginController() {
 		contentPane = new JPanel();
-		JFrame frame = this;
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
 

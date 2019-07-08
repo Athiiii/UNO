@@ -16,14 +16,15 @@ import bzz.it.uno.model.User;
  *
  */
 public class LobbyController extends JFrame {
-
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xy, xx;
 
 	public LobbyController(User user, NavigationController navigationFrame) {
-		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
+		
+		ViewSettings.setupPanel(contentPane);
+		ViewSettings.setupFrame(this);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -40,8 +41,6 @@ public class LobbyController extends JFrame {
 				xy = e.getY();
 			}
 		});
-		
-		ViewSettings.setupPanel(contentPane);
 		setContentPane(contentPane);
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.BLACK));

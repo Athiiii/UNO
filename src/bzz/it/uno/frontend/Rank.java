@@ -1,5 +1,11 @@
 package bzz.it.uno.frontend;
 
+/**
+ * To find out in which liga a user were with how much points
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class Rank {
 	static final String NOVIZE = "Novize.png";
 	static final String BRONZE = "Bronze.png";

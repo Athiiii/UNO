@@ -13,8 +13,13 @@ import javax.swing.JPanel;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
+/**
+ * Search for User to be friends
+ * @author Severin Hersche
+ *
+ */
 public class PlayerSearchController extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xx, xy;
 	

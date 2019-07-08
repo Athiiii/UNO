@@ -17,6 +17,12 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * Dialog choose a color. [red, yellow, green, blue]
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class SelectColorDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private int xx, xy;

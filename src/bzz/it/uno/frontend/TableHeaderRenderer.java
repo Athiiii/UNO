@@ -7,6 +7,9 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+/**
+ * @author Athavan Theivakulasingham
+ */
 public class TableHeaderRenderer implements TableCellRenderer {
 
 	private final TableCellRenderer baseRenderer;

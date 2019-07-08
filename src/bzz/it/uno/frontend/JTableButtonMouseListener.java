@@ -6,6 +6,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+/**
+ * @author Severin Hersche
+ */
 public class JTableButtonMouseListener extends MouseAdapter {
 	private final JTable table;
 
@@ -14,14 +17,16 @@ public class JTableButtonMouseListener extends MouseAdapter {
 	}
 
 	public void mouseClicked(MouseEvent event) {
-		int column = table.getColumnModel().getColumnIndexAtX(event.getX()); // get the coloum of the button
-		int row = event.getY() / table.getRowHeight(); // get the row of the button
+		// get the coloum of the button
+		int column = table.getColumnModel().getColumnIndexAtX(event.getX());
+		// get the row of the button
+		int row = event.getY() / table.getRowHeight();
 
-		/* Checking the row or column is valid or not */
+		// Checking the row or column is valid or not
 		if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
 			Object value = table.getValueAt(row, column);
 			if (value instanceof JButton) {
-				/* perform a click event */
+				// perform a click event
 				((JButton) value).doClick();
 			}
 		}

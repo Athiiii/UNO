@@ -138,10 +138,7 @@ public class NavigationController extends JFrame {
 		
 		
 		//create Logout Button
-		JButton btnLogout = new JButton("");
-		btnLogout.setBounds(603, 0, 50, 50);
-		btnLogout.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		btnLogout.setBackground(Color.DARK_GRAY);
+		JButton btnLogout = ViewSettings.createButton(603, 0, 50, 50, Color.DARK_GRAY, "");
 		btnLogout.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/logout.png"))
 				.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 		btnLogout.addActionListener(new ActionListener() {
@@ -152,17 +149,6 @@ public class NavigationController extends JFrame {
 				setVisible(false);
 				frame.setUserName(user.getUsername());
 				frame.setVisible(true);
-			}
-		});
-		btnLogout.setBorderPainted(false);
-		btnLogout.setFocusPainted(false);
-		btnLogout.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent evt) {
-				btnLogout.setBackground(btnLogout.getBackground().brighter());
-			}
-
-			public void mouseExited(MouseEvent evt) {
-				btnLogout.setBackground(Color.DARK_GRAY);
 			}
 		});
 		contentPane.add(btnLogout);

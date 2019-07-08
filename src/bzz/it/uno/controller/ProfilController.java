@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -49,7 +47,7 @@ import bzz.it.uno.model.User_Lobby;
  *
  */
 public class ProfilController extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private User showedUser;
 	private JPanel contentPane;
 
@@ -70,8 +68,9 @@ public class ProfilController extends JFrame {
 			this.showedUser = user;
 		}
 
-		ViewSettings.setupFrame(this);
 		contentPane = new JPanel();
+		ViewSettings.setupFrame(this);
+		ViewSettings.setupPanel(contentPane);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -88,9 +87,6 @@ public class ProfilController extends JFrame {
 				xy = e.getY();
 			}
 		});
-		contentPane.setLayout(null);
-		contentPane.setBackground(Color.DARK_GRAY);
-		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
@@ -118,7 +114,7 @@ public class ProfilController extends JFrame {
 			contentPane.add(friends);
 		} else {
 			// Button to edit the profile
-			JButton btnEdit = new JButton("Bearbeiten");
+			JButton btnEdit = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
 			btnEdit.addActionListener(new ActionListener() {
 
 				@Override
@@ -126,9 +122,6 @@ public class ProfilController extends JFrame {
 					getImageFromFileSystem();
 				}
 			});
-			btnEdit.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-			btnEdit.setBackground(new Color(41, 204, 22));
-			btnEdit.setBounds(393, 446, 154, 40);
 			contentPane.add(btnEdit);
 
 			// button to delete the profile
@@ -172,6 +165,7 @@ public class ProfilController extends JFrame {
 		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
 
+		// define table width
 		table.getColumnModel().getColumn(0).setPreferredWidth(250);
 		table.getColumnModel().getColumn(1).setPreferredWidth(150);
 		table.getColumnModel().getColumn(2).setPreferredWidth(150);
@@ -181,6 +175,8 @@ public class ProfilController extends JFrame {
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+		// get renderer for every cell in the table
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -205,7 +201,9 @@ public class ProfilController extends JFrame {
 		name.setForeground(Color.WHITE);
 		name.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		contentPane.add(name);
+		
 		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+		
 		rank = new JLabel("Platz: " + Integer.toString(getRankOfUser(allUserLobbies)));
 		rank.setBounds(160, 194, 96, 20);
 		rank.setForeground(Color.WHITE);
@@ -306,7 +304,7 @@ public class ProfilController extends JFrame {
 
 	private Image getPictureFromUser(User user) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(null);
-		
+
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(bis);
@@ -334,13 +332,8 @@ public class ProfilController extends JFrame {
 			}
 			Image scaledInstance = img.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
 					Image.SCALE_SMOOTH);
-			
+
 			profileImage.setIcon(new ImageIcon(scaledInstance));
 		}
-	}
-
-	private String getType(String fileName) {
-		String[] split = fileName.split("\\.");
-		return split[1];
 	}
 }

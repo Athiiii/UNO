@@ -20,9 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.glass.ui.View;
+
 import bzz.it.uno.dao.LobbyDao;
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.UNODialog;
+import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
@@ -30,6 +33,9 @@ import bzz.it.uno.model.User_Lobby;
 import javax.swing.JCheckBox;
 
 /**
+ * Creation of the game
+ * User can decide Lobby name (doesn't affect offline version)
+ * and possibility beween online/offline
  * 
  * @author Athavan Theivakulasingham
  *
@@ -46,11 +52,12 @@ public class SpielController extends JFrame implements ActionListener {
 	public SpielController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 385);
-		setVisible(true);
+		
 		contentPane = new JPanel();
+		
+		ViewSettings.setupFrame(this);
+		ViewSettings.setupPanel(contentPane);
+		setBounds(100, 100, 700, 385);
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -67,66 +74,9 @@ public class SpielController extends JFrame implements ActionListener {
 				xy = e.getY();
 			}
 		});
-		contentPane.setLayout(null);
-		contentPane.setBackground(Color.DARK_GRAY);
-		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
 		setContentPane(contentPane);
-
-		// set Frame icon
-		setIconImage(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png")).getImage()
-				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)).getImage());
-
-		JButton closeWindow = new JButton("");
-		closeWindow.setBounds(653, 0, 50, 50);
-		closeWindow.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 10));
-		closeWindow.setBackground(Color.DARK_GRAY);
-		closeWindow.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/closeWhite.png"))
-				.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
-		closeWindow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.exit(0);
-			}
-		});
-		closeWindow.setBorderPainted(false);
-		closeWindow.setFocusPainted(false);
-		closeWindow.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(closeWindow.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				closeWindow.setBackground(Color.DARK_GRAY);
-			}
-		});
-		contentPane.add(closeWindow);
-
-		JButton backBtn = new JButton(" Zur\u00FCck");
-		backBtn.setForeground(Color.WHITE);
-		backBtn.setBounds(0, 0, 127, 50);
-		backBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
-		backBtn.setBackground(Color.DARK_GRAY);
-		backBtn.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/back.png")).getImage()
-				.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-		backBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				dispose();
-				navigationFrame.setVisible(true);
-			}
-		});
-		backBtn.setBorderPainted(false);
-		backBtn.setFocusPainted(false);
-		backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				backBtn.setBackground(backBtn.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				backBtn.setBackground(Color.DARK_GRAY);
-			}
-		});
-		contentPane.add(backBtn);
+		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
+		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
 
 		JLabel titleLabel = new JLabel("Spiel erstellen");
 		titleLabel.setForeground(Color.WHITE);
@@ -156,23 +106,11 @@ public class SpielController extends JFrame implements ActionListener {
 		maxPlayer.setBounds(90, 253, 137, 39);
 		contentPane.add(maxPlayer);
 
-		JButton startBtn = new JButton("Start");
-		startBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		startBtn.setBackground(new Color(0, 153, 204));
+		JButton startBtn = ViewSettings.createButton(507, 320, 142, 39, new Color(0, 153, 204), "Start");
 		startBtn.addActionListener(this);
-		startBtn.setBounds(507, 320, 142, 39);
-		startBtn.setBorderPainted(false);
-		startBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(startBtn.getBackground().brighter());
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				startBtn.setBackground(new Color(92, 184, 92));
-			}
-		});
 		contentPane.add(startBtn);
 
+		//checkbox to choose between online and offline mode
 		onlineMode = new JCheckBox("online");
 		onlineMode.setBackground(Color.DARK_GRAY);
 		onlineMode.setBounds(90, 312, 137, 39);
@@ -180,9 +118,12 @@ public class SpielController extends JFrame implements ActionListener {
 		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		onlineMode.setSelected(true);
 		contentPane.add(onlineMode);
-
 	}
-
+	
+	/**
+	 * the whole validation of the user inputs.
+	 * 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
