@@ -337,20 +337,24 @@ public class ProfilController extends JFrame {
 			BufferedImage image = null;
 
 			image = ImageIO.read(file);
+			Image scaledInstance = scaleImage(image);
+
+			profileImage.setIcon(new ImageIcon(scaledInstance));
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-			ImageIO.write(image, "png", bos);
+			ImageIO.write(image, getFileType(file), bos);
 			byte[] imageBytes = bos.toByteArray();
 			String encodeToString = Base64.getEncoder().encodeToString(imageBytes);
 			showedUser.getId();
 			showedUser.setPicture(encodeToString);
 			UserDao.getInstance().updateUser(showedUser);
 
-			Image scaledInstance = scaleImage(image);
-
-			profileImage.setIcon(new ImageIcon(scaledInstance));
 		}
+	}
+
+	private String getFileType(File file) {
+		return file.getPath().split("\\.")[1]; 
 	}
 
 	private Image scaleImage(Image image) {
