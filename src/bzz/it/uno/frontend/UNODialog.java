@@ -18,10 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import com.sun.glass.ui.View;
-
-import bzz.it.uno.controller.SpielController;
-
 /**
  * Template for all Dialog Messages
  * 

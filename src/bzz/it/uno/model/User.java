@@ -59,7 +59,7 @@ public class User {
 		this.password = password;
 	}
 
-	@Column(name = "picture", length = 500)
+	@Column(name = "picture", length = 10000000)
 	public String getPicture() {
 		return picture;
 	}

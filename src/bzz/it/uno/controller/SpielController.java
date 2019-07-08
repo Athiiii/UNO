@@ -8,19 +8,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.Date;
 import java.time.LocalDate;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import com.sun.glass.ui.View;
 
 import bzz.it.uno.dao.LobbyDao;
 import bzz.it.uno.dao.UserLobbyDao;
@@ -29,8 +25,6 @@ import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
-
-import javax.swing.JCheckBox;
 
 /**
  * Creation of the game

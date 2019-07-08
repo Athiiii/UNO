@@ -6,14 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import com.sun.glass.ui.View;
 
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
@@ -30,11 +25,11 @@ public class ModifyProfileController extends JFrame {
 	private int xy, xx;
 	private NavigationController navigationFrame;
 	private JPanel contentPane;
-	
+
 	public ModifyProfileController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
-	
+
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);

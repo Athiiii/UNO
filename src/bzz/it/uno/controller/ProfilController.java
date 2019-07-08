@@ -12,9 +12,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -114,15 +116,20 @@ public class ProfilController extends JFrame {
 			contentPane.add(friends);
 		} else {
 			// Button to edit the profile
-			JButton btnEdit = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
-			btnEdit.addActionListener(new ActionListener() {
+			JButton addImageBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bild hinzufuegen");
+			addImageBtn.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					getImageFromFileSystem();
+					try {
+						getImageFromFileSystem();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
-			contentPane.add(btnEdit);
+			contentPane.add(addImageBtn);
 
 			// button to delete the profile
 			JButton btnDelete = new JButton("L\u00F6schen");
@@ -201,9 +208,9 @@ public class ProfilController extends JFrame {
 		name.setForeground(Color.WHITE);
 		name.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		contentPane.add(name);
-		
+
 		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
-		
+
 		rank = new JLabel("Platz: " + Integer.toString(getRankOfUser(allUserLobbies)));
 		rank.setBounds(160, 194, 96, 20);
 		rank.setForeground(Color.WHITE);
@@ -224,7 +231,12 @@ public class ProfilController extends JFrame {
 		profileImage.setBounds(23, 61, 127, 131);
 		contentPane.add(profileImage);
 		if (user.getPicture() != null) {
-			profileImage.setIcon(new ImageIcon(getPictureFromUser(user)));
+			try {
+				profileImage.setIcon(new ImageIcon(getPictureFromUser(user)));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		setTableData(allUserLobbies);
@@ -302,38 +314,46 @@ public class ProfilController extends JFrame {
 		return counter;
 	}
 
-	private Image getPictureFromUser(User user) {
-		ByteArrayInputStream bis = new ByteArrayInputStream(null);
+	private Image getPictureFromUser(User user) throws IOException {
+		byte[] decode = Base64.getDecoder().decode(user.getPicture());
+		ByteArrayInputStream bis = new ByteArrayInputStream(decode);
 
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(bis);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		Image scaledInstance = image.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
-				Image.SCALE_SMOOTH);
+		Image image = ImageIO.read(bis);
+		bis.close();
+
+		Image scaledInstance = scaleImage(image);
+
 		profileImage.setIcon(new ImageIcon(scaledInstance));
 		return scaledInstance;
 	}
 
-	private void getImageFromFileSystem() {
+	private void getImageFromFileSystem() throws IOException {
 		final JFileChooser fc = new JFileChooser();
 		int returnVal = fc.showOpenDialog(null);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 
-			BufferedImage img = null;
-			try {
-				img = ImageIO.read(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Image scaledInstance = img.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(),
-					Image.SCALE_SMOOTH);
+			BufferedImage image = null;
+
+			image = ImageIO.read(file);
+
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+			ImageIO.write(image, "png", bos);
+			byte[] imageBytes = bos.toByteArray();
+			String encodeToString = Base64.getEncoder().encodeToString(imageBytes);
+			showedUser.getId();
+			showedUser.setPicture(encodeToString);
+			UserDao.getInstance().updateUser(showedUser);
+
+			Image scaledInstance = scaleImage(image);
 
 			profileImage.setIcon(new ImageIcon(scaledInstance));
 		}
+	}
+
+	private Image scaleImage(Image image) {
+		return image.getScaledInstance(profileImage.getWidth(), profileImage.getHeight(), Image.SCALE_SMOOTH);
 	}
 }
