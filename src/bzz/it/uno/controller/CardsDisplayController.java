@@ -27,8 +27,15 @@ public class CardsDisplayController extends JFrame {
 	private ImageCanvas imgCanvas;
 	private OfflineGameController[] playersController;
 	private int currentPlayer = 0;
+
+	// needed for retour card
 	private int direction = 1;
+
+	// Manage UNO Rules
 	private UNOBasicLogic unoLogic;
+
+	// Take 1 Card is default
+	private int takeCards = 1;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -90,13 +97,20 @@ public class CardsDisplayController extends JFrame {
 	public boolean giveCard(OfflineGameController offlineGameController) {
 		boolean response = false;
 		if (offlineGameController == playersController[currentPlayer]) {
-			offlineGameController.addCards(unoLogic.getCardsFromStack(1));
-			if (!new UNODialog(this, "Weitergeben?", "Wills du noch eine Karte setzen", UNODialog.QUESTION,
-					UNODialog.YES_NO_BUTTON).getReponse()) {
-				nextPlayer();
+			if (takeCards == 0)
+				takeCards = 1;
+			offlineGameController.addCards(unoLogic.getCardsFromStack(takeCards));
+			if (takeCards == 1) {
+				if (!new UNODialog(this, "Weitergeben?", "Wills du noch eine Karte setzen", UNODialog.QUESTION,
+						UNODialog.YES_NO_BUTTON).getReponse()) {
+					nextPlayer();
+				} else {
+					response = true;
+				}
 			} else {
-				response = true;
+				nextPlayer();
 			}
+			takeCards = 0;
 		} else {
 			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING,
 					UNODialog.OK_BUTTON);
@@ -109,17 +123,21 @@ public class CardsDisplayController extends JFrame {
 			if (unoLogic.playedCorrect(null, cards)) {
 				unoLogic.playCards(null, cards);
 				Card lastCard = cards.get(0);
-				if(lastCard.getCardType() == CardType.BACK)
+
+				// Feature of special cards
+				if (lastCard.getCardType() == CardType.BACK) {
 					switchDirection();
-				else if(lastCard.getCardType() == CardType.SKIP)
+				} else if (lastCard.getCardType() == CardType.SKIP) {
 					nextPlayer();
-				else if(lastCard.getCardType() == CardType.CHANGECOLOR)
+				} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
 					lastCard.setColor(new SelectColorDialog(this).getColor());
-				else if(lastCard.getCardType() == CardType.PLUSFOUR)
+				} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
 					lastCard.setColor(new SelectColorDialog(this).getColor());
-				else if(lastCard.getCardType() == CardType.PLUSTWO)
-					System.out.println("TODO");
-				
+					takeCards += 4;
+				} else if (lastCard.getCardType() == CardType.PLUSTWO) {
+					takeCards += 2;
+				}
+
 				displayCurrentCard();
 				nextPlayer();
 				return true;
@@ -138,12 +156,12 @@ public class CardsDisplayController extends JFrame {
 	public void nextPlayer() {
 		if (playersController.length == currentPlayer + direction)
 			currentPlayer = 0;
-		else if(currentPlayer + direction == -1)
-			currentPlayer = playersController.length -1;
+		else if (currentPlayer + direction == -1)
+			currentPlayer = playersController.length - 1;
 		else
 			currentPlayer += direction;
 	}
-	
+
 	public void switchDirection() {
 		direction *= -1;
 	}

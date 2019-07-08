@@ -106,6 +106,7 @@ public class OfflineGameController extends JFrame {
 					if (parent.playCards(OfflineGameController.this, cards)) {
 						OfflineGameController.this.cards.removeAll(cards);
 						updateView();
+						onlyPlayingCards = false;
 					}
 				} else {
 					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING,
