@@ -62,13 +62,12 @@ public class ProfilController extends JFrame {
 	private JLabel liga;
 	private JLabel profileImage;
 	private DefaultTableModel tableModel;
+	private UserDao userDaoInstance;
+	private JButton addImageBtn;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
-		if (otherUser != null) {
-			this.showedUser = otherUser;
-		} else {
-			this.showedUser = user;
-		}
+		userDaoInstance = UserDao.getInstance();
+		setShowedUser(user, otherUser);
 
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
@@ -82,6 +81,7 @@ public class ProfilController extends JFrame {
 				ProfilController.this.setLocation(x - xx, y - xy);
 			}
 		});
+
 		contentPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -93,81 +93,20 @@ public class ProfilController extends JFrame {
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
+		
+		createButtonsForEdit();
 
-		// title
-		Label titleLabel = new Label("Profil");
-		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(281, 41, 136, 69);
-		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
-		contentPane.add(titleLabel);
+		// create title
+		createTitle();
+		
+		// creates the navigation
+		createNavigation(user, otherUser);
+		
+		// create table model
+		tableModel = createTableModel();
+		// creates the table for the history
+		table = createTable();
 
-		if (otherUser != null) {
-			// Button for adding a new Friend
-			JButton friends = new JButton("Freund Hinzuf\u00fcgen");
-			friends.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					user.getFriendList().add(showedUser);
-					UserDao.getInstance().updateUser(user);
-				}
-			});
-			friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-			friends.setBackground(new Color(166, 166, 166));
-			friends.setBounds(23, 449, 230, 40);
-			contentPane.add(friends);
-		} else {
-			// Button to edit the profile
-			JButton addImageBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bild hinzufuegen");
-			addImageBtn.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					try {
-						getImageFromFileSystem();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
-			contentPane.add(addImageBtn);
-
-			// button to delete the profile
-			JButton btnDelete = new JButton("L\u00F6schen");
-			btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-			btnDelete.setBackground(new Color(244, 67, 54));
-			btnDelete.setBounds(557, 446, 120, 40);
-
-			contentPane.add(btnDelete);
-		}
-
-		tableModel = new DefaultTableModel(new Object[][] {},
-				new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
-			private static final long serialVersionUID = 1L;
-			// Define column datatype
-			Class<?>[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
-
-			public Class<?> getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		};
-		table = new JTable(tableModel) {
-			private static final long serialVersionUID = 1L;
-
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-
-			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-				Component c = super.prepareRenderer(renderer, row, column);
-				Color color = Color.DARK_GRAY;
-
-				if (selectedRow == row)
-					color = color.brighter();
-				c.setBackground(color);
-				c.setForeground(Color.white);
-				return c;
-			}
-		};
 		ViewSettings.setupTableDesign(table);
 		TableCellRenderer baseRenderer = table.getTableHeader().getDefaultRenderer();
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
@@ -230,17 +169,136 @@ public class ProfilController extends JFrame {
 		profileImage = new JLabel();
 		profileImage.setBounds(23, 61, 127, 131);
 		contentPane.add(profileImage);
-		if (user.getPicture() != null) {
+		if (showedUser.getPicture() != null) {
 			try {
-				profileImage.setIcon(new ImageIcon(getPictureFromUser(user)));
+				profileImage.setIcon(new ImageIcon(getPictureFromUser(showedUser)));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 
 		setTableData(allUserLobbies);
 		setProfileData();
+	}
+
+	private void createNavigation(User user, User otherUser) {
+		if (otherUser != null) {
+			// Button for adding a new Friend
+			JButton friends = createFriendsButton(user);
+			contentPane.add(friends);
+		} else {
+			// Button to edit the profile
+			JButton addImageBtn = createEditBtn();
+			contentPane.add(addImageBtn);
+
+			// button to delete the profile
+			JButton btnDelete = createDeleteButton();
+			contentPane.add(btnDelete);
+		}
+	}
+
+	private JTable createTable() {
+		return new JTable(tableModel) {
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+				Color color = Color.DARK_GRAY;
+
+				if (selectedRow == row)
+					color = color.brighter();
+				c.setBackground(color);
+				c.setForeground(Color.white);
+				return c;
+			}
+		};
+	}
+
+	private DefaultTableModel createTableModel() {
+		return new DefaultTableModel(new Object[][] {}, new String[] { "Gespielt", "Spieler", "Punkte", "Rank" }) {
+			private static final long serialVersionUID = 1L;
+			// Define column datatype
+			Class<?>[] columnTypes = new Class[] { String.class, Integer.class, Integer.class, Integer.class };
+
+			public Class<?> getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
+	}
+
+	private JButton createDeleteButton() {
+		JButton btnDelete = new JButton("L\u00F6schen");
+		btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btnDelete.setBackground(new Color(244, 67, 54));
+		btnDelete.setBounds(557, 446, 120, 40);
+		return btnDelete;
+	}
+
+	private JButton createEditBtn() {
+		JButton createEditBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
+		createEditBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				addImageBtn.setVisible(true);
+			}
+		});
+		return createEditBtn;
+	}
+
+	private JButton createFriendsButton(User user) {
+		JButton friends = new JButton("Freund Hinzuf\u00fcgen");
+		friends.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				user.getFriendList().add(showedUser);
+				userDaoInstance.updateUser(user);
+			}
+		});
+		friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		friends.setBackground(new Color(166, 166, 166));
+		friends.setBounds(23, 449, 230, 40);
+		return friends;
+	}
+
+	private void setShowedUser(User user, User otherUser) {
+		if (otherUser != null) {
+			this.showedUser = otherUser;
+		} else {
+			this.showedUser = user;
+		}
+	}
+
+	private void createTitle() {
+		Label titleLabel = new Label("Profil");
+		titleLabel.setForeground(Color.WHITE);
+		titleLabel.setBounds(281, 41, 136, 69);
+		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
+		contentPane.add(titleLabel);
+	}
+
+	private void createButtonsForEdit() {
+		addImageBtn = new JButton("Bild Hinzuf\u00fcgen");
+		addImageBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					getImageFromFileSystem();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		addImageBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		addImageBtn.setBackground(new Color(166, 166, 166));
+		addImageBtn.setBounds(23, 449, 230, 40);
+		addImageBtn.setVisible(false);
+		contentPane.add(addImageBtn);
 	}
 
 	private double getPointsByUser() {
@@ -291,7 +349,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private void setTableData(List<User_Lobby> allUserLobbies) {
-		List<User_Lobby> userLobbies = UserDao.getInstance().selectByUsername(showedUser.getUsername()).getUserLobby();
+		List<User_Lobby> userLobbies = userDaoInstance.selectByUsername(showedUser.getUsername()).getUserLobby();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		if (userLobbies.size() > 0) {
 			for (User_Lobby userLobby : userLobbies) {
@@ -346,15 +404,15 @@ public class ProfilController extends JFrame {
 			ImageIO.write(image, getFileType(file), bos);
 			byte[] imageBytes = bos.toByteArray();
 			String encodeToString = Base64.getEncoder().encodeToString(imageBytes);
-			showedUser.getId();
-			showedUser.setPicture(encodeToString);
-			UserDao.getInstance().updateUser(showedUser);
 
+			showedUser.setPicture(encodeToString);
+
+			userDaoInstance.updatePicture(showedUser.getId(), encodeToString);
 		}
 	}
 
 	private String getFileType(File file) {
-		return file.getPath().split("\\.")[1]; 
+		return file.getPath().split("\\.")[1];
 	}
 
 	private Image scaleImage(Image image) {

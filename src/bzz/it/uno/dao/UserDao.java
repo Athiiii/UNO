@@ -28,12 +28,12 @@ public class UserDao {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
 		List<User> users = entityManager.createQuery("from User").getResultList();
-		if(users.size() > 0) {
+		if (users.size() > 0) {
 			users.get(0).getFriendList().size();
 			users.get(0).getUserLobby().size();
 		}
 		entityManager.getTransaction().commit();
-		
+
 		HandleConnectionToDB.closeEntityManager();
 		return users;
 
@@ -46,7 +46,7 @@ public class UserDao {
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 	}
-	
+
 	public void updateUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -54,6 +54,15 @@ public class UserDao {
 		entityManager.persist(user);
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
+	}
+
+	public void updatePicture(int id, String pic) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		User userFind = entityManager.find(User.class, id);
+
+		entityManager.getTransaction().begin();
+		userFind.setPicture(pic);
+		entityManager.getTransaction().commit();
 	}
 
 	public User selectByUsername(String username) {
