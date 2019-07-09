@@ -56,12 +56,14 @@ public class UserDao {
 		HandleConnectionToDB.closeEntityManager();
 	}
 
-	public void updatePicture(int id, String pic) {
+	public void updateUser(int id, User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		User userFind = entityManager.find(User.class, id);
 
 		entityManager.getTransaction().begin();
-		userFind.setPicture(pic);
+		userFind.setPicture(user.getPicture());
+		userFind.setPassword(user.getPassword());
+		userFind.setUsername(user.getUsername());
 		entityManager.getTransaction().commit();
 	}
 

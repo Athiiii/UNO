@@ -1,9 +1,13 @@
 package bzz.it.uno.controller;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +30,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -64,6 +70,9 @@ public class ProfilController extends JFrame {
 	private DefaultTableModel tableModel;
 	private UserDao userDaoInstance;
 	private JButton addImageBtn;
+	private JButton safeBtn;
+	private JButton editBtn;
+	private JButton newPasswordBtn;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
 		userDaoInstance = UserDao.getInstance();
@@ -93,15 +102,15 @@ public class ProfilController extends JFrame {
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
-		
+
 		createButtonsForEdit();
 
 		// create title
 		createTitle();
-		
+
 		// creates the navigation
 		createNavigation(user, otherUser);
-		
+
 		// create table model
 		tableModel = createTableModel();
 		// creates the table for the history
@@ -181,22 +190,6 @@ public class ProfilController extends JFrame {
 		setProfileData();
 	}
 
-	private void createNavigation(User user, User otherUser) {
-		if (otherUser != null) {
-			// Button for adding a new Friend
-			JButton friends = createFriendsButton(user);
-			contentPane.add(friends);
-		} else {
-			// Button to edit the profile
-			JButton addImageBtn = createEditBtn();
-			contentPane.add(addImageBtn);
-
-			// button to delete the profile
-			JButton btnDelete = createDeleteButton();
-			contentPane.add(btnDelete);
-		}
-	}
-
 	private JTable createTable() {
 		return new JTable(tableModel) {
 			private static final long serialVersionUID = 1L;
@@ -230,6 +223,22 @@ public class ProfilController extends JFrame {
 		};
 	}
 
+	private void createNavigation(User user, User otherUser) {
+		if (otherUser != null) {
+			// Button for adding a new Friend
+			JButton friends = createFriendsButton(user);
+			contentPane.add(friends);
+		} else {
+			// Button to edit the profile
+			JButton addImageBtn = createEditBtn();
+			contentPane.add(addImageBtn);
+
+			// button to delete the profile
+			JButton btnDelete = createDeleteButton();
+			contentPane.add(btnDelete);
+		}
+	}
+
 	private JButton createDeleteButton() {
 		JButton btnDelete = new JButton("L\u00F6schen");
 		btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -239,15 +248,18 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createEditBtn() {
-		JButton createEditBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
-		createEditBtn.addActionListener(new ActionListener() {
+		editBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
+		editBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				addImageBtn.setVisible(true);
+				safeBtn.setVisible(true);
+				newPasswordBtn.setVisible(true);
+				editBtn.setVisible(false);
 			}
 		});
-		return createEditBtn;
+		return editBtn;
 	}
 
 	private JButton createFriendsButton(User user) {
@@ -299,6 +311,76 @@ public class ProfilController extends JFrame {
 		addImageBtn.setBounds(23, 449, 230, 40);
 		addImageBtn.setVisible(false);
 		contentPane.add(addImageBtn);
+
+		safeBtn = new JButton("Speichern");
+		safeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				userDaoInstance.updateUser(showedUser.getId(), showedUser);
+
+			}
+
+		});
+		safeBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		safeBtn.setBackground(new Color(41, 204, 22));
+		safeBtn.setBounds(393, 446, 154, 40);
+		safeBtn.setVisible(false);
+		contentPane.add(safeBtn);
+
+		newPasswordBtn = new JButton("Passwort \00E4ndern");
+		newPasswordBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				createNewPasswordMessage();
+			}
+		});
+		newPasswordBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
+		newPasswordBtn.setBackground(new Color(166, 166, 166));
+		newPasswordBtn.setBounds(160, 170, 180, 20);
+		newPasswordBtn.setVisible(false);
+		contentPane.add(newPasswordBtn);
+	}
+
+	private void createNewPasswordMessage() {
+		JLabel label = new JLabel("Gib dein neues Passwort ein:");
+		JLabel labelSecound = new JLabel("Wiederhole dein neues Passwort:");
+		JPasswordField passwordField = new JPasswordField(10);
+		JPasswordField passwordFieldSecound = new JPasswordField(10);
+
+		JPanel panel = new JPanel(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.insets = new Insets(10, 10, 10, 10);
+
+		// add components to the panel
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		panel.add(label, constraints);
+
+		constraints.gridx = 1;
+		panel.add(passwordField, constraints);
+
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		panel.add(labelSecound, constraints);
+
+		constraints.gridx = 1;
+		panel.add(passwordFieldSecound, constraints);
+
+		String[] options = new String[] { "OK", "Cancel" };
+		int option = JOptionPane.showOptionDialog(null, panel, "Neues Passwort", JOptionPane.NO_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+		if (new String(passwordField.getPassword()).equals(new String(passwordFieldSecound.getPassword()))) {
+			if (option == 0) {
+				showedUser.setPassword(new String(passwordField.getPassword()));
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Bitte gib 2 mal das gleiche Passwort ein!");
+			createNewPasswordMessage();
+		}
 	}
 
 	private double getPointsByUser() {
@@ -406,8 +488,6 @@ public class ProfilController extends JFrame {
 			String encodeToString = Base64.getEncoder().encodeToString(imageBytes);
 
 			showedUser.setPicture(encodeToString);
-
-			userDaoInstance.updatePicture(showedUser.getId(), encodeToString);
 		}
 	}
 
