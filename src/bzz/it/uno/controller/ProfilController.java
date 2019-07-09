@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -73,6 +74,7 @@ public class ProfilController extends JFrame {
 	private JButton safeBtn;
 	private JButton editBtn;
 	private JButton newPasswordBtn;
+	private JTextField newUsername;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
 		userDaoInstance = UserDao.getInstance();
@@ -256,6 +258,8 @@ public class ProfilController extends JFrame {
 				addImageBtn.setVisible(true);
 				safeBtn.setVisible(true);
 				newPasswordBtn.setVisible(true);
+				newUsername.setVisible(true);
+				name.setVisible(false);
 				editBtn.setVisible(false);
 			}
 		});
@@ -328,7 +332,7 @@ public class ProfilController extends JFrame {
 		safeBtn.setVisible(false);
 		contentPane.add(safeBtn);
 
-		newPasswordBtn = new JButton("Passwort \00E4ndern");
+		newPasswordBtn = new JButton("Passwort \u00E4ndern");
 		newPasswordBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -338,9 +342,16 @@ public class ProfilController extends JFrame {
 		});
 		newPasswordBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
 		newPasswordBtn.setBackground(new Color(166, 166, 166));
-		newPasswordBtn.setBounds(160, 170, 180, 20);
+		newPasswordBtn.setBounds(160, 170, 200, 20);
 		newPasswordBtn.setVisible(false);
 		contentPane.add(newPasswordBtn);
+		
+		newUsername = new JTextField();
+		newUsername.setBounds(160, 112, 200, 30);
+		newUsername.setForeground(Color.WHITE);
+		newUsername.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 22));
+		newUsername.setVisible(false);
+		contentPane.add(newUsername);
 	}
 
 	private void createNewPasswordMessage() {
