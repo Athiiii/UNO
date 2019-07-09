@@ -75,6 +75,8 @@ public class ProfilController extends JFrame {
 	private JButton editBtn;
 	private JButton newPasswordBtn;
 	private JTextField newUsername;
+	private JButton btnDelete;
+	private JButton cancelBtn;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
 		userDaoInstance = UserDao.getInstance();
@@ -242,7 +244,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createDeleteButton() {
-		JButton btnDelete = new JButton("L\u00F6schen");
+		btnDelete = new JButton("L\u00F6schen");
 		btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		btnDelete.setBackground(new Color(244, 67, 54));
 		btnDelete.setBounds(557, 446, 120, 40);
@@ -259,6 +261,8 @@ public class ProfilController extends JFrame {
 				safeBtn.setVisible(true);
 				newPasswordBtn.setVisible(true);
 				newUsername.setVisible(true);
+				cancelBtn.setVisible(true);
+				btnDelete.setVisible(false);
 				name.setVisible(false);
 				editBtn.setVisible(false);
 			}
@@ -321,16 +325,48 @@ public class ProfilController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(!newUsername.getText().isEmpty()) {
+					showedUser.setUsername(newUsername.getText());
+					name.setText(showedUser.getUsername());
+				}
 				userDaoInstance.updateUser(showedUser.getId(), showedUser);
-
+				addImageBtn.setVisible(false);
+				safeBtn.setVisible(false);
+				newPasswordBtn.setVisible(false);
+				newUsername.setVisible(false);
+				cancelBtn.setVisible(false);
+				name.setVisible(true);
+				btnDelete.setVisible(true);
+				editBtn.setVisible(true);
 			}
 
 		});
 		safeBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		safeBtn.setBackground(new Color(41, 204, 22));
-		safeBtn.setBounds(393, 446, 154, 40);
+		safeBtn.setBounds(373, 446, 154, 40);
 		safeBtn.setVisible(false);
 		contentPane.add(safeBtn);
+		
+		cancelBtn = new JButton("Abbrechen");
+		cancelBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				addImageBtn.setVisible(false);
+				safeBtn.setVisible(false);
+				newPasswordBtn.setVisible(false);
+				newUsername.setVisible(false);
+				cancelBtn.setVisible(false);
+				name.setVisible(true);
+				btnDelete.setVisible(true);
+				editBtn.setVisible(true);
+			}
+		});
+		cancelBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		cancelBtn.setBackground(new Color(244, 67, 54));
+		cancelBtn.setBounds(530, 446, 150, 40);
+		cancelBtn.setVisible(false);
+		contentPane.add(cancelBtn);
 
 		newPasswordBtn = new JButton("Passwort \u00E4ndern");
 		newPasswordBtn.addActionListener(new ActionListener() {
@@ -348,7 +384,7 @@ public class ProfilController extends JFrame {
 		
 		newUsername = new JTextField();
 		newUsername.setBounds(160, 112, 200, 30);
-		newUsername.setForeground(Color.WHITE);
+		newUsername.setForeground(Color.BLACK);
 		newUsername.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 22));
 		newUsername.setVisible(false);
 		contentPane.add(newUsername);
