@@ -1,13 +1,9 @@
 package bzz.it.uno.controller;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,9 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,6 +35,7 @@ import javax.swing.table.TableCellRenderer;
 
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.dao.UserLobbyDao;
+import bzz.it.uno.frontend.ChangePasswordDialog;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
@@ -244,10 +239,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createDeleteButton() {
-		btnDelete = new JButton("L\u00F6schen");
-		btnDelete.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnDelete.setBackground(new Color(244, 67, 54));
-		btnDelete.setBounds(557, 446, 120, 40);
+		btnDelete = ViewSettings.createButton(557, 446, 120, 40, new Color(244, 67, 54), "L\u00F6schen");
 		return btnDelete;
 	}
 
@@ -271,16 +263,13 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createFriendsButton(User user) {
-		JButton friends = new JButton("Freund Hinzuf\u00fcgen");
+		JButton friends = ViewSettings.createButton(23, 449, 230, 40, new Color(166, 166, 166), "Freund Hinzuf\u00fcgen");
 		friends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				user.getFriendList().add(showedUser);
 				userDaoInstance.updateUser(user);
 			}
 		});
-		friends.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		friends.setBackground(new Color(166, 166, 166));
-		friends.setBounds(23, 449, 230, 40);
 		return friends;
 	}
 
@@ -301,7 +290,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private void createButtonsForEdit() {
-		addImageBtn = new JButton("Bild Hinzuf\u00fcgen");
+		addImageBtn = ViewSettings.createButton(23, 449, 230, 40, new Color(166, 166, 166), "Bild Hinzuf\u00fcgen");
 		addImageBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -314,13 +303,10 @@ public class ProfilController extends JFrame {
 				}
 			}
 		});
-		addImageBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		addImageBtn.setBackground(new Color(166, 166, 166));
-		addImageBtn.setBounds(23, 449, 230, 40);
 		addImageBtn.setVisible(false);
 		contentPane.add(addImageBtn);
 
-		safeBtn = new JButton("Speichern");
+		safeBtn = ViewSettings.createButton(373, 446, 154, 40, new Color(41, 204, 22), "Speichern");
 		safeBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -341,13 +327,10 @@ public class ProfilController extends JFrame {
 			}
 
 		});
-		safeBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		safeBtn.setBackground(new Color(41, 204, 22));
-		safeBtn.setBounds(373, 446, 154, 40);
 		safeBtn.setVisible(false);
 		contentPane.add(safeBtn);
 		
-		cancelBtn = new JButton("Abbrechen");
+		cancelBtn = ViewSettings.createButton(530, 446, 150, 40, new Color(244, 67, 54), "Abbrechen");
 		cancelBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -362,23 +345,16 @@ public class ProfilController extends JFrame {
 				editBtn.setVisible(true);
 			}
 		});
-		cancelBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		cancelBtn.setBackground(new Color(244, 67, 54));
-		cancelBtn.setBounds(530, 446, 150, 40);
 		cancelBtn.setVisible(false);
 		contentPane.add(cancelBtn);
 
-		newPasswordBtn = new JButton("Passwort \u00E4ndern");
+		newPasswordBtn = ViewSettings.createButton(160, 150, 200, 30, new Color(166, 166, 166), "Passwort \u00E4ndern");
 		newPasswordBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				createNewPasswordMessage();
-			}
+				showedUser.setPassword(new ChangePasswordDialog(ProfilController.this).getPassword());			}
 		});
-		newPasswordBtn.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
-		newPasswordBtn.setBackground(new Color(166, 166, 166));
-		newPasswordBtn.setBounds(160, 170, 200, 20);
 		newPasswordBtn.setVisible(false);
 		contentPane.add(newPasswordBtn);
 		
@@ -388,46 +364,6 @@ public class ProfilController extends JFrame {
 		newUsername.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 22));
 		newUsername.setVisible(false);
 		contentPane.add(newUsername);
-	}
-
-	private void createNewPasswordMessage() {
-		JLabel label = new JLabel("Gib dein neues Passwort ein:");
-		JLabel labelSecound = new JLabel("Wiederhole dein neues Passwort:");
-		JPasswordField passwordField = new JPasswordField(10);
-		JPasswordField passwordFieldSecound = new JPasswordField(10);
-
-		JPanel panel = new JPanel(new GridBagLayout());
-
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.insets = new Insets(10, 10, 10, 10);
-
-		// add components to the panel
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		panel.add(label, constraints);
-
-		constraints.gridx = 1;
-		panel.add(passwordField, constraints);
-
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		panel.add(labelSecound, constraints);
-
-		constraints.gridx = 1;
-		panel.add(passwordFieldSecound, constraints);
-
-		String[] options = new String[] { "OK", "Cancel" };
-		int option = JOptionPane.showOptionDialog(null, panel, "Neues Passwort", JOptionPane.NO_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
-		if (new String(passwordField.getPassword()).equals(new String(passwordFieldSecound.getPassword()))) {
-			if (option == 0) {
-				showedUser.setPassword(new String(passwordField.getPassword()));
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Bitte gib 2 mal das gleiche Passwort ein!");
-			createNewPasswordMessage();
-		}
 	}
 
 	private double getPointsByUser() {

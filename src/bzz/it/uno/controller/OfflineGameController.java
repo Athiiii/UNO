@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -32,6 +33,7 @@ import bzz.it.uno.model.Card;
  *
  */
 public class OfflineGameController extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private int xy, xx;
 	private JPanel contentPane;
 	private List<CardButton> cardBtns;
@@ -147,6 +149,18 @@ public class OfflineGameController extends JFrame {
 		cardPanel.removeAll();
 		for (int i = 0; i < cards.size(); i++) {
 			CardButton cardBtn = new CardButton(cards.get(i).getFilename(), cards.get(i));
+			cardBtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(e.getClickCount() == 2) {
+						if (parent.playCards(OfflineGameController.this, Arrays.asList(cardBtn.getCard()))) {
+							OfflineGameController.this.cards.removeAll(Arrays.asList(cardBtn.getCard()));
+							updateView();
+							onlyPlayingCards = false;
+						}
+					}
+				}
+			});
 			cardBtns.add(cardBtn);
 			cardPanel.add(cardBtn);
 		}

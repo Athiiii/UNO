@@ -1,16 +1,11 @@
 package bzz.it.uno.controller;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
@@ -21,7 +16,7 @@ import bzz.it.uno.model.User;
  *
  */
 public class SpielendeController extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;

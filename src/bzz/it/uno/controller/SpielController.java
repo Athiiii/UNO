@@ -35,6 +35,7 @@ import bzz.it.uno.model.User_Lobby;
  *
  */
 public class SpielController extends JFrame implements ActionListener {
+	private static final long serialVersionUID = 1L;
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
