@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import bzz.it.uno.controller.SpielController;
+import bzz.it.uno.controller.GameController;
 
 public class ChangePasswordDialog extends JDialog {
 	private String password;
@@ -26,7 +26,7 @@ public class ChangePasswordDialog extends JDialog {
 	private int xx, xy;
 
 	public static void main(String[] args) {
-		new ChangePasswordDialog(new SpielController(null, null));
+		new ChangePasswordDialog(new GameController(null, null));
 	}
 	
 	public ChangePasswordDialog(JFrame parent) {

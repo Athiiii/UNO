@@ -167,7 +167,14 @@ public class UNOBasicLogic {
 	public void reshuffleCards() {
 		Card currentCard = playedCards.getCards().get(0);
 		cardStacks.getCards().addAll(playedCards.getCards());
-		playedCards.setCards(Arrays.asList(currentCard));
+		
+		//reshuffle cards
+		Collections.shuffle(cardStacks.getCards());
+		Collections.shuffle(cardStacks.getCards());
+		Collections.shuffle(cardStacks.getCards());
+		
+		playedCards = new CardDeck(new ArrayList<Card>());
+		playedCards.addCard(currentCard);
 	}
 
 	/**

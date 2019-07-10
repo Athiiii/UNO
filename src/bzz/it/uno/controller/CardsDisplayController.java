@@ -1,6 +1,7 @@
 package bzz.it.uno.controller;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -17,6 +18,7 @@ import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardType;
+import bzz.it.uno.model.User;
 
 /**
  * Main controller for offline UNO Version Display current Card
@@ -31,6 +33,8 @@ public class CardsDisplayController extends JFrame {
 	private ImageCanvas imgCanvas;
 	private OfflineGameController[] playersController;
 	private int currentPlayer = 0;
+	private User user;
+	private NavigationController navigationFrame;
 
 	// needed for retour card
 	private int direction = 1;
@@ -41,7 +45,10 @@ public class CardsDisplayController extends JFrame {
 	// Take 1 Card is default
 	private int takeCards = 1;
 
-	public CardsDisplayController(int players) {
+	public CardsDisplayController(User user, NavigationController navigationFrame, int players) {
+		this.user = user;
+		this.navigationFrame = navigationFrame;
+
 		unoLogic = new UNOBasicLogic();
 
 		contentPane = new JPanel();
@@ -50,8 +57,11 @@ public class CardsDisplayController extends JFrame {
 		setBounds(100, 100, 150, 202);
 
 		// define first card
-		Card card = unoLogic.getCardsFromStack(1).get(0);
-		unoLogic.playCards(null, Arrays.asList(card));
+		Card card;
+		do {
+			card = unoLogic.getCardsFromStack(1).get(0);
+			unoLogic.playCards(null, Arrays.asList(card));
+		} while (card.getCardType() != CardType.COMMON);
 
 		// display first card
 		imgCanvas = new ImageCanvas();
@@ -63,7 +73,9 @@ public class CardsDisplayController extends JFrame {
 		playersController = new OfflineGameController[players];
 		for (int i = 0; i < players; ++i) {
 			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
-			playersController[i].addCards(unoLogic.getCardsFromStack(7));
+			playersController[i].addCards(unoLogic.getCardsFromStack(1));
+			if (i == currentPlayer)
+				playersController[i].setStatus(true);
 		}
 
 		imgCanvas.addMouseMotionListener(new MouseMotionAdapter() {
@@ -97,7 +109,7 @@ public class CardsDisplayController extends JFrame {
 	 * gives a card from stack to user
 	 * 
 	 * @param offlineGameController
-	 * @return boolean if players wants to continuee
+	 * @return boolean if players wants to continue
 	 */
 	public boolean giveCard(OfflineGameController offlineGameController) {
 		boolean response = false;
@@ -134,36 +146,46 @@ public class CardsDisplayController extends JFrame {
 	public boolean playCards(OfflineGameController offlineGameController, List<Card> cards) {
 		if (offlineGameController == playersController[currentPlayer]) {
 			if (unoLogic.playedCorrect(null, cards)) {
-				unoLogic.playCards(null, cards);
-				Card lastCard = cards.get(0);
+				if (takeCards > 1
+						&& cards.get(cards.size() - 1).getCardType() != unoLogic.getLastPlayedCard().getCardType()) {
+					new UNODialog(this, "Ungültige Karte", "Sie dürfen diese Karte nicht setzen", UNODialog.WARNING,
+							UNODialog.OK_BUTTON);
+					return false;
+				} else {
+					unoLogic.playCards(null, cards);
+					Card lastCard = cards.get(0);
 
-				// Feature of special cards
-				if (lastCard.getCardType() == CardType.BACK) {
-					// switch direction
-					direction *= -1;
-				} else if (lastCard.getCardType() == CardType.SKIP) {
-					// affects that players(s) will be skiped
-					for (int i = 0; i < cards.size(); ++i)
-						nextPlayer();
-				} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
-					// displays view to choose color
-					lastCard.setColor(new SelectColorDialog(this).getColor());
-				} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
-					// displays view to choose color
-					lastCard.setColor(new SelectColorDialog(this).getColor());
+					// Feature of special cards
+					if (lastCard.getCardType() == CardType.BACK) {
+						// switch direction
+						direction *= -1;
+					} else if (lastCard.getCardType() == CardType.SKIP) {
+						// affects that players(s) will be skipped
+						for (int i = 0; i < cards.size(); ++i)
+							nextPlayer();
+					} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
+						// displays view to choose color
+						lastCard.setColor(new SelectColorDialog(this).getColor());
+					} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
+						// displays view to choose color
+						lastCard.setColor(new SelectColorDialog(this).getColor());
 
-					// define how many cards the next player has to take
-					for (int i = 0; i < cards.size(); ++i)
-						takeCards += 4;
-				} else if (lastCard.getCardType() == CardType.PLUSTWO) {
-					// define how many cards the next player has to take
-					for (int i = 0; i < cards.size(); ++i)
-						takeCards += 2;
+						// define how many cards the next player has to take
+						for (int i = 0; i < cards.size(); ++i)
+							takeCards += 4;
+					} else if (lastCard.getCardType() == CardType.PLUSTWO) {
+						// define how many cards the next player has to take
+						for (int i = 0; i < cards.size(); ++i)
+							takeCards += 2;
+					}
+
+					displayCurrentCard();
+					if (offlineGameController.getCards().size() == 1) {
+						playerWon();
+					}
+					nextPlayer();
+					return true;
 				}
-
-				displayCurrentCard();
-				nextPlayer();
-				return true;
 			} else {
 				new UNODialog(this, "Ungültig", "Diese Eingabe ist nicht gültig. Bitte neu versuchen", UNODialog.ERROR,
 						UNODialog.OK_BUTTON);
@@ -182,9 +204,58 @@ public class CardsDisplayController extends JFrame {
 	public void nextPlayer() {
 		if (playersController.length == currentPlayer + direction)
 			currentPlayer = 0;
-		else if (currentPlayer + direction == -1)
+		else if (currentPlayer + direction <= -1)
 			currentPlayer = playersController.length - 1;
 		else
 			currentPlayer += direction;
+
+		for (int i = 0; i < playersController.length; ++i) {
+			boolean status = false;
+			if (currentPlayer == i)
+				status = true;
+			playersController[i].setStatus(status);
+		}
+	}
+
+	/**
+	 * Assign points to winner of the round and prepare next round
+	 */
+	public void playerWon() {
+		// get points for winner
+		int points = 0;
+		for (int i = 0; i < playersController.length; ++i) {
+			if (i != currentPlayer) {
+				for (int j = 0; j < playersController[i].getCards().size(); ++j) {
+					points += playersController[i].getCards().get(j).getValue();
+				}
+			}
+		}
+		playersController[currentPlayer].addPoints(points);
+
+		if (playersController[currentPlayer].getPoints() >= 500) {
+			new OfflineGameEnd(user, navigationFrame, playersController);
+			dispose();
+		} else {
+
+			// preparation of next round
+			unoLogic.reshuffleCards();
+			for (int i = 0; i < playersController.length; ++i) {
+				playersController[i].resetCards();
+				playersController[i].addCards(unoLogic.getCardsFromStack(1));
+			}
+
+			// define first card
+			Card card;
+			do {
+				card = unoLogic.getCardsFromStack(1).get(0);
+				unoLogic.playCards(null, Arrays.asList(card));
+			} while (card.getCardType() != CardType.COMMON);
+
+			// display first card
+			displayCurrentCard();
+
+			// reset taking card to default
+			takeCards = 1;
+		}
 	}
 }

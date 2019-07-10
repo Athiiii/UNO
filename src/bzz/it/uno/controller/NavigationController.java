@@ -77,7 +77,7 @@ public class NavigationController extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//forward
 				setVisible(false);
-				new SpielController(user, NavigationController.this);
+				new GameController(user, NavigationController.this);
 			}
 		});
 		contentPane.add(newGame);

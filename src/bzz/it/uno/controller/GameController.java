@@ -34,7 +34,7 @@ import bzz.it.uno.model.User_Lobby;
  * @author Athavan Theivakulasingham
  *
  */
-public class SpielController extends JFrame implements ActionListener {
+public class GameController extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private User user;
 	private JPanel contentPane;
@@ -44,7 +44,7 @@ public class SpielController extends JFrame implements ActionListener {
 	private JTextField numberPlayers;
 	private JCheckBox onlineMode;
 
-	public SpielController(User user, NavigationController navigationFrame) {
+	public GameController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
 		
@@ -59,7 +59,7 @@ public class SpielController extends JFrame implements ActionListener {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				SpielController.this.setLocation(x - xx, y - xy);
+				GameController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -156,7 +156,7 @@ public class SpielController extends JFrame implements ActionListener {
 						new LobbyWaitController(user, navigationFrame, lobby);
 					} else {
 						// OFFLINE MODE
-						new CardsDisplayController(maxPlayers);
+						new CardsDisplayController(user, navigationFrame, maxPlayers);
 						dispose();
 						navigationFrame.setVisible(true);
 					}

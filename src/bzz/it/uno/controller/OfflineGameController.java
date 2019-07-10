@@ -42,9 +42,13 @@ public class OfflineGameController extends JFrame {
 	private CardsDisplayController parent;
 	private boolean onlyPlayingCards = false;
 	private Component displayCardComponent;
+	private JLabel offlineIcon;
+	private int points = 0;
+	private String username;
 
-	public OfflineGameController(String userName, CardsDisplayController parent) {
+	public OfflineGameController(String username, CardsDisplayController parent) {
 		this.parent = parent;
+		this.username = username;
 
 		cardPanel = new JPanel();
 		cardPanel.setBackground(Color.DARK_GRAY);
@@ -85,7 +89,7 @@ public class OfflineGameController extends JFrame {
 		});
 		setContentPane(contentPane);
 
-		JLabel titleLabel = new JLabel(userName);
+		JLabel titleLabel = new JLabel(username);
 
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(10, 10, 680, 69);
@@ -137,6 +141,16 @@ public class OfflineGameController extends JFrame {
 		});
 		contentPane.add(btnPullCard);
 
+		offlineIcon = new JLabel(
+				new ImageIcon(new ImageIcon(OfflineGameController.class.getResource("/images/green-dot.png")).getImage()
+						.getScaledInstance(10, 10, Image.SCALE_SMOOTH)));
+		offlineIcon.setBounds(5, 5, 10, 10);
+		offlineIcon.setVisible(false);
+		contentPane.add(offlineIcon);
+	}
+
+	public void setStatus(boolean online) {
+		offlineIcon.setVisible(online);
 	}
 
 	public void addCards(List<Card> cards) {
@@ -152,7 +166,7 @@ public class OfflineGameController extends JFrame {
 			cardBtn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if(e.getClickCount() == 2) {
+					if (e.getClickCount() == 2) {
 						if (parent.playCards(OfflineGameController.this, Arrays.asList(cardBtn.getCard()))) {
 							OfflineGameController.this.cards.removeAll(Arrays.asList(cardBtn.getCard()));
 							updateView();
@@ -169,5 +183,29 @@ public class OfflineGameController extends JFrame {
 		displayCardComponent = ViewSettings.createDefaultScrollPane(cardPanel, 290, 450, 110);
 		contentPane.add(displayCardComponent);
 		contentPane.updateUI();
+	}
+	
+	public void addPoints(int points) {
+		this.points += points;
+	}
+	
+	public boolean wonByPoints() {
+		return this.points >= 500; 
+	}
+	
+	public List<Card> getCards() {
+		return this.cards;
+	}
+	
+	public void resetCards() {
+		this.cards = new ArrayList<Card>();
+	}
+	
+	public int getPoints() {
+		return this.points;
+	}
+	
+	public String getUsername() {
+		return this.username;
 	}
 }
