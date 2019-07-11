@@ -152,7 +152,7 @@ public class GameController extends JFrame implements ActionListener {
 						lobbyUser.addUserLobby(userLobby);
 
 						setVisible(false);
-						new LobbyWaitController(user, navigationFrame, lobby);
+						new LobbyWaitController(user, navigationFrame, lobby, maxPlayers);
 					} else {
 						// OFFLINE MODE
 						new CardsDisplayController(user, navigationFrame, maxPlayers);

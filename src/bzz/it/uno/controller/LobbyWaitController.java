@@ -2,6 +2,7 @@
 package bzz.it.uno.controller;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
+import bzz.it.uno.network.GameAction;
 import bzz.it.uno.network.GameActionListener;
 
 /**
@@ -31,18 +33,38 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 	private NavigationController navigationFrame;
 	private JPanel contentPane;
 	private Lobby lobby;
+	private GameAction mqttController;
+	private int players;
+	private JLabel playerLabel;
 	
-	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby) {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				User user = new User();
+				user.setUsername("B");
+				Lobby lobby = new Lobby();
+				lobby.setId(2);
+				new LobbyWaitController(user, null, lobby, 3);
+			}
+		});
+	}
+
+	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby, int maxPlayer) {
 		this.navigationFrame = navigationFrame;
 		this.lobby = lobby;
 		this.user = user;
+		this.players = 1;
+		this.mqttController = new GameAction(this, user.getUsername());
+
+		// subscribe to game (mqqt)
+		mqttController.subscribe(Integer.toString(lobby.getId()));
 
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
-		
+
 		setBounds(100, 100, 700, 385);
-		
+
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -59,20 +81,33 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 			}
 		});
 		setContentPane(contentPane);
-		
+
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
+		contentPane.setLayout(null);
 
 		JLabel titleLabel = new JLabel("Warterraum");
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBounds(160, 36, 438, 69);
+		titleLabel.setBounds(190, 30, 325, 59);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
+
+		JLabel maxPlayerLabel = new JLabel("/ " + maxPlayer);
+		maxPlayerLabel.setForeground(Color.WHITE);
+		maxPlayerLabel.setBounds(360, 147, 46, 42);
+		maxPlayerLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 35));
+		contentPane.add(maxPlayerLabel);
+		
+		JLabel playerLabel = new JLabel(Integer.toString(players));
+		playerLabel.setForeground(Color.WHITE);
+		playerLabel.setBounds(330, 147, 46, 42);
+		playerLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 35));
+		contentPane.add(playerLabel);
 	}
 
 	@Override
 	public void messageReceived(MqttMessage mqttMessage) {
-		// TODO Auto-generated method stub
-		
+		System.out.println(mqttMessage.getPayload());
+
 	}
 }

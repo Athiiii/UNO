@@ -1,7 +1,5 @@
 package bzz.it.uno.network;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -20,12 +18,19 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  * @author Athavan Theivakulasingham
  *
  */
-public class GameAction implements MqttCallback {	
+public class GameAction implements MqttCallback {
 
-	GameActionListener onlineGameController;
+	private GameActionListener onlineGameController;
+	
+	//client Id
+	private String username;
+	
+	// Our personal server
+	private final String SERVER_IP = "104.207.133.76";
 
-	public GameAction(GameActionListener onlineGameController) {
+	public GameAction(GameActionListener onlineGameController, String username) {
 		this.onlineGameController = onlineGameController;
+		this.username = username;
 	}
 
 	/**
@@ -35,10 +40,9 @@ public class GameAction implements MqttCallback {
 	 * @param topic
 	 */
 	public void publish(String message, String topic) {
-		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
 		MqttClient client = null;
 		try {
-			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
+			client = new MqttClient("tcp://" + SERVER_IP + ":1883", username, new MemoryPersistence());
 			client.connect();
 			client.publish("UNO/" + topic, message.getBytes(), 2, true);
 			client.disconnect();
@@ -55,10 +59,9 @@ public class GameAction implements MqttCallback {
 	 * @param topic
 	 */
 	public void subscribe(String topic) {
-		String clientId = "sslTestClient" + ThreadLocalRandom.current().nextInt(0, 5);
 		MqttClient client = null;
 		try {
-			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
+			client = new MqttClient("tcp://" + SERVER_IP + ":1883", username, new MemoryPersistence());
 
 			client.setCallback(this);
 
@@ -68,7 +71,7 @@ public class GameAction implements MqttCallback {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Unsubscribe a specific topic <br>
 	 * predefined prefix is: <b>UNO/</b>
@@ -76,10 +79,10 @@ public class GameAction implements MqttCallback {
 	 * @param topic
 	 * @param clientId
 	 */
-	public void unsubscribe(String topic, String clientId) {
+	public void unsubscribe(String topic) {
 		MqttClient client = null;
 		try {
-			client = new MqttClient("tcp://104.207.133.76:1883", clientId, new MemoryPersistence());
+			client = new MqttClient("tcp://" + SERVER_IP + ":1883", username, new MemoryPersistence());
 
 			client.setCallback(this);
 
@@ -100,6 +103,7 @@ public class GameAction implements MqttCallback {
 
 	@Override
 	public void messageArrived(String arg, MqttMessage mqttMessage) throws Exception {
+		// forward message to controller
 		onlineGameController.messageReceived(mqttMessage);
 	}
 }
