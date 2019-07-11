@@ -2,17 +2,12 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,12 +22,12 @@ import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 
 /**
- * Display after game is finished (offline mode)
+ * Display after game is finished (online mode)
  * 
  * @author Athavan Theivakulasingham
  *
  */
-public class OfflineGameEnd extends JFrame {
+public class OnlineGameEnd extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int xy, xx;
@@ -40,7 +35,7 @@ public class OfflineGameEnd extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow;
 
-	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players) {
+	public OnlineGameEnd(User user, NavigationController navigationFrame) {
 		contentPane = new JPanel();
 
 		ViewSettings.setupFrame(this);
@@ -51,7 +46,7 @@ public class OfflineGameEnd extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				OfflineGameEnd.this.setLocation(x - xx, y - xy);
+				OnlineGameEnd.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -117,7 +112,6 @@ public class OfflineGameEnd extends JFrame {
 				table.repaint();
 			}
 		});
-		fillData(players);
 		contentPane.add(ViewSettings.createDefaultScrollPane(table, 400, 700, 200));
 
 		// title
@@ -128,51 +122,4 @@ public class OfflineGameEnd extends JFrame {
 		contentPane.add(titleLabel);
 	}
 
-	private void fillData(OfflineGameController[] players) {
-		List<OfflinePlayerRank> rankList = new ArrayList<OfflinePlayerRank>();
-		for (int i = 0; i < players.length; ++i) {
-			rankList.add(new OfflinePlayerRank(players[i].getUsername(), players[i].getPoints()));
-		}
-		Collections.sort(rankList);
-		for (int i = 0; i < rankList.size(); ++i) {
-			int points = rankList.get(i).getPoints();
-			String username = rankList.get(i).getUser();
-			Object[] data = { i + 1, username, points };
-			tableModel.addRow(data);
-		}
-	}
-}
-
-class OfflinePlayerRank implements Comparable<OfflinePlayerRank> {
-	private String user;
-	private Integer points;
-
-	public OfflinePlayerRank() {
-	}
-
-	public OfflinePlayerRank(String user, Integer points) {
-		this.user = user;
-		this.points = points;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public Integer getPoints() {
-		return points;
-	}
-
-	public void setPoints(Integer points) {
-		this.points = points;
-	}
-
-	@Override
-	public int compareTo(OfflinePlayerRank o) {
-		return o.getPoints().compareTo(getPoints());
-	}
 }

@@ -11,9 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
+import bzz.it.uno.network.GameActionListener;
 
 /**
  * Wait for other users. Used for online version
@@ -21,7 +24,7 @@ import bzz.it.uno.model.User;
  * @author Athavan Theivakulasingham
  *
  */
-public class LobbyWaitController extends JFrame {
+public class LobbyWaitController extends JFrame implements GameActionListener {
 	private static final long serialVersionUID = 1L;
 	private User user;
 	private int xy, xx;
@@ -65,5 +68,11 @@ public class LobbyWaitController extends JFrame {
 		titleLabel.setBounds(160, 36, 438, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
+	}
+
+	@Override
+	public void messageReceived(MqttMessage mqttMessage) {
+		// TODO Auto-generated method stub
+		
 	}
 }

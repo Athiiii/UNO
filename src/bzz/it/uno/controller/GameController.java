@@ -139,7 +139,6 @@ public class GameController extends JFrame implements ActionListener {
 				if (lobbyExist == null) {
 					if (onlineMode.isSelected()) {
 						// ONLINE MODE
-
 						LobbyDao lobbyDao = LobbyDao.getInstance();
 						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
 						Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());

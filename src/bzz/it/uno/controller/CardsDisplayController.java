@@ -73,7 +73,7 @@ public class CardsDisplayController extends JFrame {
 		playersController = new OfflineGameController[players];
 		for (int i = 0; i < players; ++i) {
 			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
-			playersController[i].addCards(unoLogic.getCardsFromStack(1));
+			playersController[i].addCards(unoLogic.getCardsFromStack(7));
 			if (i == currentPlayer)
 				playersController[i].setStatus(true);
 		}
@@ -241,7 +241,7 @@ public class CardsDisplayController extends JFrame {
 			unoLogic.reshuffleCards();
 			for (int i = 0; i < playersController.length; ++i) {
 				playersController[i].resetCards();
-				playersController[i].addCards(unoLogic.getCardsFromStack(1));
+				playersController[i].addCards(unoLogic.getCardsFromStack(7));
 			}
 
 			// define first card

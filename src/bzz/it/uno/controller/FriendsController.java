@@ -73,7 +73,7 @@ public class FriendsController extends JFrame {
 
 		String[] columnNames = { "Username", "Punkte", "Action" };
 		tableModel = new DefaultTableModel(columnNames, 0) {
-			private static final long serialVersionUID = 3153162956700695186L;
+			private static final long serialVersionUID = 1L;
 
 			// set Column Datatype
 			@Override
