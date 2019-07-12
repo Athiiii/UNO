@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,18 +71,20 @@ public class OfflineGameController extends JFrame {
 		cards = new ArrayList<Card>();
 		contentPane = new JPanel();
 
-		// ViewSettings.setupFrame(this);
-		JFrame frame = this;
-		frame.setUndecorated(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 450, 400);
-		frame.setVisible(true);
-		frame.setIconImage(new ImageIcon(new ImageIcon(ViewSettings.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)).getImage());
-		// ViewSettings.setupPanel(contentPane);
-		contentPane.setLayout(null);
-		contentPane.setBackground(Color.DARK_GRAY);
-		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
+		ViewSettings.setupFrame(this);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 400);
+		
+		ViewSettings.setupPanel(contentPane);
+		
+		//dispose whole game when closing this
+		addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent evt) {
+               parent.dispose();
+
+            }
+        });
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -253,6 +257,10 @@ public class OfflineGameController extends JFrame {
 
 	public boolean isSayedUNO() {
 		return sayedUNO;
+	}
+	
+	public void setSayedUNO(boolean sayedUNO) {
+		this.sayedUNO = sayedUNO;
 	}
 
 	public boolean isSayedUNOConfirm() {

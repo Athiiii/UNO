@@ -2,7 +2,6 @@ package bzz.it.uno.controller;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.event.MouseAdapter;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,9 +20,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.TableHeaderRenderer;
 import bzz.it.uno.frontend.ViewSettings;
+import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
+import bzz.it.uno.model.User_Lobby;
 
 /**
  * Display after game is finished (offline mode)
@@ -40,7 +41,7 @@ public class OfflineGameEnd extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow;
 
-	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players) {
+	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players, Lobby lobby) {
 		contentPane = new JPanel();
 
 		ViewSettings.setupFrame(this);
@@ -126,6 +127,30 @@ public class OfflineGameEnd extends JFrame {
 		titleLabel.setBounds(220, 38, 280, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
+		
+		addDbPoints(user, players, lobby);
+	}
+	
+	public void addDbPoints(User user, OfflineGameController[] players, Lobby lobby) {
+		UserLobbyDao userLobbyDao = UserLobbyDao.getInstance();
+		List<User_Lobby> userLobbies = userLobbyDao.selectByUser(user.getId());
+		User_Lobby userLobby = null;
+		for(int i = 0; i < userLobbies.size(); ++i) {
+			if(userLobbies.get(i).getLobby().getId() == lobby.getId()) {
+				userLobby = userLobbies.get(i);
+				break;
+			}
+		}
+		if(userLobby != null) {
+			int points = 0;
+			for(int i = 0; i < players.length; ++i) {
+				if(players[i].getUsername().equals(user.getUsername())) {
+					points = players[i].getPoints();
+					break;
+				}
+			}
+			userLobbyDao.updatePointsUserLobby(points, userLobby.getId());
+		}
 	}
 
 	private void fillData(OfflineGameController[] players) {

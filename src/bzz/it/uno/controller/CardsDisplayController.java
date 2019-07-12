@@ -1,7 +1,6 @@
 package bzz.it.uno.controller;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -12,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import bzz.it.uno.backend.UNOBasicLogic;
-import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.SelectColorDialog;
 import bzz.it.uno.frontend.UNODialog;
@@ -37,6 +35,7 @@ public class CardsDisplayController extends JFrame {
 	private int currentPlayer = 0;
 	private User user;
 	private NavigationController navigationFrame;
+	private Lobby lobby;
 
 	// needed for retour card
 	private int direction = 1;
@@ -47,15 +46,19 @@ public class CardsDisplayController extends JFrame {
 	// Take 1 Card is default
 	private int takeCards = 1;
 
-	public CardsDisplayController(User user, NavigationController navigationFrame, int players) {
+	public CardsDisplayController(User user, NavigationController navigationFrame, Lobby lobby, int players) {
 		this.user = user;
 		this.navigationFrame = navigationFrame;
+		this.lobby = lobby;
 
 		unoLogic = new UNOBasicLogic();
 
 		contentPane = new JPanel();
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		setBounds(100, 100, 150, 202);
 
 		// define first card
@@ -74,8 +77,18 @@ public class CardsDisplayController extends JFrame {
 		// create players
 		playersController = new OfflineGameController[players];
 		for (int i = 0; i < players; ++i) {
-			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
-			playersController[i].addCards(unoLogic.getCardsFromStack(1));
+			String offlineUsername = "";
+			if (i == 0)
+				offlineUsername = user.getUsername();
+			else {
+				offlineUsername = "Player " + (i + 1);
+
+				// if anonym player and loged in user have the same name it will be changed
+				if (offlineUsername.equals(user.getUsername()))
+					offlineUsername = "Player " + (i + 1) + " (1)";
+			}
+			playersController[i] = new OfflineGameController(offlineUsername, this);
+			playersController[i].addCards(unoLogic.getCardsFromStack(7));
 			if (i == currentPlayer)
 				playersController[i].setStatus(true);
 		}
@@ -195,11 +208,13 @@ public class CardsDisplayController extends JFrame {
 						if (playersController[playerBefore].getCards().size() == 1
 								&& playersController[playerBefore].isSayedUNO())
 							playersController[playerBefore].setSayedUNOConfirm(true);
+						response = true;
 					}
 					displayCurrentCard();
 					if (offlineGameController.getCards().size() == 1 && offlineGameController.isSayedUNO()
 							&& offlineGameController.isSayedUNOConfirm()) {
 						playerWon();
+						response = true;
 					} else if (offlineGameController.isSayedUNO() && offlineGameController.getCards().size() == 1) {
 						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
 						new UNODialog(this, "Ungültig", "Sie haben ungültig UNO gesagt. 2 Karten",
@@ -214,8 +229,11 @@ public class CardsDisplayController extends JFrame {
 						new UNODialog(this, "Ungültig", "Sie haben zu spät UNO gesagt. 2 Karten", UNODialog.INFORMATION,
 								UNODialog.OK_BUTTON);
 					}
+					if (!response) {
+						offlineGameController.setSayedUNOConfirm(false);
+						offlineGameController.setSayedUNO(false);
+					}
 					nextPlayer();
-					response = true;
 				}
 			} else {
 				new UNODialog(this, "Ungültig", "Diese Eingabe ist nicht gültig. Bitte neu versuchen", UNODialog.ERROR,
@@ -263,8 +281,11 @@ public class CardsDisplayController extends JFrame {
 		playersController[currentPlayer].addPoints(points);
 
 		if (playersController[currentPlayer].getPoints() >= 500) {
-			new OfflineGameEnd(user, navigationFrame, playersController);
+			new OfflineGameEnd(user, navigationFrame, playersController, lobby);
 			dispose();
+			for (int i = 0; i < playersController.length; ++i) {
+				playersController[i].dispose();
+			}
 		} else {
 
 			// preparation of next round

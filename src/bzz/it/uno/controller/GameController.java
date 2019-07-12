@@ -142,25 +142,24 @@ public class GameController extends JFrame implements ActionListener {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
 
 				if (lobbyExist == null) {
+					LobbyDao lobbyDao = LobbyDao.getInstance();
+					UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
+					Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
+					lobbyDao.addLobby(lobby);
+					lobby = lobbyDao.selectLobbyByName(lobby.getName());
+					User_Lobby userLobby = new User_Lobby();
+					userLobby.setLobby(lobby);
+					userLobby.setUser(user);
+					userLobby.setPoints(0);
+					lobbyUser.addUserLobby(userLobby);
 					if (onlineMode.isSelected()) {
 						// ONLINE MODE
-						LobbyDao lobbyDao = LobbyDao.getInstance();
-						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
-						Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
-						lobbyDao.addLobby(lobby);
-						lobby = lobbyDao.selectLobbyByName(lobby.getName());
-						User_Lobby userLobby = new User_Lobby();
-						userLobby.setLobby(lobby);
-						userLobby.setUser(user);
-						userLobby.setPoints(0);
-
-						lobbyUser.addUserLobby(userLobby);
 
 						setVisible(false);
 						new LobbyWaitController(user, navigationFrame, lobby, maxPlayers);
 					} else {
 						// OFFLINE MODE
-						new CardsDisplayController(user, navigationFrame, maxPlayers);
+						new CardsDisplayController(user, navigationFrame, lobby, maxPlayers);
 						dispose();
 						navigationFrame.setVisible(true);
 					}

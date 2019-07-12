@@ -53,5 +53,16 @@ public class UserLobbyDao {
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
 	}
+	
+	public void updatePointsUserLobby(int points, int user_Lobby_id) {
+		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
+		entityManager.getTransaction().begin();
+		User_Lobby foundLobby = entityManager.find(User_Lobby.class, user_Lobby_id);
+		foundLobby.setPoints(points);
+		entityManager.getTransaction().commit();
+		HandleConnectionToDB.closeEntityManager();	
+	}
+	
+	
 
 }
