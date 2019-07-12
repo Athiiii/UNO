@@ -27,9 +27,8 @@ import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
- * Creation of the game
- * User can decide Lobby name (doesn't affect offline version)
- * and possibility beween online/offline
+ * Creation of the game User can decide Lobby name (doesn't affect offline
+ * version) and possibility beween online/offline
  * 
  * @author Athavan Theivakulasingham
  *
@@ -47,9 +46,9 @@ public class GameController extends JFrame implements ActionListener {
 	public GameController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
-		
+
 		contentPane = new JPanel();
-		
+
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
 		setBounds(100, 100, 700, 385);
@@ -105,7 +104,7 @@ public class GameController extends JFrame implements ActionListener {
 		startBtn.addActionListener(this);
 		contentPane.add(startBtn);
 
-		//checkbox to choose between online and offline mode
+		// checkbox to choose between online and offline mode
 		onlineMode = new JCheckBox("online");
 		onlineMode.setBackground(Color.DARK_GRAY);
 		onlineMode.setBounds(90, 312, 137, 39);
@@ -114,7 +113,7 @@ public class GameController extends JFrame implements ActionListener {
 		onlineMode.setSelected(false);
 		contentPane.add(onlineMode);
 	}
-	
+
 	/**
 	 * the whole validation of the user inputs.
 	 * 
@@ -123,15 +122,21 @@ public class GameController extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
-			if (onlineMode.isSelected() && maxPlayers > 30) {
+			if (maxPlayers < 2) {
+				numberPlayers.setText("2");
+				new UNODialog(this, "Zu wenige Max. Players", "Max. Spieler wurde auf 2 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
+			} else if (onlineMode.isSelected() && maxPlayers > 30) {
 				numberPlayers.setText("30");
-				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt",
-						UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
 			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
 				numberPlayers.setText("5");
-				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
 				if (lobbyName.getText().equals("")) {
-					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION,
+							UNODialog.OK_BUTTON);
 				}
 			} else {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());

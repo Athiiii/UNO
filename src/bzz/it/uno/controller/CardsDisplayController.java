@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import bzz.it.uno.backend.UNOBasicLogic;
+import bzz.it.uno.dao.HandleConnectionToDB;
 import bzz.it.uno.frontend.ImageCanvas;
 import bzz.it.uno.frontend.SelectColorDialog;
 import bzz.it.uno.frontend.UNODialog;
@@ -194,14 +195,12 @@ public class CardsDisplayController extends JFrame {
 						if (playersController[playerBefore].getCards().size() == 1
 								&& playersController[playerBefore].isSayedUNO())
 							playersController[playerBefore].setSayedUNOConfirm(true);
-
-						response = true;
 					}
 					displayCurrentCard();
 					if (offlineGameController.getCards().size() == 1 && offlineGameController.isSayedUNO()
 							&& offlineGameController.isSayedUNOConfirm()) {
 						playerWon();
-					} else if (offlineGameController.isSayedUNO() && offlineGameController.getCards().size() != 0) {
+					} else if (offlineGameController.isSayedUNO() && offlineGameController.getCards().size() == 1) {
 						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
 						new UNODialog(this, "Ungültig", "Sie haben ungültig UNO gesagt. 2 Karten",
 								UNODialog.INFORMATION, UNODialog.OK_BUTTON);
@@ -216,6 +215,7 @@ public class CardsDisplayController extends JFrame {
 								UNODialog.OK_BUTTON);
 					}
 					nextPlayer();
+					response = true;
 				}
 			} else {
 				new UNODialog(this, "Ungültig", "Diese Eingabe ist nicht gültig. Bitte neu versuchen", UNODialog.ERROR,
