@@ -47,6 +47,7 @@ public class RankingController extends JFrame {
 	private DefaultTableModel tableModel;
 
 	public RankingController(User user, NavigationController navigationFrame) {
+		
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);

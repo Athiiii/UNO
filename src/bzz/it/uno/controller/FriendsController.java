@@ -143,6 +143,14 @@ public class FriendsController extends JFrame {
 
 		ViewSettings.setupTableDesign(table);
 		friendSearch = ViewSettings.createButton(450, 60, 200, 40, new Color(41, 204, 22), "Spieler Suche");
+		friendSearch.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new PlayerSearchController(user, FriendsController.this);
+				
+			}
+		});
 		contentPane.add(friendSearch);
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
