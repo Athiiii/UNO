@@ -42,6 +42,7 @@ public class FriendsController extends JFrame {
 	private DefaultTableModel tableModel;
 	private JTable table;
 	private int selectedRow = -1;
+	private JButton friendSearch;
 
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
@@ -141,6 +142,8 @@ public class FriendsController extends JFrame {
 		});
 
 		ViewSettings.setupTableDesign(table);
+		friendSearch = ViewSettings.createButton(450, 60, 200, 40, new Color(41, 204, 22), "Spieler Suche");
+		contentPane.add(friendSearch);
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationFrame));
 		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 200));
