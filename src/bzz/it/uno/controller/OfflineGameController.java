@@ -41,7 +41,12 @@ public class OfflineGameController extends JFrame {
 	private JPanel cardPanel;
 	private CardsDisplayController parent;
 	private boolean onlyPlayingCards = false;
+	
+	//flag to check if player sayed UNO
 	private boolean sayedUNO = false;
+	
+	//flag to check if player sayed it early enough
+	private boolean sayedUNOConfirm = false;
 
 	private Component displayCardComponent;
 
@@ -118,7 +123,9 @@ public class OfflineGameController extends JFrame {
 						OfflineGameController.this.cards.removeAll(cards);
 						onlyPlayingCards = false;
 						updateView();
+						
 						sayedUNO = false;
+						sayedUNOConfirm = false;
 					}
 				} else {
 					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING,
@@ -141,6 +148,7 @@ public class OfflineGameController extends JFrame {
 							UNODialog.YES_NO_BUTTON).getReponse()) {
 						parent.nextPlayer();
 						sayedUNO = false;
+						onlyPlayingCards = false;
 					}
 				}
 			}
@@ -245,5 +253,13 @@ public class OfflineGameController extends JFrame {
 
 	public boolean isSayedUNO() {
 		return sayedUNO;
+	}
+
+	public boolean isSayedUNOConfirm() {
+		return sayedUNOConfirm;
+	}
+
+	public void setSayedUNOConfirm(boolean sayedUNOConfirm) {
+		this.sayedUNOConfirm = sayedUNOConfirm;
 	}
 }
