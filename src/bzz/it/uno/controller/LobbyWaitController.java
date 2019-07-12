@@ -36,7 +36,7 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 	private GameAction mqttController;
 	private int players;
 	private JLabel playerLabel;
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -54,10 +54,10 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 		this.lobby = lobby;
 		this.user = user;
 		this.players = 1;
-		this.mqttController = new GameAction(this, user.getUsername());
+		this.mqttController = new GameAction(this);
 
 		// subscribe to game (mqqt)
-		mqttController.subscribe(Integer.toString(lobby.getId()));
+		mqttController.subscribe("3");
 
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
@@ -97,7 +97,7 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 		maxPlayerLabel.setBounds(360, 147, 46, 42);
 		maxPlayerLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 35));
 		contentPane.add(maxPlayerLabel);
-		
+
 		JLabel playerLabel = new JLabel(Integer.toString(players));
 		playerLabel.setForeground(Color.WHITE);
 		playerLabel.setBounds(330, 147, 46, 42);
@@ -107,7 +107,9 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 
 	@Override
 	public void messageReceived(MqttMessage mqttMessage) {
-		System.out.println(mqttMessage.getPayload());
-
+		String message = new String(mqttMessage.getPayload());
+		System.out.println(message);
+		++players;
+		playerLabel.setText(Integer.toString(players));
 	}
 }

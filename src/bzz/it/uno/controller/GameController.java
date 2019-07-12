@@ -111,7 +111,7 @@ public class GameController extends JFrame implements ActionListener {
 		onlineMode.setBounds(90, 312, 137, 39);
 		onlineMode.setForeground(Color.WHITE);
 		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		onlineMode.setSelected(true);
+		onlineMode.setSelected(false);
 		contentPane.add(onlineMode);
 	}
 	
