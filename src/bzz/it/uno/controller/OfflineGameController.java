@@ -41,8 +41,13 @@ public class OfflineGameController extends JFrame {
 	private JPanel cardPanel;
 	private CardsDisplayController parent;
 	private boolean onlyPlayingCards = false;
+	private boolean sayedUNO = false;
+
 	private Component displayCardComponent;
+
 	private JLabel offlineIcon;
+	private JLabel pointsLabel;
+
 	private int points = 0;
 	private String username;
 
@@ -111,8 +116,9 @@ public class OfflineGameController extends JFrame {
 				if (cards.size() != 0) {
 					if (parent.playCards(OfflineGameController.this, cards)) {
 						OfflineGameController.this.cards.removeAll(cards);
-						updateView();
 						onlyPlayingCards = false;
+						updateView();
+						sayedUNO = false;
 					}
 				} else {
 					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING,
@@ -134,6 +140,7 @@ public class OfflineGameController extends JFrame {
 					if (new UNODialog(parent, "Unerlaubt", "Nicht erlaubt. Weitergeben?", UNODialog.QUESTION,
 							UNODialog.YES_NO_BUTTON).getReponse()) {
 						parent.nextPlayer();
+						sayedUNO = false;
 					}
 				}
 			}
@@ -147,6 +154,24 @@ public class OfflineGameController extends JFrame {
 		offlineIcon.setBounds(5, 5, 10, 10);
 		offlineIcon.setVisible(false);
 		contentPane.add(offlineIcon);
+
+		pointsLabel = new JLabel(Integer.toString(points));
+		pointsLabel.setForeground(Color.WHITE);
+		pointsLabel.setBounds(15, 60, 680, 69);
+		pointsLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 15));
+		contentPane.add(pointsLabel);
+
+		JButton sayUno = ViewSettings.createButton(60, 80, 150, 30, new Color(33, 150, 243), "UNO Sagen");
+		sayUno.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		sayUno.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sayedUNO = true;
+			}
+
+		});
+		contentPane.add(sayUno);
 	}
 
 	public void setStatus(boolean online) {
@@ -184,28 +209,41 @@ public class OfflineGameController extends JFrame {
 		contentPane.add(displayCardComponent);
 		contentPane.updateUI();
 	}
-	
+
 	public void addPoints(int points) {
 		this.points += points;
+		updatePointsLabel();
 	}
-	
+
 	public boolean wonByPoints() {
-		return this.points >= 500; 
+		return this.points >= 500;
 	}
-	
+
 	public List<Card> getCards() {
 		return this.cards;
 	}
-	
+
 	public void resetCards() {
 		this.cards = new ArrayList<Card>();
 	}
-	
+
 	public int getPoints() {
 		return this.points;
 	}
-	
+
 	public String getUsername() {
 		return this.username;
+	}
+
+	public void updatePointsLabel() {
+		pointsLabel.setText(Integer.toString(points));
+	}
+	
+	public void setOnlyPlayingCards(boolean onlyPlayingCards) {
+		this.onlyPlayingCards = onlyPlayingCards;
+	}
+
+	public boolean isSayedUNO() {
+		return sayedUNO;
 	}
 }

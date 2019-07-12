@@ -37,18 +37,6 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 	private int players;
 	private JLabel playerLabel;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				User user = new User();
-				user.setUsername("B");
-				Lobby lobby = new Lobby();
-				lobby.setId(2);
-				new LobbyWaitController(user, null, lobby, 3);
-			}
-		});
-	}
-
 	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby, int maxPlayer) {
 		this.navigationFrame = navigationFrame;
 		this.lobby = lobby;

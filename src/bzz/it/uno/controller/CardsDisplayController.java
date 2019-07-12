@@ -18,6 +18,7 @@ import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardType;
+import bzz.it.uno.model.Lobby;
 import bzz.it.uno.model.User;
 
 /**
@@ -44,6 +45,14 @@ public class CardsDisplayController extends JFrame {
 
 	// Take 1 Card is default
 	private int takeCards = 1;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new CardsDisplayController(null, null, 2);
+			}
+		});
+	}
 
 	public CardsDisplayController(User user, NavigationController navigationFrame, int players) {
 		this.user = user;
@@ -120,6 +129,7 @@ public class CardsDisplayController extends JFrame {
 			if (takeCards == 1) {
 				if (!new UNODialog(this, "Weitergeben?", "Wills du noch eine Karte setzen", UNODialog.QUESTION,
 						UNODialog.YES_NO_BUTTON).getReponse()) {
+					offlineGameController.setOnlyPlayingCards(false);
 					nextPlayer();
 				} else {
 					response = true;
@@ -180,8 +190,15 @@ public class CardsDisplayController extends JFrame {
 					}
 
 					displayCurrentCard();
-					if (offlineGameController.getCards().size() == 1) {
+					if (offlineGameController.getCards().size() == 1 && offlineGameController.isSayedUNO()) {
 						playerWon();
+					} else if (offlineGameController.isSayedUNO() && offlineGameController.getCards().size() != 0) {
+						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
+						new UNODialog(this, "Ungültig", "Sie haben ungültig UNO gesagt. 2 Karten",
+								UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+					} else if(!offlineGameController.isSayedUNO() && offlineGameController.getCards().size() == 1) {
+						new UNODialog(this, "Ungültig", "Sie haben vergessen UNO zu sagen. 2 Karten",
+								UNODialog.INFORMATION, UNODialog.OK_BUTTON);
 					}
 					nextPlayer();
 					return true;
