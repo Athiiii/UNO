@@ -60,7 +60,7 @@ public class NavigationController extends JFrame {
 		});
 		setContentPane(contentPane);
 
-		//title label
+		// title label
 		Label titleLabel = new Label("Welcome");
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(233, 16, 234, 69);
@@ -69,75 +69,74 @@ public class NavigationController extends JFrame {
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 
-		//new Game Button
+		// new Game Button
 		JButton newGame = ViewSettings.createButton(187, 101, 344, 40, new Color(244, 67, 54), "Neues Spiel");
 		newGame.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				new GameController(user, NavigationController.this);
 			}
 		});
 		contentPane.add(newGame);
 
-		//profile Button
+		// profile Button
 		JButton btnProfil = ViewSettings.createButton(187, 399, 344, 40, new Color(103, 58, 183), "Profil");
 		btnProfil.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				new ProfilController(user, NavigationController.this, null);
 			}
 		});
 		contentPane.add(btnProfil);
-		
-		//ranking view Button
+
+		// ranking view Button
 		JButton btnRanking = ViewSettings.createButton(187, 174, 344, 40, new Color(0, 150, 136), "Ranking");
 		btnRanking.setBounds(187, 174, 344, 40);
 		btnRanking.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				new RankingController(user, NavigationController.this);
 			}
 		});
 		contentPane.add(btnRanking);
 
-		//friend view Button
+		// friend view Button
 		JButton btnFriends = ViewSettings.createButton(187, 248, 344, 40, new Color(255, 152, 0), "Freunde");
 		btnFriends.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				new FriendsController(user, NavigationController.this);
 			}
 		});
 		contentPane.add(btnFriends);
 
-		
-		//open Lobbies Button
-		JButton btnOpenLobbies = ViewSettings.createButton(187, 321, 344, 40, new Color(96, 125, 139), "Offene Lobbies");
+		// open Lobbies Button
+		JButton btnOpenLobbies = ViewSettings.createButton(187, 321, 344, 40, new Color(96, 125, 139),
+				"Offene Lobbies");
 		btnOpenLobbies.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				new LobbyController(user, NavigationController.this);
 			}
 		});
 		contentPane.add(btnOpenLobbies);
-		
-		
-		//create Logout Button
+
+		// create Logout Button
 		JButton btnLogout = ViewSettings.createButton(603, 0, 50, 50, Color.DARK_GRAY, "");
 		btnLogout.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/logout.png"))
 				.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
@@ -145,7 +144,7 @@ public class NavigationController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//forward
+				// forward
 				setVisible(false);
 				frame.setUserName(user.getUsername());
 				frame.setVisible(true);

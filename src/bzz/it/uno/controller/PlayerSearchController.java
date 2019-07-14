@@ -51,8 +51,9 @@ public class PlayerSearchController extends JFrame {
 	private int selectedRow;
 	private List<User_Lobby> allUserLobbies;
 	private List<User> allUser;
+	private List<RankModel> actuallListOfUser;
 
-	public PlayerSearchController(User user, FriendsController friendsController) {
+	public PlayerSearchController(User user, NavigationController navigationController) {
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
@@ -75,7 +76,7 @@ public class PlayerSearchController extends JFrame {
 		setContentPane(contentPane);
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
-		contentPane.add(ViewSettings.createReturnButton(this, friendsController));
+		contentPane.add(ViewSettings.createReturnButton(this, navigationController));
 		allUser = getInstance().getAllUsers();
 		createTitle();
 		allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
@@ -172,9 +173,15 @@ public class PlayerSearchController extends JFrame {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				super.mouseClicked(arg0);
 				// get the clicked cell's row and column
 				selectedRow = table.getSelectedRow();
+				if (arg0.getClickCount() > 1) {
+					for (User u : allUser) {
+						if (u.getUsername().matches(actuallListOfUser.get(selectedRow).getName())) {
+							new ProfilController(user, navigationController, u);
+						}
+					}
+				}
 
 				// Repaints JTable
 				table.repaint();
@@ -258,6 +265,7 @@ public class PlayerSearchController extends JFrame {
 			Object[] data = { i + 1, liga, userName, (int) points };
 			tableModel.addRow(data);
 		}
+		actuallListOfUser = ranks;
 	}
 
 	class DocumentAdapter implements DocumentListener {
