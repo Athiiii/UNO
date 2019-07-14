@@ -527,7 +527,7 @@ public class ProfilController extends JFrame {
 			Image scaledInstance = scaleImage(image);
 
 			profileImage.setIcon(new ImageIcon(scaledInstance));
-
+			
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 			ImageIO.write(image, getFileType(file), bos);
