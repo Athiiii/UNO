@@ -57,12 +57,13 @@ class RuleManagement {
 	private boolean isSameNumber(Card currentCard, Card comingCard) {
 		boolean result = false;
 		if (comingCard.getValue() == currentCard.getValue() && currentCard.getCardType() == comingCard.getCardType()
-				&& currentCard.getCardType() == CardType.COMMON)
+				&& currentCard.getCardType() == CardType.COMMON) {
 			result = true;
-		else if (currentCard.getCardType() == comingCard.getCardType())
+		} else if (currentCard.getCardType() == comingCard.getCardType() && comingCard.getCardType() != CardType.COMMON) {
 			result = true;
-		else if (comingCard.getCardType() == CardType.PLUSFOUR || comingCard.getCardType() == CardType.CHANGECOLOR)
+		} else if (comingCard.getCardType() == CardType.PLUSFOUR || comingCard.getCardType() == CardType.CHANGECOLOR) {
 			result = true;
+		}
 		return result;
 	}
 
@@ -78,6 +79,7 @@ class RuleManagement {
 		boolean result = false;
 		if (comingCard.getColor().equals(currentCard.getColor()))
 			result = true;
+
 		return result;
 	}
 

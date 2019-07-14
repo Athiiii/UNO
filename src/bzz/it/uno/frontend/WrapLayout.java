@@ -1,6 +1,11 @@
 package bzz.it.uno.frontend;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -11,7 +16,7 @@ import javax.swing.SwingUtilities;
  */
 public class WrapLayout extends FlowLayout
 {
-	private Dimension preferredLayoutSize;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	* Constructs a new <code>WrapLayout</code> with a left

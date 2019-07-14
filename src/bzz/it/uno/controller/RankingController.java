@@ -79,7 +79,7 @@ public class RankingController extends JFrame {
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
 
-		String[] columnNames = { "Platz", "Liga", "User", "Points" };
+		String[] columnNames = { "Platz", "Liga", "User", "Punkte" };
 		tableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 			

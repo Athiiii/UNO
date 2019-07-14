@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -32,6 +35,7 @@ import bzz.it.uno.model.Card;
  *
  */
 public class OfflineGameController extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private int xy, xx;
 	private JPanel contentPane;
 	private List<CardButton> cardBtns;
@@ -39,10 +43,24 @@ public class OfflineGameController extends JFrame {
 	private JPanel cardPanel;
 	private CardsDisplayController parent;
 	private boolean onlyPlayingCards = false;
+	
+	//flag to check if player sayed UNO
+	private boolean sayedUNO = false;
+	
+	//flag to check if player sayed it early enough
+	private boolean sayedUNOConfirm = false;
+
 	private Component displayCardComponent;
 
-	public OfflineGameController(String userName, CardsDisplayController parent) {
+	private JLabel offlineIcon;
+	private JLabel pointsLabel;
+
+	private int points = 0;
+	private String username;
+
+	public OfflineGameController(String username, CardsDisplayController parent) {
 		this.parent = parent;
+		this.username = username;
 
 		cardPanel = new JPanel();
 		cardPanel.setBackground(Color.DARK_GRAY);
@@ -53,18 +71,20 @@ public class OfflineGameController extends JFrame {
 		cards = new ArrayList<Card>();
 		contentPane = new JPanel();
 
-		// ViewSettings.setupFrame(this);
-		JFrame frame = this;
-		frame.setUndecorated(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 450, 400);
-		frame.setVisible(true);
-		frame.setIconImage(new ImageIcon(new ImageIcon(ViewSettings.class.getResource("/images/uno_logo.png"))
-				.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)).getImage());
-		// ViewSettings.setupPanel(contentPane);
-		contentPane.setLayout(null);
-		contentPane.setBackground(Color.DARK_GRAY);
-		contentPane.setBorder(new EmptyBorder(11, 300, 11, 300));
+		ViewSettings.setupFrame(this);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 400);
+		
+		ViewSettings.setupPanel(contentPane);
+		
+		//dispose whole game when closing this
+		addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent evt) {
+               parent.dispose();
+
+            }
+        });
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -83,7 +103,7 @@ public class OfflineGameController extends JFrame {
 		});
 		setContentPane(contentPane);
 
-		JLabel titleLabel = new JLabel(userName);
+		JLabel titleLabel = new JLabel(username);
 
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBounds(10, 10, 680, 69);
@@ -105,8 +125,11 @@ public class OfflineGameController extends JFrame {
 				if (cards.size() != 0) {
 					if (parent.playCards(OfflineGameController.this, cards)) {
 						OfflineGameController.this.cards.removeAll(cards);
-						updateView();
 						onlyPlayingCards = false;
+						updateView();
+						
+						sayedUNO = false;
+						sayedUNOConfirm = false;
 					}
 				} else {
 					new UNODialog(parent, "Keine Auswahl", "Sie müssen min. 1 Karte auswählen", UNODialog.WARNING,
@@ -128,6 +151,8 @@ public class OfflineGameController extends JFrame {
 					if (new UNODialog(parent, "Unerlaubt", "Nicht erlaubt. Weitergeben?", UNODialog.QUESTION,
 							UNODialog.YES_NO_BUTTON).getReponse()) {
 						parent.nextPlayer();
+						sayedUNO = false;
+						onlyPlayingCards = false;
 					}
 				}
 			}
@@ -135,6 +160,34 @@ public class OfflineGameController extends JFrame {
 		});
 		contentPane.add(btnPullCard);
 
+		offlineIcon = new JLabel(
+				new ImageIcon(new ImageIcon(OfflineGameController.class.getResource("/images/green-dot.png")).getImage()
+						.getScaledInstance(10, 10, Image.SCALE_SMOOTH)));
+		offlineIcon.setBounds(5, 5, 10, 10);
+		offlineIcon.setVisible(false);
+		contentPane.add(offlineIcon);
+
+		pointsLabel = new JLabel(Integer.toString(points));
+		pointsLabel.setForeground(Color.WHITE);
+		pointsLabel.setBounds(15, 60, 680, 69);
+		pointsLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 15));
+		contentPane.add(pointsLabel);
+
+		JButton sayUno = ViewSettings.createButton(60, 80, 150, 30, new Color(33, 150, 243), "UNO Sagen");
+		sayUno.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+		sayUno.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sayedUNO = true;
+			}
+
+		});
+		contentPane.add(sayUno);
+	}
+
+	public void setStatus(boolean online) {
+		offlineIcon.setVisible(online);
 	}
 
 	public void addCards(List<Card> cards) {
@@ -147,6 +200,18 @@ public class OfflineGameController extends JFrame {
 		cardPanel.removeAll();
 		for (int i = 0; i < cards.size(); i++) {
 			CardButton cardBtn = new CardButton(cards.get(i).getFilename(), cards.get(i));
+			cardBtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						if (parent.playCards(OfflineGameController.this, Arrays.asList(cardBtn.getCard()))) {
+							OfflineGameController.this.cards.removeAll(Arrays.asList(cardBtn.getCard()));
+							updateView();
+							onlyPlayingCards = false;
+						}
+					}
+				}
+			});
 			cardBtns.add(cardBtn);
 			cardPanel.add(cardBtn);
 		}
@@ -155,5 +220,54 @@ public class OfflineGameController extends JFrame {
 		displayCardComponent = ViewSettings.createDefaultScrollPane(cardPanel, 290, 450, 110);
 		contentPane.add(displayCardComponent);
 		contentPane.updateUI();
+	}
+
+	public void addPoints(int points) {
+		this.points += points;
+		updatePointsLabel();
+	}
+
+	public boolean wonByPoints() {
+		return this.points >= 500;
+	}
+
+	public List<Card> getCards() {
+		return this.cards;
+	}
+
+	public void resetCards() {
+		this.cards = new ArrayList<Card>();
+	}
+
+	public int getPoints() {
+		return this.points;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void updatePointsLabel() {
+		pointsLabel.setText(Integer.toString(points));
+	}
+	
+	public void setOnlyPlayingCards(boolean onlyPlayingCards) {
+		this.onlyPlayingCards = onlyPlayingCards;
+	}
+
+	public boolean isSayedUNO() {
+		return sayedUNO;
+	}
+	
+	public void setSayedUNO(boolean sayedUNO) {
+		this.sayedUNO = sayedUNO;
+	}
+
+	public boolean isSayedUNOConfirm() {
+		return sayedUNOConfirm;
+	}
+
+	public void setSayedUNOConfirm(boolean sayedUNOConfirm) {
+		this.sayedUNOConfirm = sayedUNOConfirm;
 	}
 }

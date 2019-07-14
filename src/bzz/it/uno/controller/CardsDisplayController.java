@@ -1,11 +1,9 @@
 package bzz.it.uno.controller;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +17,8 @@ import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.Card;
 import bzz.it.uno.model.CardType;
+import bzz.it.uno.model.Lobby;
+import bzz.it.uno.model.User;
 
 /**
  * Main controller for offline UNO Version Display current Card
@@ -33,6 +33,9 @@ public class CardsDisplayController extends JFrame {
 	private ImageCanvas imgCanvas;
 	private OfflineGameController[] playersController;
 	private int currentPlayer = 0;
+	private User user;
+	private NavigationController navigationFrame;
+	private Lobby lobby;
 
 	// needed for retour card
 	private int direction = 1;
@@ -43,17 +46,27 @@ public class CardsDisplayController extends JFrame {
 	// Take 1 Card is default
 	private int takeCards = 1;
 
-	public CardsDisplayController(int players) {
+	public CardsDisplayController(User user, NavigationController navigationFrame, Lobby lobby, int players) {
+		this.user = user;
+		this.navigationFrame = navigationFrame;
+		this.lobby = lobby;
+
 		unoLogic = new UNOBasicLogic();
 
 		contentPane = new JPanel();
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		setBounds(100, 100, 150, 202);
 
 		// define first card
-		Card card = unoLogic.getCardsFromStack(1).get(0);
-		unoLogic.playCards(null, Arrays.asList(card));
+		Card card;
+		do {
+			card = unoLogic.getCardsFromStack(1).get(0);
+			unoLogic.playCards(null, Arrays.asList(card));
+		} while (card.getCardType() != CardType.COMMON);
 
 		// display first card
 		imgCanvas = new ImageCanvas();
@@ -64,8 +77,20 @@ public class CardsDisplayController extends JFrame {
 		// create players
 		playersController = new OfflineGameController[players];
 		for (int i = 0; i < players; ++i) {
-			playersController[i] = new OfflineGameController("Player " + (i + 1), this);
+			String offlineUsername = "";
+			if (i == 0)
+				offlineUsername = user.getUsername();
+			else {
+				offlineUsername = "Player " + (i + 1);
+
+				// if anonym player and loged in user have the same name it will be changed
+				if (offlineUsername.equals(user.getUsername()))
+					offlineUsername = "Player " + (i + 1) + " (1)";
+			}
+			playersController[i] = new OfflineGameController(offlineUsername, this);
 			playersController[i].addCards(unoLogic.getCardsFromStack(7));
+			if (i == currentPlayer)
+				playersController[i].setStatus(true);
 		}
 
 		imgCanvas.addMouseMotionListener(new MouseMotionAdapter() {
@@ -99,7 +124,7 @@ public class CardsDisplayController extends JFrame {
 	 * gives a card from stack to user
 	 * 
 	 * @param offlineGameController
-	 * @return boolean if players wants to continuee
+	 * @return boolean if players wants to continue
 	 */
 	public boolean giveCard(OfflineGameController offlineGameController) {
 		boolean response = false;
@@ -110,6 +135,8 @@ public class CardsDisplayController extends JFrame {
 			if (takeCards == 1) {
 				if (!new UNODialog(this, "Weitergeben?", "Wills du noch eine Karte setzen", UNODialog.QUESTION,
 						UNODialog.YES_NO_BUTTON).getReponse()) {
+					offlineGameController.setOnlyPlayingCards(false);
+					response = false;
 					nextPlayer();
 				} else {
 					response = true;
@@ -134,48 +161,89 @@ public class CardsDisplayController extends JFrame {
 	 * @return boolean - if successful
 	 */
 	public boolean playCards(OfflineGameController offlineGameController, List<Card> cards) {
+		boolean response = false;
 		if (offlineGameController == playersController[currentPlayer]) {
 			if (unoLogic.playedCorrect(null, cards)) {
-				unoLogic.playCards(null, cards);
-				Card lastCard = cards.get(0);
+				if (takeCards > 1
+						&& cards.get(cards.size() - 1).getCardType() != unoLogic.getLastPlayedCard().getCardType()) {
+					new UNODialog(this, "Ungültige Karte", "Sie dürfen diese Karte nicht setzen", UNODialog.WARNING,
+							UNODialog.OK_BUTTON);
+				} else {
+					if (offlineGameController.getCards().size() != 1
+							|| offlineGameController.isSayedUNO() && offlineGameController.isSayedUNOConfirm()) {
+						unoLogic.playCards(null, cards);
 
-				// Feature of special cards
-				if (lastCard.getCardType() == CardType.BACK) {
-					// switch direction
-					direction *= -1;
-				} else if (lastCard.getCardType() == CardType.SKIP) {
-					// affects that players(s) will be skiped
-					for (int i = 0; i < cards.size(); ++i)
-						nextPlayer();
-				} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
-					// displays view to choose color
-					lastCard.setColor(new SelectColorDialog(this).getColor());
-				} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
-					// displays view to choose color
-					lastCard.setColor(new SelectColorDialog(this).getColor());
+						Card lastCard = cards.get(0);
 
-					// define how many cards the next player has to take
-					for (int i = 0; i < cards.size(); ++i)
-						takeCards += 4;
-				} else if (lastCard.getCardType() == CardType.PLUSTWO) {
-					// define how many cards the next player has to take
-					for (int i = 0; i < cards.size(); ++i)
-						takeCards += 2;
+						// Feature of special cards
+						if (lastCard.getCardType() == CardType.BACK) {
+							// switch direction
+							direction *= -1;
+						} else if (lastCard.getCardType() == CardType.SKIP) {
+							// affects that players(s) will be skipped
+							for (int i = 0; i < cards.size(); ++i)
+								nextPlayer();
+						} else if (lastCard.getCardType() == CardType.CHANGECOLOR) {
+							// displays view to choose color
+							lastCard.setColor(new SelectColorDialog(this).getColor());
+						} else if (lastCard.getCardType() == CardType.PLUSFOUR) {
+							// displays view to choose color
+							lastCard.setColor(new SelectColorDialog(this).getColor());
+
+							// define how many cards the next player has to take
+							for (int i = 0; i < cards.size(); ++i)
+								takeCards += 4;
+						} else if (lastCard.getCardType() == CardType.PLUSTWO) {
+							// define how many cards the next player has to take
+							for (int i = 0; i < cards.size(); ++i)
+								takeCards += 2;
+						}
+
+						// confirm if player before has 1 card and sayed UNO
+						int playerBefore = currentPlayer + (direction * -1);
+						if (playerBefore == -1)
+							playerBefore = playersController.length - 1;
+						else if (playerBefore == playersController.length)
+							playerBefore = 0;
+						if (playersController[playerBefore].getCards().size() == 1
+								&& playersController[playerBefore].isSayedUNO())
+							playersController[playerBefore].setSayedUNOConfirm(true);
+						response = true;
+					}
+					displayCurrentCard();
+					if (offlineGameController.getCards().size() == 1 && offlineGameController.isSayedUNO()
+							&& offlineGameController.isSayedUNOConfirm()) {
+						playerWon();
+						response = true;
+					} else if (offlineGameController.isSayedUNO() && offlineGameController.getCards().size() == 1) {
+						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
+						new UNODialog(this, "Ungültig", "Sie haben ungültig UNO gesagt. 2 Karten",
+								UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+					} else if (!offlineGameController.isSayedUNO() && offlineGameController.getCards().size() == 1) {
+						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
+						new UNODialog(this, "Ungültig", "Sie haben vergessen UNO zu sagen. 2 Karten",
+								UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+					} else if (!offlineGameController.isSayedUNOConfirm()
+							&& offlineGameController.getCards().size() == 1 && offlineGameController.isSayedUNO()) {
+						offlineGameController.addCards(unoLogic.getCardsFromStack(2));
+						new UNODialog(this, "Ungültig", "Sie haben zu spät UNO gesagt. 2 Karten", UNODialog.INFORMATION,
+								UNODialog.OK_BUTTON);
+					}
+					if (!response) {
+						offlineGameController.setSayedUNOConfirm(false);
+						offlineGameController.setSayedUNO(false);
+					}
+					nextPlayer();
 				}
-
-				displayCurrentCard();
-				nextPlayer();
-				return true;
 			} else {
 				new UNODialog(this, "Ungültig", "Diese Eingabe ist nicht gültig. Bitte neu versuchen", UNODialog.ERROR,
 						UNODialog.OK_BUTTON);
-				return false;
 			}
 		} else {
 			new UNODialog(this, "Ungültig", "Sie sind nicht an der Reihe. Bitte warten.", UNODialog.WARNING,
 					UNODialog.OK_BUTTON);
-			return false;
 		}
+		return response;
 	}
 
 	/**
@@ -184,9 +252,61 @@ public class CardsDisplayController extends JFrame {
 	public void nextPlayer() {
 		if (playersController.length == currentPlayer + direction)
 			currentPlayer = 0;
-		else if (currentPlayer + direction == -1)
+		else if (currentPlayer + direction <= -1)
 			currentPlayer = playersController.length - 1;
 		else
 			currentPlayer += direction;
+
+		for (int i = 0; i < playersController.length; ++i) {
+			boolean status = false;
+			if (currentPlayer == i)
+				status = true;
+			playersController[i].setStatus(status);
+		}
+	}
+
+	/**
+	 * Assign points to winner of the round and prepare next round
+	 */
+	public void playerWon() {
+		// get points for winner
+		int points = 0;
+		for (int i = 0; i < playersController.length; ++i) {
+			if (i != currentPlayer) {
+				for (int j = 0; j < playersController[i].getCards().size(); ++j) {
+					points += playersController[i].getCards().get(j).getValue();
+				}
+			}
+		}
+		playersController[currentPlayer].addPoints(points);
+
+		if (playersController[currentPlayer].getPoints() >= 500) {
+			new OfflineGameEnd(user, navigationFrame, playersController, lobby);
+			dispose();
+			for (int i = 0; i < playersController.length; ++i) {
+				playersController[i].dispose();
+			}
+		} else {
+
+			// preparation of next round
+			unoLogic.reshuffleCards();
+			for (int i = 0; i < playersController.length; ++i) {
+				playersController[i].resetCards();
+				playersController[i].addCards(unoLogic.getCardsFromStack(7));
+			}
+
+			// define first card
+			Card card;
+			do {
+				card = unoLogic.getCardsFromStack(1).get(0);
+				unoLogic.playCards(null, Arrays.asList(card));
+			} while (card.getCardType() != CardType.COMMON);
+
+			// display first card
+			displayCurrentCard();
+
+			// reset taking card to default
+			takeCards = 1;
+		}
 	}
 }

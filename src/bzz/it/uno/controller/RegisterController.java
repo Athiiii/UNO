@@ -141,13 +141,13 @@ public class RegisterController extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (repeatPasswordField.getText().equals(passwordField.getText())) {
+		if (new String(repeatPasswordField.getPassword()).equals(new String(passwordField.getPassword()))) {
 			UserDao dao = UserDao.getInstance();
 			User user = dao.selectByUsername(usernameField.getText());
 			if (user == null) {
 				user = new User();
 				user.setComputer(false);
-				user.setPassword(passwordField.getText());
+				user.setPassword(new String(passwordField.getPassword()));
 				user.setUsername(usernameField.getText());
 				dao.addUser(user);
 

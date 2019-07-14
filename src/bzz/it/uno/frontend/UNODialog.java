@@ -25,7 +25,7 @@ import javax.swing.JTextArea;
  *
  */
 public class UNODialog extends JDialog {
-	
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private int xx, xy;
 
@@ -41,15 +41,20 @@ public class UNODialog extends JDialog {
 	/**
 	 * Display a predefined dialog <br>
 	 * messageType can be either:
+	 * <ul>
 	 * <li>ERROR</li>
 	 * <li>WARNING</li>
 	 * <li>QUESTION</li>
-	 * <li>INFORMATION</li> <br>
+	 * <li>INFORMATION</li>
+	 * </ul>
+	 * <br>
 	 * Per default it is INFORMATION <br>
 	 * <br>
 	 * buttonType can be either:
+	 * <ul>
 	 * <li>OK_BUTTON</li>
 	 * <li>YES_NO_BUTTON</li> <br>
+	 * </ul>
 	 * Per default it is OK_BUTTON
 	 * 
 	 * @param parent
@@ -127,7 +132,7 @@ public class UNODialog extends JDialog {
 		panel.add(contentLabel, BorderLayout.CENTER);
 
 		if (buttonType == YES_NO_BUTTON) {
-			JButton btnYes = ViewSettings.createButton(180, 156, 70, 30, new Color(50,205,50), "Ja");
+			JButton btnYes = ViewSettings.createButton(180, 156, 70, 30, new Color(50, 205, 50), "Ja");
 			btnYes.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
 			btnYes.addActionListener(new ActionListener() {
 
@@ -148,9 +153,9 @@ public class UNODialog extends JDialog {
 					dispose();
 				}
 			});
-			contentPanel.add(btnNo);			
+			contentPanel.add(btnNo);
 		} else {
-			
+
 			JButton btnOk = ViewSettings.createButton(241, 156, 90, 30, new Color(32, 152, 209), "Ok");
 			btnOk.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
 			btnOk.addActionListener(new ActionListener() {

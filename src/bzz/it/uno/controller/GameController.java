@@ -27,14 +27,14 @@ import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
- * Creation of the game
- * User can decide Lobby name (doesn't affect offline version)
- * and possibility beween online/offline
+ * Creation of the game User can decide Lobby name (doesn't affect offline
+ * version) and possibility beween online/offline
  * 
  * @author Athavan Theivakulasingham
  *
  */
-public class SpielController extends JFrame implements ActionListener {
+public class GameController extends JFrame implements ActionListener {
+	private static final long serialVersionUID = 1L;
 	private User user;
 	private JPanel contentPane;
 	private int xy, xx;
@@ -43,12 +43,12 @@ public class SpielController extends JFrame implements ActionListener {
 	private JTextField numberPlayers;
 	private JCheckBox onlineMode;
 
-	public SpielController(User user, NavigationController navigationFrame) {
+	public GameController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;
-		
+
 		contentPane = new JPanel();
-		
+
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
 		setBounds(100, 100, 700, 385);
@@ -58,7 +58,7 @@ public class SpielController extends JFrame implements ActionListener {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				SpielController.this.setLocation(x - xx, y - xy);
+				GameController.this.setLocation(x - xx, y - xy);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -104,16 +104,16 @@ public class SpielController extends JFrame implements ActionListener {
 		startBtn.addActionListener(this);
 		contentPane.add(startBtn);
 
-		//checkbox to choose between online and offline mode
+		// checkbox to choose between online and offline mode
 		onlineMode = new JCheckBox("online");
 		onlineMode.setBackground(Color.DARK_GRAY);
 		onlineMode.setBounds(90, 312, 137, 39);
 		onlineMode.setForeground(Color.WHITE);
 		onlineMode.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		onlineMode.setSelected(true);
+		onlineMode.setSelected(false);
 		contentPane.add(onlineMode);
 	}
-	
+
 	/**
 	 * the whole validation of the user inputs.
 	 * 
@@ -122,40 +122,44 @@ public class SpielController extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
-			if (onlineMode.isSelected() && maxPlayers > 30) {
+			if (maxPlayers < 2) {
+				numberPlayers.setText("2");
+				new UNODialog(this, "Zu wenige Max. Players", "Max. Spieler wurde auf 2 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
+			} else if (onlineMode.isSelected() && maxPlayers > 30) {
 				numberPlayers.setText("30");
-				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt",
-						UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 30 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
 			} else if (!onlineMode.isSelected() && maxPlayers > 5) {
 				numberPlayers.setText("5");
-				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+				new UNODialog(this, "Zu viele Max. Players", "Max. Spieler wurde auf 5 gesetzt", UNODialog.INFORMATION,
+						UNODialog.OK_BUTTON);
 				if (lobbyName.getText().equals("")) {
-					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION, UNODialog.OK_BUTTON);
+					new UNODialog(this, "Lobbyname", "Lobbyname kann darf nicht leer sein", UNODialog.INFORMATION,
+							UNODialog.OK_BUTTON);
 				}
 			} else {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
 
 				if (lobbyExist == null) {
+					LobbyDao lobbyDao = LobbyDao.getInstance();
+					UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
+					Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
+					lobbyDao.addLobby(lobby);
+					lobby = lobbyDao.selectLobbyByName(lobby.getName());
+					User_Lobby userLobby = new User_Lobby();
+					userLobby.setLobby(lobby);
+					userLobby.setUser(user);
+					userLobby.setPoints(0);
+					lobbyUser.addUserLobby(userLobby);
 					if (onlineMode.isSelected()) {
 						// ONLINE MODE
 
-						LobbyDao lobbyDao = LobbyDao.getInstance();
-						UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
-						Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
-						lobbyDao.addLobby(lobby);
-						lobby = lobbyDao.selectLobbyByName(lobby.getName());
-						User_Lobby userLobby = new User_Lobby();
-						userLobby.setLobby(lobby);
-						userLobby.setUser(user);
-						userLobby.setPoints(0);
-
-						lobbyUser.addUserLobby(userLobby);
-
 						setVisible(false);
-						new LobbyWaitController(user, navigationFrame, lobby);
+						new LobbyWaitController(user, navigationFrame, lobby, maxPlayers);
 					} else {
 						// OFFLINE MODE
-						new CardsDisplayController(maxPlayers);
+						new CardsDisplayController(user, navigationFrame, lobby, maxPlayers);
 						dispose();
 						navigationFrame.setVisible(true);
 					}
