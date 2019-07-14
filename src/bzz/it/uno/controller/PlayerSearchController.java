@@ -176,6 +176,7 @@ public class PlayerSearchController extends JFrame {
 				// get the clicked cell's row and column
 				selectedRow = table.getSelectedRow();
 				if (arg0.getClickCount() > 1) {
+					dispose();
 					for (User u : allUser) {
 						if (u.getUsername().matches(actuallListOfUser.get(selectedRow).getName())) {
 							new ProfilController(user, navigationController, u);

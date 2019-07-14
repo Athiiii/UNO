@@ -148,7 +148,7 @@ public class FriendsController extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				new PlayerSearchController(user, navigationFrame);
-				
+				dispose();
 			}
 		});
 		contentPane.add(friendSearch);
