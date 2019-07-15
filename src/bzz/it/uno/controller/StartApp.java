@@ -6,6 +6,7 @@ import bzz.it.uno.dao.HandleConnectionToDB;
 
 /**
  * Start application
+ * 
  * @author Severin Hersche
  */
 public class StartApp {
@@ -16,7 +17,7 @@ public class StartApp {
 					HandleConnectionToDB.openDbFactory();
 					new LoginController();
 					Runtime.getRuntime().addShutdownHook(new Thread() {
-						//call before application will be closed
+						// call before application will be closed
 						@Override
 						public void run() {
 							HandleConnectionToDB.closeDbFactory();

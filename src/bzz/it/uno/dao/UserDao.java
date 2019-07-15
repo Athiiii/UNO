@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import bzz.it.uno.model.User;
 
 /**
- * @author Athavan Theivakulasingham
+ * @author Athavan Theivakulasingham, Severin Hersche
  */
 public class UserDao {
 	private static UserDao userDao;
