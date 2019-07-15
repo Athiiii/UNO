@@ -71,7 +71,7 @@ public class FriendsController extends JFrame {
 		});
 		setContentPane(contentPane);
 
-		String[] columnNames = { "Username", "Punkte", "Action" };
+		String[] columnNames = { "Username", "Action" };
 		tableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -80,8 +80,6 @@ public class FriendsController extends JFrame {
 			public Class<?> getColumnClass(int column) {
 				switch (column) {
 				case 1:
-					return Integer.class;
-				case 2:
 					return JButton.class;
 				default:
 					return String.class;
@@ -103,7 +101,7 @@ public class FriendsController extends JFrame {
 				// to highlight which row is selected
 				if (selectedRow == row)
 					color = color.brighter();
-				if (column != 2) {
+				if (column != 1) {
 					c.setBackground(color);
 					c.setForeground(Color.white);
 				}
@@ -115,17 +113,15 @@ public class FriendsController extends JFrame {
 		table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer(baseRenderer));
 
 		// column width
-		table.getColumnModel().getColumn(0).setPreferredWidth(300);
-		table.getColumnModel().getColumn(1).setPreferredWidth(250);
-		table.getColumnModel().getColumn(2).setPreferredWidth(150);
+		table.getColumnModel().getColumn(0).setPreferredWidth(550);
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
 
 		table.setRowHeight(50);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(2).setCellRenderer(new JTableButtonRenderer());
+		table.getColumnModel().getColumn(1).setCellRenderer(new JTableButtonRenderer());
 
 		table.addMouseListener(new JTableButtonMouseListener(table));
 
@@ -168,7 +164,7 @@ public class FriendsController extends JFrame {
 				// the username will be defined here, so that the friend can be removed
 				removeFriendBtn.setName(friend.getUsername());
 
-				model.addRow(new Object[] { friend.getUsername(), 1, removeFriendBtn });
+				model.addRow(new Object[] { friend.getUsername(), removeFriendBtn});
 				removeFriendBtn.addActionListener(new ActionListener() {
 
 					@Override
