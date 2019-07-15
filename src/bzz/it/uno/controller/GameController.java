@@ -28,7 +28,7 @@ import bzz.it.uno.model.User_Lobby;
 
 /**
  * Creation of the game User can decide Lobby name (doesn't affect offline
- * version) and possibility beween online/offline
+ * version) and possibility between online/offline
  * 
  * @author Athavan Theivakulasingham
  *
@@ -124,6 +124,7 @@ public class GameController extends JFrame implements ActionListener {
 			int maxPlayers = Integer.parseInt(numberPlayers.getText());
 			if (maxPlayers < 2) {
 				numberPlayers.setText("2");
+
 				new UNODialog(this, "Zu wenige Max. Players", "Max. Spieler wurde auf 2 gesetzt", UNODialog.INFORMATION,
 						UNODialog.OK_BUTTON);
 			} else if (onlineMode.isSelected() && maxPlayers > 30) {
@@ -142,16 +143,23 @@ public class GameController extends JFrame implements ActionListener {
 				Lobby lobbyExist = LobbyDao.getInstance().selectLobbyByName(lobbyName.getText());
 
 				if (lobbyExist == null) {
-					LobbyDao lobbyDao = LobbyDao.getInstance();
-					UserLobbyDao lobbyUser = UserLobbyDao.getInstance();
+					// create lobby
 					Lobby lobby = new Lobby(true, lobbyName.getText(), LocalDate.now());
-					lobbyDao.addLobby(lobby);
-					lobby = lobbyDao.selectLobbyByName(lobby.getName());
+
+					// add lobby to db
+					LobbyDao.getInstance().addLobby(lobby);
+
+					// read lobby from db (to get Pk)
+					lobby = LobbyDao.getInstance().selectLobbyByName(lobby.getName());
+
+					// define Lobby_User object with the curren player
 					User_Lobby userLobby = new User_Lobby();
 					userLobby.setLobby(lobby);
 					userLobby.setUser(user);
 					userLobby.setPoints(0);
-					lobbyUser.addUserLobby(userLobby);
+
+					// add user_lobby to db
+					UserLobbyDao.getInstance().addUserLobby(userLobby);
 					if (onlineMode.isSelected()) {
 						// ONLINE MODE
 
@@ -168,6 +176,7 @@ public class GameController extends JFrame implements ActionListener {
 				}
 			}
 		} catch (Exception ex) {
+			// occurs if integer parse failed
 			numberPlayers.setText("");
 			JOptionPane.showMessageDialog(this, "Ungültige Zahl bei Max. Spieler", "Ungültige Max. Spieler", 0);
 		}

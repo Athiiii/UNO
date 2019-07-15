@@ -27,19 +27,13 @@ import bzz.it.uno.network.GameActionListener;
  */
 public class LobbyWaitController extends JFrame implements GameActionListener {
 	private static final long serialVersionUID = 1L;
-	private User user;
 	private int xy, xx;
-	private NavigationController navigationFrame;
 	private JPanel contentPane;
-	private Lobby lobby;
 	private GameAction mqttController;
 	private int players;
 	private JLabel playerLabel;
 
 	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby, int maxPlayer) {
-		this.navigationFrame = navigationFrame;
-		this.lobby = lobby;
-		this.user = user;
 		this.players = 1;
 		this.mqttController = new GameAction(this);
 

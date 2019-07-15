@@ -28,8 +28,7 @@ import bzz.it.uno.model.User;
 /**
  * <li>View all friends</li>
  * <li>remove friends</li>
- * <li>add new friends</li>
- * <br>
+ * <li>add new friends</li> <br>
  * 
  * @author Severin Hersche
  *
@@ -46,7 +45,7 @@ public class FriendsController extends JFrame {
 
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
-		
+
 		contentPane = new JPanel();
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);
@@ -100,7 +99,8 @@ public class FriendsController extends JFrame {
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 				Component c = super.prepareRenderer(renderer, row, column);
 				Color color = Color.DARK_GRAY;
-
+				
+				// to highlight which row is selected
 				if (selectedRow == row)
 					color = color.brighter();
 				if (column != 2) {
@@ -144,7 +144,7 @@ public class FriendsController extends JFrame {
 		ViewSettings.setupTableDesign(table);
 		friendSearch = ViewSettings.createButton(450, 60, 200, 40, new Color(41, 204, 22), "Spieler Suche");
 		friendSearch.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				new PlayerSearchController(user, navigationFrame);
@@ -161,11 +161,11 @@ public class FriendsController extends JFrame {
 	private void setTableData() {
 		List<User> friends = user.getFriendList();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
+
 		if (friends != null) {
 			for (User friend : friends) {
 				JButton removeFriendBtn = new JButton("Entfernen");
-				// Hier wird der username gesetzt damit nacher anhand von ihm dann der Freund
-				// entfert werden kann
+				// the username will be defined here, so that the friend can be removed
 				removeFriendBtn.setName(friend.getUsername());
 
 				model.addRow(new Object[] { friend.getUsername(), friend.getUserLobby().get(0), removeFriendBtn });
@@ -174,7 +174,6 @@ public class FriendsController extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						removeFriend(removeFriendBtn);
-
 					}
 
 					private void removeFriend(JButton removeFriendBtn) {

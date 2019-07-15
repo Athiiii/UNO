@@ -21,6 +21,7 @@ import javax.swing.JPasswordField;
 import bzz.it.uno.controller.GameController;
 
 public class ChangePasswordDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
 	private String password;
 	private final JPanel contentPanel = new JPanel();
 	private int xx, xy;

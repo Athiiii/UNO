@@ -77,15 +77,24 @@ public class PlayerSearchController extends JFrame {
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationController));
-		allUser = getInstance().getAllUsers();
+		allUser = UserDao.getInstance().getAllUsers();
+		
+		// remove the user itself from the list
+		allUser.removeIf(u -> u.getId() == user.getId());
+		
 		createTitle();
 		allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+		
+		// remove all user lobbies where the user itself played
+		allUserLobbies.removeIf(ul -> ul.getUser().getId() == user.getId());
+		
 		JTextField jTextField = new JTextField();
 		jTextField.setBounds(110, 150, 350, 34);
 		jTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 			@Override
 			public void onChange() {
 				for (User user : allUser) {
+					System.out.println(user.getUsername());
 					if (jTextField.getText().isEmpty()) {
 						addAllUsers(null);
 					} else if (user.getUsername().toLowerCase()
@@ -190,10 +199,6 @@ public class PlayerSearchController extends JFrame {
 		});
 
 		contentPane.add(ViewSettings.createDefaultScrollPane(table, 400, 700, 200));
-	}
-
-	private UserDao getInstance() {
-		return UserDao.getInstance();
 	}
 
 	private int checkIfUserAlreadyInList(User user, List<RankModel> ranks) {
