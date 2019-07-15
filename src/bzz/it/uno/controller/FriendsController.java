@@ -99,7 +99,7 @@ public class FriendsController extends JFrame {
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 				Component c = super.prepareRenderer(renderer, row, column);
 				Color color = Color.DARK_GRAY;
-				
+
 				// to highlight which row is selected
 				if (selectedRow == row)
 					color = color.brighter();
@@ -168,7 +168,7 @@ public class FriendsController extends JFrame {
 				// the username will be defined here, so that the friend can be removed
 				removeFriendBtn.setName(friend.getUsername());
 
-				model.addRow(new Object[] { friend.getUsername(), friend.getUserLobby().get(0), removeFriendBtn });
+				model.addRow(new Object[] { friend.getUsername(), 1, removeFriendBtn });
 				removeFriendBtn.addActionListener(new ActionListener() {
 
 					@Override
@@ -178,13 +178,21 @@ public class FriendsController extends JFrame {
 
 					private void removeFriend(JButton removeFriendBtn) {
 						if (user.getFriendList() != null) {
-							for (User user : user.getFriendList()) {
-								if (user.getUsername().equals(removeFriendBtn.getName())) {
-									user.getFriendList().remove(user);
-									UserDao.getInstance().addUser(user);
-								}
-							}
+							int counter = 0;
+							User removeFriend = null;
+							for (User friends : user.getFriendList()) {
+								if (friends.getUsername().equals(removeFriendBtn.getName())) {
 
+									model.removeRow(counter);
+									removeFriend = friend;
+
+								}
+								counter++;
+							}
+							if (removeFriend != null) {
+								user.getFriendList().remove(removeFriend);
+								UserDao.getInstance().updateUser(user);
+							}
 						}
 					}
 				});

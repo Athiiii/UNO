@@ -31,6 +31,7 @@ public class UserDao {
 		if (users.size() > 0) {
 			users.get(0).getFriendList().size();
 			users.get(0).getUserLobby().size();
+			users.get(0).getFriendList().size();
 		}
 		entityManager.getTransaction().commit();
 
@@ -78,6 +79,7 @@ public class UserDao {
 			user = users.get(0);
 			user.getFriendList().size();
 			user.getUserLobby().size();
+			user.getFriendList().size();
 		}
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
