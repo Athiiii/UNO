@@ -72,8 +72,10 @@ public class ProfilController extends JFrame {
 	private JTextField newUsername;
 	private JButton btnDelete;
 	private JButton cancelBtn;
+	private NavigationController navigationFrame;
 
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
+		this.navigationFrame = navigationFrame;
 		userDaoInstance = UserDao.getInstance();
 		setShowedUser(user, otherUser);
 
@@ -266,8 +268,10 @@ public class ProfilController extends JFrame {
 		JButton friends = ViewSettings.createButton(23, 449, 230, 40, new Color(166, 166, 166), "Freund Hinzuf\u00fcgen");
 		friends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
 				user.getFriendList().add(showedUser);
 				userDaoInstance.updateUser(user);
+				navigationFrame.setVisible(true);
 			}
 		});
 		return friends;
@@ -298,7 +302,6 @@ public class ProfilController extends JFrame {
 				try {
 					getImageFromFileSystem();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
