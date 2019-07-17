@@ -43,6 +43,13 @@ public class GameController extends JFrame implements ActionListener {
 	private JTextField numberPlayers;
 	private JCheckBox onlineMode;
 
+	/**
+	 * create view to define <b>lobbyname</b>, <b>number of players</b> and if it is
+	 * <b>online</b> or <b>offline</b>
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 */
 	public GameController(User user, NavigationController navigationFrame) {
 		this.navigationFrame = navigationFrame;
 		this.user = user;

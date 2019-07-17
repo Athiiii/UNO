@@ -28,7 +28,6 @@ public class ImageCanvas extends Canvas {
 		try {
 			img = ImageIO.read(ViewSettings.class.getResource("/images/cards/small/" + filename));
 		} catch (IOException ex) {
-			ex.printStackTrace();
 		}
 	}
 

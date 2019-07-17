@@ -21,10 +21,9 @@ public class LobbyController extends JFrame {
 	private int xy, xx;
 
 	/**
-	 * This is Called, when you start a new Lobby
+	 * read all open lobbies from db and display it in the table
 	 * 
-	 * @param user
-	 *            or = owner
+	 * @param user            or = owner
 	 * @param navigationFrame
 	 */
 	public LobbyController(User user, NavigationController navigationFrame) {

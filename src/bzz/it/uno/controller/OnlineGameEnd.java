@@ -35,6 +35,12 @@ public class OnlineGameEnd extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow;
 
+	/**
+	 * Create view and ranking if online game is finished
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 */
 	public OnlineGameEnd(User user, NavigationController navigationFrame) {
 		contentPane = new JPanel();
 

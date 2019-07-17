@@ -33,12 +33,20 @@ public class LobbyWaitController extends JFrame implements GameActionListener {
 	private int players;
 	private JLabel playerLabel;
 
+	/**
+	 * Wait for the other online players
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 * @param lobby
+	 * @param maxPlayer
+	 */
 	public LobbyWaitController(User user, NavigationController navigationFrame, Lobby lobby, int maxPlayer) {
 		this.players = 1;
 		this.mqttController = new GameAction(this);
 
 		// subscribe to game (mqqt)
-		mqttController.subscribe("3");
+		mqttController.subscribe(Integer.toString(lobby.getId()));
 
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);

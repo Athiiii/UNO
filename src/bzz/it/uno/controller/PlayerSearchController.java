@@ -52,13 +52,12 @@ public class PlayerSearchController extends JFrame {
 	private List<User> allUser;
 	private List<RankModel> actuallListOfUser;
 
-	
 	/**
-	 * This is called if you want to search for a specific Player.
+	 * Create list of players to search for
 	 * 
 	 * @param user
 	 * @param navigationController
-	 * @param allUsers a List of all users in the application
+	 * @param allUsers             a List of all users in the application
 	 */
 	public PlayerSearchController(User user, NavigationController navigationController, List<User> allUsers) {
 		contentPane = new JPanel();
@@ -85,16 +84,16 @@ public class PlayerSearchController extends JFrame {
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationController));
 		allUser = allUsers;
-		
+
 		// remove the user itself from the list
 		allUser.removeIf(u -> u.getId() == user.getId());
-		
+
 		createTitle();
 		allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
-		
+
 		// remove all user lobbies where the user itself played
 		allUserLobbies.removeIf(ul -> ul.getUser().getId() == user.getId());
-		
+
 		JTextField jTextField = new JTextField();
 		jTextField.setBounds(110, 150, 350, 34);
 		jTextField.getDocument().addDocumentListener(new DocumentAdapter() {

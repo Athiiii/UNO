@@ -45,10 +45,10 @@ public class FriendsController extends JFrame {
 	private List<User> actualListOfFriends;
 
 	/**
-	 * This is started when you want so see your friends
+	 * get all friends from db <br>
+	 * create table and display all friend's
 	 * 
-	 * @param user
-	 *            or = owner
+	 * @param user or = owner
 	 * @param navigationFrame
 	 */
 	public FriendsController(User user, NavigationController navigationFrame) {
@@ -83,7 +83,7 @@ public class FriendsController extends JFrame {
 		tableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
-			// set Column Datatype
+			// set column datatype
 			@Override
 			public Class<?> getColumnClass(int column) {
 				switch (column) {

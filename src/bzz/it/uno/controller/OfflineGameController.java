@@ -59,6 +59,12 @@ public class OfflineGameController extends JFrame {
 	private int points = 0;
 	private String username;
 
+	/**
+	 * Create "Say UNO", "Take Card", "Play Card" Buttons. Set view of the cards
+	 * 
+	 * @param username
+	 * @param parent
+	 */
 	public OfflineGameController(String username, CardsDisplayController parent) {
 		this.parent = parent;
 		this.username = username;

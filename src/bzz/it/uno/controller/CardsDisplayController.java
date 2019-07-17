@@ -46,6 +46,15 @@ public class CardsDisplayController extends JFrame {
 	// Take 1 Card is default
 	private int takeCards = 1;
 
+	/**
+	 * styling to display current card. <br>
+	 * generate offline players and view for every player
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 * @param lobby
+	 * @param players
+	 */
 	public CardsDisplayController(User user, NavigationController navigationFrame, Lobby lobby, int players) {
 		this.user = user;
 		this.navigationFrame = navigationFrame;
