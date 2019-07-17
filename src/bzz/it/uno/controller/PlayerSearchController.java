@@ -27,7 +27,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
@@ -53,7 +52,7 @@ public class PlayerSearchController extends JFrame {
 	private List<User> allUser;
 	private List<RankModel> actuallListOfUser;
 
-	public PlayerSearchController(User user, NavigationController navigationController) {
+	public PlayerSearchController(User user, NavigationController navigationController, List<User> allUsers) {
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
 		ViewSettings.setupPanel(contentPane);
@@ -77,7 +76,7 @@ public class PlayerSearchController extends JFrame {
 
 		contentPane.add(ViewSettings.createCloseButton(ViewSettings.WHITE));
 		contentPane.add(ViewSettings.createReturnButton(this, navigationController));
-		allUser = UserDao.getInstance().getAllUsers();
+		allUser = allUsers;
 		
 		// remove the user itself from the list
 		allUser.removeIf(u -> u.getId() == user.getId());
@@ -188,7 +187,7 @@ public class PlayerSearchController extends JFrame {
 					dispose();
 					for (User u : allUser) {
 						if (u.getUsername().matches(actuallListOfUser.get(selectedRow).getName())) {
-							new ProfilController(user, navigationController, u);
+							new ProfilController(user, navigationController, u, false);
 						}
 					}
 				}

@@ -90,7 +90,7 @@ public class NavigationController extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// forward
 				setVisible(false);
-				new ProfilController(user, NavigationController.this, null);
+				new ProfilController(user, NavigationController.this, null, false);
 			}
 		});
 		contentPane.add(btnProfil);

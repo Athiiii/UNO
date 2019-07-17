@@ -42,6 +42,7 @@ public class FriendsController extends JFrame {
 	private JTable table;
 	private int selectedRow = -1;
 	private JButton friendSearch;
+	private List<User> actualListOfFriends;
 
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
@@ -124,13 +125,21 @@ public class FriendsController extends JFrame {
 		table.getColumnModel().getColumn(1).setCellRenderer(new JTableButtonRenderer());
 
 		table.addMouseListener(new JTableButtonMouseListener(table));
-
+		List<User> allUsers = UserDao.getInstance().getAllUsers();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				super.mouseClicked(arg0);
 				// get the clicked cell's row
 				selectedRow = table.getSelectedRow();
+				if(arg0.getClickCount() > 1) {
+					for (User u : allUsers) {
+						if (u.getUsername().matches(actualListOfFriends.get(selectedRow).getUsername())) {
+							dispose();
+							new ProfilController(user, navigationFrame, u, true);
+						}
+					}
+				}
 
 				// Repaints JTable
 				table.repaint();
@@ -143,7 +152,7 @@ public class FriendsController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new PlayerSearchController(user, navigationFrame);
+				new PlayerSearchController(user, navigationFrame, allUsers);
 				dispose();
 			}
 		});
@@ -193,6 +202,7 @@ public class FriendsController extends JFrame {
 					}
 				});
 			}
+			actualListOfFriends = friends;
 		}
 	}
 }

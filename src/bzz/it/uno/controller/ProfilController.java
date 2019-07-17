@@ -73,9 +73,12 @@ public class ProfilController extends JFrame {
 	private JButton btnDelete;
 	private JButton cancelBtn;
 	private NavigationController navigationFrame;
+	private boolean fromFriendController;
 
-	public ProfilController(User user, NavigationController navigationFrame, User otherUser) {
+	public ProfilController(User user, NavigationController navigationFrame, User otherUser,
+			boolean fromFriendController) {
 		this.navigationFrame = navigationFrame;
+		this.fromFriendController = fromFriendController;
 		userDaoInstance = UserDao.getInstance();
 		setShowedUser(user, otherUser);
 
@@ -227,8 +230,10 @@ public class ProfilController extends JFrame {
 	private void createNavigation(User user, User otherUser) {
 		if (otherUser != null) {
 			// Button for adding a new Friend
-			JButton friends = createFriendsButton(user);
-			contentPane.add(friends);
+			if (!fromFriendController) {
+				JButton friends = createFriendsButton(user);
+				contentPane.add(friends);
+			}
 		} else {
 			// Button to edit the profile
 			JButton addImageBtn = createEditBtn();
@@ -265,7 +270,8 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createFriendsButton(User user) {
-		JButton friends = ViewSettings.createButton(23, 449, 230, 40, new Color(166, 166, 166), "Freund Hinzuf\u00fcgen");
+		JButton friends = ViewSettings.createButton(23, 449, 230, 40, new Color(166, 166, 166),
+				"Freund Hinzuf\u00fcgen");
 		friends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
@@ -314,7 +320,7 @@ public class ProfilController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(!newUsername.getText().isEmpty()) {
+				if (!newUsername.getText().isEmpty()) {
 					showedUser.setUsername(newUsername.getText());
 					name.setText(showedUser.getUsername());
 				}
@@ -332,7 +338,7 @@ public class ProfilController extends JFrame {
 		});
 		safeBtn.setVisible(false);
 		contentPane.add(safeBtn);
-		
+
 		cancelBtn = ViewSettings.createButton(530, 446, 150, 40, new Color(244, 67, 54), "Abbrechen");
 		cancelBtn.addActionListener(new ActionListener() {
 
@@ -356,11 +362,12 @@ public class ProfilController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				showedUser.setPassword(new ChangePasswordDialog(ProfilController.this).getPassword());			}
+				showedUser.setPassword(new ChangePasswordDialog(ProfilController.this).getPassword());
+			}
 		});
 		newPasswordBtn.setVisible(false);
 		contentPane.add(newPasswordBtn);
-		
+
 		newUsername = new JTextField();
 		newUsername.setBounds(160, 112, 200, 30);
 		newUsername.setForeground(Color.BLACK);
@@ -466,7 +473,7 @@ public class ProfilController extends JFrame {
 			Image scaledInstance = scaleImage(image);
 
 			profileImage.setIcon(new ImageIcon(scaledInstance));
-			
+
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 			ImageIO.write(image, getFileType(file), bos);
