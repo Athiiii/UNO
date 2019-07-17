@@ -343,8 +343,9 @@ public class ProfilController extends JFrame {
 					cancelBtn.setVisible(false);
 					name.setVisible(true);
 					editBtn.setVisible(true);
-				}else {
-					new UNODialog(ProfilController.this, "Namens Fehler", "Dieser Name ist bereits verwendet!", UNODialog.ERROR, UNODialog.OK_BUTTON);
+				} else {
+					new UNODialog(ProfilController.this, "Namens Fehler", "Dieser Name ist bereits verwendet!",
+							UNODialog.ERROR, UNODialog.OK_BUTTON);
 				}
 			}
 
