@@ -44,8 +44,7 @@ import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
- * See profile data, your liga and your playing history. You can also delete and
- * edit your profile in this view
+ * See profile data, your liga and your playing history. You can also edit your profile in this view and upload for example a picture. 
  * 
  * @author Severin Hersche
  *
@@ -238,17 +237,9 @@ public class ProfilController extends JFrame {
 			// Button to edit the profile
 			JButton addImageBtn = createEditBtn();
 			contentPane.add(addImageBtn);
-
-			// button to delete the profile
-			JButton btnDelete = createDeleteButton();
-			contentPane.add(btnDelete);
 		}
 	}
 
-	private JButton createDeleteButton() {
-		btnDelete = ViewSettings.createButton(557, 446, 120, 40, new Color(244, 67, 54), "L\u00F6schen");
-		return btnDelete;
-	}
 
 	private JButton createEditBtn() {
 		editBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
