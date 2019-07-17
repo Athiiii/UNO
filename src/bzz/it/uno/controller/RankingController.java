@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.dao.UserLobbyDao;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
@@ -83,10 +84,10 @@ public class RankingController extends JFrame {
 		titleLabel.setBounds(258, 38, 240, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
-		// get all Data From Table: User_Lobby
-		List<User_Lobby> allUser_Lobbies = UserLobbyDao.getInstance().getAllUserLobbies();
-		
+
+		// get all Data From Table: User
+		List<User> allUsers = UserDao.getInstance().getAllUsers();
+
 		// checkbox to choose between show all users or just friends
 		showOnlyFriends = new JCheckBox("Nur Freunde zeigen");
 		showOnlyFriends.setBackground(Color.DARK_GRAY);
@@ -98,10 +99,11 @@ public class RankingController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(showOnlyFriends.isSelected()) {
-					setRankingList(allUser_Lobbies, user.getFriendList());
-				}else {
-					setRankingList(allUser_Lobbies, null);
+				if (showOnlyFriends.isSelected()) {
+					setRankingList(user.getFriendList());
+				} else {
+					setRankingList(allUsers);
+					System.out.println(allUsers.size());
 				}
 			}
 		});
@@ -124,7 +126,7 @@ public class RankingController extends JFrame {
 				}
 			}
 		};
-		setRankingList(allUser_Lobbies, null);
+		setRankingList(allUsers);
 		table = new JTable(tableModel) {
 			private static final long serialVersionUID = 1L;
 
@@ -181,35 +183,24 @@ public class RankingController extends JFrame {
 		contentPane.add(ViewSettings.createDefaultScrollPane(table, 400, 700, 200));
 	}
 
-	private void setRankingList(List<User_Lobby> allUserLobbies, List<User> friends) {
-		
-
+	private void setRankingList(List<User> users) {
 		List<RankModel> ranks = new ArrayList<RankModel>();
-
-		if (friends == null) {
-			// create a model for every user with all points
-			for (int i = 0; i < allUserLobbies.size(); ++i) {
-				User_Lobby lobbyGame = allUserLobbies.get(i);
-				int result = checkIfUserAlreadyInList(allUserLobbies.get(i).getUser(), ranks);
-				if (result == -1) {
-					RankModel model = new RankModel(lobbyGame.getUser().getUsername(), lobbyGame.getPoints(), null);
-					ranks.add(model);
-				} else {
-					ranks.get(result).setPoints(ranks.get(result).getPoints() + lobbyGame.getPoints());
-				}
-			}
-		}else {
-			for (User friend: friends) {
-				for (User_Lobby user_Lobby : allUserLobbies) {
-					if(friend.getUsername().equals(user_Lobby.getUser().getUsername())) {
-						int result = checkIfUserAlreadyInList(user_Lobby.getUser(), ranks);
-						if (result == -1) {
-							RankModel model = new RankModel(user_Lobby.getUser().getUsername(), user_Lobby.getPoints(), null);
-							ranks.add(model);
-						} else {
-							ranks.get(result).setPoints(ranks.get(result).getPoints() + user_Lobby.getPoints());
-						}
+		List<User_Lobby> allUserLobbies = UserLobbyDao.getInstance().getAllUserLobbies();
+		for (User user : users) {
+			for (User_Lobby user_Lobby : allUserLobbies) {
+				if (user.getUsername().equals(user_Lobby.getUser().getUsername())) {
+					int result = checkIfUserAlreadyInList(user_Lobby.getUser(), ranks);
+					if (result == -1) {
+						RankModel model = new RankModel(user_Lobby.getUser().getUsername(), user_Lobby.getPoints(),
+								null);
+						ranks.add(model);
+					} else {
+						ranks.get(result).setPoints(ranks.get(result).getPoints() + user_Lobby.getPoints());
 					}
+				}
+				if(checkIfUserAlreadyInList(user, ranks) == -1) {
+					RankModel model = new RankModel(user.getUsername(), 0, null);
+					ranks.add(model);
 				}
 			}
 		}

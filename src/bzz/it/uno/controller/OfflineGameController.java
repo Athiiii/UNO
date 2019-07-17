@@ -29,6 +29,8 @@ import bzz.it.uno.frontend.WrapLayout;
 import bzz.it.uno.model.Card;
 
 /**
+ * Representation of 1 offline Player. Contains player cards, ability to say UNO
+ * and ability to take a card from the stack.
  * 
  * @author Athavan Theivakulasingham
  *
@@ -42,11 +44,11 @@ public class OfflineGameController extends JFrame {
 	private JPanel cardPanel;
 	private CardsDisplayController parent;
 	private boolean onlyPlayingCards = false;
-	
-	//flag to check if player sayed UNO
+
+	// flag to check if player sayed UNO
 	private boolean sayedUNO = false;
-	
-	//flag to check if player sayed it early enough
+
+	// flag to check if player sayed it early enough
 	private boolean sayedUNOConfirm = false;
 
 	private Component displayCardComponent;
@@ -73,17 +75,20 @@ public class OfflineGameController extends JFrame {
 		ViewSettings.setupFrame(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 400);
-		
+
 		ViewSettings.setupPanel(contentPane);
-		
-		//dispose whole game when closing this
+
+		/*
+		 * dispose whole game when closing this
+		 * this will prevent that the whole application will be closed
+		 */
 		addWindowListener(new WindowAdapter() {
 
-            public void windowClosing(WindowEvent evt) {
-               parent.dispose();
+			public void windowClosing(WindowEvent evt) {
+				parent.dispose();
 
-            }
-        });
+			}
+		});
 
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -126,7 +131,7 @@ public class OfflineGameController extends JFrame {
 						OfflineGameController.this.cards.removeAll(cards);
 						onlyPlayingCards = false;
 						updateView();
-						
+
 						sayedUNO = false;
 						sayedUNOConfirm = false;
 					}
@@ -249,7 +254,7 @@ public class OfflineGameController extends JFrame {
 	public void updatePointsLabel() {
 		pointsLabel.setText(Integer.toString(points));
 	}
-	
+
 	public void setOnlyPlayingCards(boolean onlyPlayingCards) {
 		this.onlyPlayingCards = onlyPlayingCards;
 	}
@@ -257,7 +262,7 @@ public class OfflineGameController extends JFrame {
 	public boolean isSayedUNO() {
 		return sayedUNO;
 	}
-	
+
 	public void setSayedUNO(boolean sayedUNO) {
 		this.sayedUNO = sayedUNO;
 	}
