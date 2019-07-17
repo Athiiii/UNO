@@ -19,6 +19,11 @@ public class ImageCanvas extends Canvas {
 	private static final long serialVersionUID = 1L;
 	private BufferedImage img;
 
+	/**
+	 * Define image on the canvas
+	 * 
+	 * @param filename
+	 */
 	public void putImage(String filename) {
 		try {
 			img = ImageIO.read(ViewSettings.class.getResource("/images/cards/small/" + filename));

@@ -9,6 +9,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 /**
+ * Render Table Cell where a button is set
+ * 
  * @author Severin Hersche
  */
 public class JTableButtonRenderer implements TableCellRenderer {

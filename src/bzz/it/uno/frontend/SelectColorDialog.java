@@ -28,6 +28,11 @@ public class SelectColorDialog extends JDialog {
 	private int xx, xy;
 	private String color;
 
+	/**
+	 * styling for the color select dialog
+	 * 
+	 * @param parent
+	 */
 	public SelectColorDialog(JFrame parent) {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		int size = 190;

@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 /**
+ * Styling the header of the table
+ * 
  * @author Athavan Theivakulasingham
  */
 public class TableHeaderRenderer implements TableCellRenderer {
@@ -17,7 +19,7 @@ public class TableHeaderRenderer implements TableCellRenderer {
 	public TableHeaderRenderer(TableCellRenderer baseRenderer) {
 		this.baseRenderer = baseRenderer;
 	}
-
+	
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {

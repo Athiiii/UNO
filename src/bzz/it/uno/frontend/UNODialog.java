@@ -172,6 +172,11 @@ public class UNODialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * Used if button type YES_NO_BUTTON is selected.
+	 * 
+	 * @return boolean if button "YES" is clicked
+	 */
 	public boolean getReponse() {
 		return response;
 	}

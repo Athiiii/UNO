@@ -16,6 +16,12 @@ public class Rank {
 	static final String MASTER = "Master.png";
 	static final String CHALLANGER = "Challanger.png";
 
+	/**
+	 * Getting the filename of the liga depending the points
+	 * 
+	 * @param points
+	 * @return the filename of the liga Image
+	 */
 	public static String getRankImgByPoints(double points) {
 		if (points >= 3000)
 			return CHALLANGER;
