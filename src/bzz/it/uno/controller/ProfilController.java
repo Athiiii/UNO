@@ -39,6 +39,7 @@ import bzz.it.uno.frontend.ChangePasswordDialog;
 import bzz.it.uno.frontend.Rank;
 import bzz.it.uno.frontend.RankModel;
 import bzz.it.uno.frontend.TableHeaderRenderer;
+import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
@@ -70,10 +71,10 @@ public class ProfilController extends JFrame {
 	private JButton editBtn;
 	private JButton newPasswordBtn;
 	private JTextField newUsername;
-	private JButton btnDelete;
 	private JButton cancelBtn;
 	private NavigationController navigationFrame;
 	private boolean fromFriendController;
+	private List<User> allUsers;
 
 	/**
 	 * 
@@ -251,7 +252,7 @@ public class ProfilController extends JFrame {
 	}
 
 	private JButton createEditBtn() {
-		editBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
+		editBtn = ViewSettings.createButton(530, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
 		editBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -261,9 +262,9 @@ public class ProfilController extends JFrame {
 				newPasswordBtn.setVisible(true);
 				newUsername.setVisible(true);
 				cancelBtn.setVisible(true);
-				btnDelete.setVisible(false);
 				name.setVisible(false);
 				editBtn.setVisible(false);
+				allUsers = UserDao.getInstance().getAllUsers();
 			}
 		});
 		return editBtn;
@@ -320,19 +321,31 @@ public class ProfilController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+
+				boolean uniqName = true;
 				if (!newUsername.getText().isEmpty()) {
-					showedUser.setUsername(newUsername.getText());
-					name.setText(showedUser.getUsername());
+					for (User user : allUsers) {
+						if (user.getUsername().equals(newUsername.getText())) {
+							uniqName = false;
+						}
+					}
+					if (uniqName) {
+						showedUser.setUsername(newUsername.getText());
+						name.setText(showedUser.getUsername());
+					}
 				}
-				userDaoInstance.updateUser(showedUser.getId(), showedUser);
-				addImageBtn.setVisible(false);
-				safeBtn.setVisible(false);
-				newPasswordBtn.setVisible(false);
-				newUsername.setVisible(false);
-				cancelBtn.setVisible(false);
-				name.setVisible(true);
-				btnDelete.setVisible(true);
-				editBtn.setVisible(true);
+				if (uniqName) {
+					userDaoInstance.updateUser(showedUser.getId(), showedUser);
+					addImageBtn.setVisible(false);
+					safeBtn.setVisible(false);
+					newPasswordBtn.setVisible(false);
+					newUsername.setVisible(false);
+					cancelBtn.setVisible(false);
+					name.setVisible(true);
+					editBtn.setVisible(true);
+				}else {
+					new UNODialog(ProfilController.this, "Namens Fehler", "Dieser Name ist bereits verwendet!", UNODialog.ERROR, UNODialog.OK_BUTTON);
+				}
 			}
 
 		});
@@ -350,7 +363,6 @@ public class ProfilController extends JFrame {
 				newUsername.setVisible(false);
 				cancelBtn.setVisible(false);
 				name.setVisible(true);
-				btnDelete.setVisible(true);
 				editBtn.setVisible(true);
 			}
 		});
