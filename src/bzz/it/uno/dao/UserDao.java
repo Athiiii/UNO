@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import bzz.it.uno.model.User;
 
 /**
+ * Handling CRUD operations for table "User"
+ * 
  * @author Athavan Theivakulasingham, Severin Hersche
  */
 public class UserDao {
@@ -24,6 +26,11 @@ public class UserDao {
 		return userDao;
 	}
 
+	/**
+	 * Get the whole data from the table
+	 * 
+	 * @return list of users
+	 */
 	public List<User> getAllUsers() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -41,6 +48,11 @@ public class UserDao {
 
 	}
 
+	/**
+	 * Add new user
+	 * 
+	 * @param user
+	 */
 	public void addUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -49,6 +61,11 @@ public class UserDao {
 		HandleConnectionToDB.closeEntityManager();
 	}
 
+	/**
+	 * update a specific user
+	 * 
+	 * @param user
+	 */
 	public void updateUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -58,6 +75,12 @@ public class UserDao {
 		HandleConnectionToDB.closeEntityManager();
 	}
 
+	/**
+	 * update a specific user by pk (id)
+	 * 
+	 * @param id
+	 * @param user
+	 */
 	public void updateUser(int id, User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		User userFind = entityManager.find(User.class, id);
@@ -69,6 +92,12 @@ public class UserDao {
 		entityManager.getTransaction().commit();
 	}
 
+	/**
+	 * select user by username
+	 * 
+	 * @param username
+	 * @return user
+	 */
 	public User selectByUsername(String username) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
