@@ -103,6 +103,9 @@ public class GameAction implements MqttCallback {
 		}
 	}
 
+	/**
+	 * Call when connection is closed
+	 */
 	@Override
 	public void connectionLost(Throwable arg) {
 		System.out.println("lost");
@@ -113,6 +116,9 @@ public class GameAction implements MqttCallback {
 	public void deliveryComplete(IMqttDeliveryToken arg) {
 	}
 
+	/**
+	 * Forward to controller when a message received
+	 */
 	@Override
 	public void messageArrived(String arg, MqttMessage mqttMessage) throws Exception {
 		// forward message to controller

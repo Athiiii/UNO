@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * DB Table "Lobby" representation
  * 
  * @author Severin Hersche
  *
@@ -26,9 +27,9 @@ public class Lobby {
 	private LocalDate date;
 
 	public Lobby() {
-		
+
 	}
-	
+
 	public Lobby(boolean status, String name, LocalDate date) {
 		this.status = status;
 		this.name = name;
@@ -72,8 +73,8 @@ public class Lobby {
 	public void setUserLobby(List<User_Lobby> userLobby) {
 		this.userLobby = userLobby;
 	}
-	
-	@Column(name="date")
+
+	@Column(name = "date")
 	public LocalDate getDate() {
 		return date;
 	}

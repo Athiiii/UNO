@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
+ * DB Table "Message" representation
  * 
  * @author Severin Hersche
  *

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * DB Table "User" representation
  * 
  * @author Severin Hersche
  *
@@ -22,6 +23,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class User {
+	// PK
 	private int id;
 	private String username;
 	private String password;

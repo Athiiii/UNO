@@ -1,6 +1,7 @@
 package bzz.it.uno.model;
 
 /**
+ * Model Class for Online Player
  * 
  * @author Athavan Theivakulasingham
  *

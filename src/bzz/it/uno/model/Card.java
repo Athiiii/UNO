@@ -1,6 +1,7 @@
 package bzz.it.uno.model;
 
 /**
+ * Representation of 1 UNO Card
  * 
  * @author Athavan Theivakulasingham
  *
@@ -44,6 +45,12 @@ public class Card {
 		this.cardType = cardType;
 	}
 
+	/**
+	 * Generate the filename depending on the <b>color</b>, <b>number</b> and
+	 * <b>type</b> of the card
+	 * 
+	 * @return the filename
+	 */
 	public String getFilename() {
 		String name = "";
 		if (getCardType() == CardType.COMMON) {

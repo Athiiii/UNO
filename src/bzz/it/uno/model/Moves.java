@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
+ * DB Table "Moves" representation
  * 
  * @author Severin Hersche
  *

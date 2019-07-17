@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * DB Table "User_Lobby" representation
  * 
  * @author Severin Hersche
  *
