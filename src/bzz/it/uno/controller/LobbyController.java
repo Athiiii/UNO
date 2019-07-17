@@ -20,6 +20,13 @@ public class LobbyController extends JFrame {
 	private JPanel contentPane;
 	private int xy, xx;
 
+	/**
+	 * This is Called, when you start a new Lobby
+	 * 
+	 * @param user
+	 *            or = owner
+	 * @param navigationFrame
+	 */
 	public LobbyController(User user, NavigationController navigationFrame) {
 		contentPane = new JPanel();
 

@@ -52,6 +52,14 @@ public class PlayerSearchController extends JFrame {
 	private List<User> allUser;
 	private List<RankModel> actuallListOfUser;
 
+	
+	/**
+	 * This is called if you want to search for a specific Player.
+	 * 
+	 * @param user
+	 * @param navigationController
+	 * @param allUsers a List of all users in the application
+	 */
 	public PlayerSearchController(User user, NavigationController navigationController, List<User> allUsers) {
 		contentPane = new JPanel();
 		ViewSettings.setupFrame(this);
@@ -187,7 +195,7 @@ public class PlayerSearchController extends JFrame {
 					dispose();
 					for (User u : allUser) {
 						if (u.getUsername().matches(actuallListOfUser.get(selectedRow).getName())) {
-							new ProfilController(user, navigationController, u, false);
+							new ProfileController(user, navigationController, u, false);
 						}
 					}
 				}

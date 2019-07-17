@@ -52,6 +52,13 @@ public class RankingController extends JFrame {
 
 	private JCheckBox showOnlyFriends;
 
+	
+	/**
+	 * This is called if you want to see the Ranking
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 */
 	public RankingController(User user, NavigationController navigationFrame) {
 
 		contentPane = new JPanel();

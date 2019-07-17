@@ -37,6 +37,12 @@ public class NavigationController extends JFrame {
 	private JPanel contentPane;
 	private int xy, xx;
 
+	/**
+	 * This is called for showing and managing the navigation
+	 * 
+	 * @param user
+	 * @param frame
+	 */
 	public NavigationController(User user, LoginController frame) {
 		contentPane = new JPanel();
 
@@ -90,7 +96,7 @@ public class NavigationController extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// forward
 				setVisible(false);
-				new ProfilController(user, NavigationController.this, null, false);
+				new ProfileController(user, NavigationController.this, null, false);
 			}
 		});
 		contentPane.add(btnProfil);

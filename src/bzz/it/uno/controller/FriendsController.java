@@ -44,6 +44,13 @@ public class FriendsController extends JFrame {
 	private JButton friendSearch;
 	private List<User> actualListOfFriends;
 
+	/**
+	 * This is started when you want so see your friends
+	 * 
+	 * @param user
+	 *            or = owner
+	 * @param navigationFrame
+	 */
 	public FriendsController(User user, NavigationController navigationFrame) {
 		this.user = user;
 
@@ -136,7 +143,7 @@ public class FriendsController extends JFrame {
 					for (User u : allUsers) {
 						if (u.getUsername().matches(actualListOfFriends.get(selectedRow).getUsername())) {
 							dispose();
-							new ProfilController(user, navigationFrame, u, true);
+							new ProfileController(user, navigationFrame, u, true);
 						}
 					}
 				}

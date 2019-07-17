@@ -51,7 +51,7 @@ import bzz.it.uno.model.User_Lobby;
  * @author Severin Hersche
  *
  */
-public class ProfilController extends JFrame {
+public class ProfileController extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private User showedUser;
 	private JPanel contentPane;
@@ -77,6 +77,7 @@ public class ProfilController extends JFrame {
 	private List<User> allUsers;
 
 	/**
+	 * This is called for showing your or a profile from anyone else 
 	 * 
 	 * @param user
 	 * @param navigationFrame
@@ -85,7 +86,7 @@ public class ProfilController extends JFrame {
 	 * @param is
 	 *            true if it comes form fromFriendController
 	 */
-	public ProfilController(User user, NavigationController navigationFrame, User otherUser,
+	public ProfileController(User user, NavigationController navigationFrame, User otherUser,
 			boolean fromFriendController) {
 		this.navigationFrame = navigationFrame;
 		this.fromFriendController = fromFriendController;
@@ -101,7 +102,7 @@ public class ProfilController extends JFrame {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				ProfilController.this.setLocation(x - xx, y - xy);
+				ProfileController.this.setLocation(x - xx, y - xy);
 			}
 		});
 
@@ -181,7 +182,7 @@ public class ProfilController extends JFrame {
 
 		liga = new JLabel("");
 		ImageIcon icon = new ImageIcon(
-				ProfilController.class.getResource("/images/" + Rank.getRankImgByPoints(getPointsByUser())));
+				ProfileController.class.getResource("/images/" + Rank.getRankImgByPoints(getPointsByUser())));
 		float height = 140;
 		float width = ((height / icon.getIconHeight()) * icon.getIconWidth());
 		icon = new ImageIcon(icon.getImage().getScaledInstance((int) width, (int) height, Image.SCALE_SMOOTH));
@@ -344,7 +345,7 @@ public class ProfilController extends JFrame {
 					name.setVisible(true);
 					editBtn.setVisible(true);
 				} else {
-					new UNODialog(ProfilController.this, "Namens Fehler", "Dieser Name ist bereits verwendet!",
+					new UNODialog(ProfileController.this, "Namens Fehler", "Dieser Name ist bereits verwendet!",
 							UNODialog.ERROR, UNODialog.OK_BUTTON);
 				}
 			}
@@ -375,7 +376,7 @@ public class ProfilController extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				showedUser.setPassword(new ChangePasswordDialog(ProfilController.this).getPassword());
+				showedUser.setPassword(new ChangePasswordDialog(ProfileController.this).getPassword());
 			}
 		});
 		newPasswordBtn.setVisible(false);

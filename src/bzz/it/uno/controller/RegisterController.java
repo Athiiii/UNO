@@ -41,6 +41,10 @@ public class RegisterController extends JFrame implements ActionListener {
 	private JPasswordField repeatPasswordField;
 	private TextField usernameField;
 
+	/**
+	 * This is called to register a new user. 
+	 * @param frame
+	 */
 	public RegisterController(LoginController frame) {
 		this.frame = frame;
 		frame.setVisible(false);
