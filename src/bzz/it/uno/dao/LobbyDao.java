@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import bzz.it.uno.model.Lobby;
-import bzz.it.uno.model.User;
 
 /**
  * @author Severin Hersche, Athavan Theivakulasingham
@@ -29,6 +28,7 @@ public class LobbyDao {
 	public List<Lobby> getAllLobbys() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
+		@SuppressWarnings("unchecked")
 		List<Lobby> lobbys = entityManager.createQuery("from Lobby").getResultList();
 		entityManager.getTransaction().commit();
 		HandleConnectionToDB.closeEntityManager();
@@ -40,6 +40,7 @@ public class LobbyDao {
 		entityManager.getTransaction().begin();
 		Query query = entityManager.createQuery("from Lobby where name=:name");
 		query.setParameter("name", lobbyName);
+		@SuppressWarnings("unchecked")
 		List<Lobby> lobbies = query.getResultList();
 		Lobby lobby = null;
 		if (lobbies.size() > 0) {

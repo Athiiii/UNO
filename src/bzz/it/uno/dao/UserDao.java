@@ -27,6 +27,7 @@ public class UserDao {
 	public List<User> getAllUsers() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
+		@SuppressWarnings("unchecked")
 		List<User> users = entityManager.createQuery("from User").getResultList();
 		if (users.size() > 0) {
 			users.get(0).getFriendList().size();
@@ -73,6 +74,7 @@ public class UserDao {
 		entityManager.getTransaction().begin();
 		Query query = entityManager.createQuery("from User where username=:user");
 		query.setParameter("user", username);
+		@SuppressWarnings("unchecked")
 		List<User> users = query.getResultList();
 		User user = null;
 		if (users.size() > 0) {

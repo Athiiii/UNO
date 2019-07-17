@@ -44,7 +44,8 @@ import bzz.it.uno.model.User;
 import bzz.it.uno.model.User_Lobby;
 
 /**
- * See profile data, your liga and your playing history. You can also edit your profile in this view and upload for example a picture. 
+ * See profile data, your liga and your playing history. You can also edit your
+ * profile in this view and upload for example a picture.
  * 
  * @author Severin Hersche
  *
@@ -74,6 +75,13 @@ public class ProfilController extends JFrame {
 	private NavigationController navigationFrame;
 	private boolean fromFriendController;
 
+	/**
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 * @param otherUser is null if the profile is opened vie navigation
+	 * @param is true if it comes form fromFriendController
+	 */
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser,
 			boolean fromFriendController) {
 		this.navigationFrame = navigationFrame;
@@ -240,7 +248,6 @@ public class ProfilController extends JFrame {
 		}
 	}
 
-
 	private JButton createEditBtn() {
 		editBtn = ViewSettings.createButton(393, 446, 154, 40, new Color(41, 204, 22), "Bearbeiten");
 		editBtn.addActionListener(new ActionListener() {
@@ -402,7 +409,7 @@ public class ProfilController extends JFrame {
 		return rank;
 	}
 
-	public int checkIfUserAlreadyInList(User user, List<RankModel> ranks) {
+	private int checkIfUserAlreadyInList(User user, List<RankModel> ranks) {
 		for (int i = 0; i < ranks.size(); ++i) {
 			if (ranks.get(i).getName().equals(user.getUsername()))
 				return i;
