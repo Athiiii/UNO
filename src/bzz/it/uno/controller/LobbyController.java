@@ -22,7 +22,7 @@ public class LobbyController extends JFrame {
 
 	public LobbyController(User user, NavigationController navigationFrame) {
 		contentPane = new JPanel();
-		
+
 		ViewSettings.setupPanel(contentPane);
 		ViewSettings.setupFrame(this);
 

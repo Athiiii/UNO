@@ -41,7 +41,8 @@ public class OfflineGameEnd extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow;
 
-	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players, Lobby lobby) {
+	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players,
+			Lobby lobby) {
 		contentPane = new JPanel();
 
 		ViewSettings.setupFrame(this);
@@ -127,24 +128,24 @@ public class OfflineGameEnd extends JFrame {
 		titleLabel.setBounds(220, 38, 280, 69);
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 50));
 		contentPane.add(titleLabel);
-		
+
 		addDbPoints(user, players, lobby);
 	}
-	
+
 	public void addDbPoints(User user, OfflineGameController[] players, Lobby lobby) {
 		UserLobbyDao userLobbyDao = UserLobbyDao.getInstance();
 		List<User_Lobby> userLobbies = userLobbyDao.selectByUser(user.getId());
 		User_Lobby userLobby = null;
-		for(int i = 0; i < userLobbies.size(); ++i) {
-			if(userLobbies.get(i).getLobby().getId() == lobby.getId()) {
+		for (int i = 0; i < userLobbies.size(); ++i) {
+			if (userLobbies.get(i).getLobby().getId() == lobby.getId()) {
 				userLobby = userLobbies.get(i);
 				break;
 			}
 		}
-		if(userLobby != null) {
+		if (userLobby != null) {
 			int points = 0;
-			for(int i = 0; i < players.length; ++i) {
-				if(players[i].getUsername().equals(user.getUsername())) {
+			for (int i = 0; i < players.length; ++i) {
+				if (players[i].getUsername().equals(user.getUsername())) {
 					points = players[i].getPoints();
 					break;
 				}

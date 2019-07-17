@@ -79,8 +79,8 @@ public class OfflineGameController extends JFrame {
 		ViewSettings.setupPanel(contentPane);
 
 		/*
-		 * dispose whole game when closing this
-		 * this will prevent that the whole application will be closed
+		 * dispose whole game when closing this this will prevent that the whole
+		 * application will be closed
 		 */
 		addWindowListener(new WindowAdapter() {
 

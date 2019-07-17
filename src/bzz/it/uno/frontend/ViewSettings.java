@@ -110,8 +110,10 @@ public class ViewSettings {
 	/**
 	 * creates a return Button with some styling
 	 * 
-	 * @param from Frame
-	 * @param to   Frame
+	 * @param from
+	 *            Frame
+	 * @param to
+	 *            Frame
 	 * @return return Button
 	 */
 	public static JButton createReturnButton(JFrame from, JFrame to) {
@@ -148,7 +150,8 @@ public class ViewSettings {
 	/**
 	 * Creating a default Scrollpane with styling
 	 * 
-	 * @param view which should be in it
+	 * @param view
+	 *            which should be in it
 	 * @return designed Scrollpane
 	 */
 	public static JScrollPane createDefaultScrollPane(Component view, int height, int width, int yCord) {

@@ -11,20 +11,20 @@ import bzz.it.uno.model.Lobby;
  * @author Severin Hersche, Athavan Theivakulasingham
  */
 public class LobbyDao {
-	
+
 	private static LobbyDao lobbyDao;
-	
+
 	private LobbyDao() {
-		
+
 	}
-	
+
 	public static LobbyDao getInstance() {
 		if (lobbyDao == null) {
 			lobbyDao = new LobbyDao();
 		}
 		return lobbyDao;
 	}
-	
+
 	public List<Lobby> getAllLobbys() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -34,7 +34,7 @@ public class LobbyDao {
 		HandleConnectionToDB.closeEntityManager();
 		return lobbys;
 	}
-	
+
 	public Lobby selectLobbyByName(String lobbyName) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -50,7 +50,7 @@ public class LobbyDao {
 		HandleConnectionToDB.closeEntityManager();
 		return lobby;
 	}
-	
+
 	public void addLobby(Lobby lobby) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

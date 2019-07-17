@@ -198,7 +198,7 @@ public class RankingController extends JFrame {
 						ranks.get(result).setPoints(ranks.get(result).getPoints() + user_Lobby.getPoints());
 					}
 				}
-				if(checkIfUserAlreadyInList(user, ranks) == -1) {
+				if (checkIfUserAlreadyInList(user, ranks) == -1) {
 					RankModel model = new RankModel(user.getUsername(), 0, null);
 					ranks.add(model);
 				}

@@ -132,7 +132,7 @@ public class FriendsController extends JFrame {
 				super.mouseClicked(arg0);
 				// get the clicked cell's row
 				selectedRow = table.getSelectedRow();
-				if(arg0.getClickCount() > 1) {
+				if (arg0.getClickCount() > 1) {
 					for (User u : allUsers) {
 						if (u.getUsername().matches(actualListOfFriends.get(selectedRow).getUsername())) {
 							dispose();
@@ -173,7 +173,7 @@ public class FriendsController extends JFrame {
 				// the username will be defined here, so that the friend can be removed
 				removeFriendBtn.setName(friend.getUsername());
 
-				model.addRow(new Object[] { friend.getUsername(), removeFriendBtn});
+				model.addRow(new Object[] { friend.getUsername(), removeFriendBtn });
 				removeFriendBtn.addActionListener(new ActionListener() {
 
 					@Override

@@ -72,9 +72,8 @@ public class LoginController extends JFrame implements ActionListener {
 
 		JLabel loginView = new JLabel("");
 		loginView.setVerticalAlignment(SwingConstants.TOP);
-		loginView.setIcon(new ImageIcon(
-				new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
-						.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
+		loginView.setIcon(new ImageIcon(new ImageIcon(LoginController.class.getResource("/images/uno_logo.png"))
+				.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH)));
 		panel.add(loginView);
 		// set up login Button
 		JButton loginButton = new JButton("Login");
@@ -154,7 +153,8 @@ public class LoginController extends JFrame implements ActionListener {
 			this.setVisible(false);
 			new NavigationController(currentUser, this);
 		} else {
-			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR, UNODialog.OK_BUTTON);
+			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR,
+					UNODialog.OK_BUTTON);
 			passwordField.setText("");
 			usernameInput.setText("");
 		}

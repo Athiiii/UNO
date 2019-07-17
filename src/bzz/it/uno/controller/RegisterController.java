@@ -116,8 +116,8 @@ public class RegisterController extends JFrame implements ActionListener {
 		passwordLabel.setBounds(243, 256, 107, 39);
 		passwordLabel.setForeground(Color.WHITE);
 		contentPane.add(passwordLabel);
-		
-		//switch to login view
+
+		// switch to login view
 		JLabel alreadyAccount = new JLabel("Bereits ein Konto?");
 		alreadyAccount.addMouseListener(new MouseAdapter() {
 			@Override
@@ -163,8 +163,8 @@ public class RegisterController extends JFrame implements ActionListener {
 			}
 
 		} else {
-			new UNODialog(this, "Register failed", "Register failed. Entered passwords are different.",
-					UNODialog.ERROR, UNODialog.OK_BUTTON);
+			new UNODialog(this, "Register failed", "Register failed. Entered passwords are different.", UNODialog.ERROR,
+					UNODialog.OK_BUTTON);
 			passwordField.setText("");
 			repeatPasswordField.setText("");
 		}

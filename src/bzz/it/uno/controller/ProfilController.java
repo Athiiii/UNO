@@ -79,8 +79,10 @@ public class ProfilController extends JFrame {
 	 * 
 	 * @param user
 	 * @param navigationFrame
-	 * @param otherUser is null if the profile is opened vie navigation
-	 * @param is true if it comes form fromFriendController
+	 * @param otherUser
+	 *            is null if the profile is opened vie navigation
+	 * @param is
+	 *            true if it comes form fromFriendController
 	 */
 	public ProfilController(User user, NavigationController navigationFrame, User otherUser,
 			boolean fromFriendController) {

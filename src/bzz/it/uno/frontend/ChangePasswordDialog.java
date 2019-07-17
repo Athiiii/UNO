@@ -29,7 +29,7 @@ public class ChangePasswordDialog extends JDialog {
 	public static void main(String[] args) {
 		new ChangePasswordDialog(new GameController(null, null));
 	}
-	
+
 	public ChangePasswordDialog(JFrame parent) {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		setUndecorated(true);
@@ -92,19 +92,20 @@ public class ChangePasswordDialog extends JDialog {
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(243, 80, 190, 39);
 		contentPanel.add(passwordField);
-		
+
 		JPasswordField passwordFieldSecond = new JPasswordField(10);
 		passwordFieldSecond.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordFieldSecond.setBounds(243, 145, 190, 39);
 		contentPanel.add(passwordFieldSecond);
-		
+
 		JButton okBtn = ViewSettings.createButton(240, 210, 70, 30, new Color(204, 0, 0), "OK");
 		okBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (passwordField.getPassword().equals("")) {
-					new UNODialog(parent, "Fehler", "Passwort darf nicht leer sein", UNODialog.WARNING, UNODialog.OK_BUTTON);
+					new UNODialog(parent, "Fehler", "Passwort darf nicht leer sein", UNODialog.WARNING,
+							UNODialog.OK_BUTTON);
 				} else if (new String(passwordField.getPassword())
 						.equals(new String(passwordFieldSecond.getPassword()))) {
 					setPassword(new String(passwordField.getPassword()));

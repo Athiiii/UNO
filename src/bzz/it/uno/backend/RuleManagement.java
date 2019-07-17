@@ -59,7 +59,8 @@ class RuleManagement {
 		if (comingCard.getValue() == currentCard.getValue() && currentCard.getCardType() == comingCard.getCardType()
 				&& currentCard.getCardType() == CardType.COMMON) {
 			result = true;
-		} else if (currentCard.getCardType() == comingCard.getCardType() && comingCard.getCardType() != CardType.COMMON) {
+		} else if (currentCard.getCardType() == comingCard.getCardType()
+				&& comingCard.getCardType() != CardType.COMMON) {
 			result = true;
 		} else if (comingCard.getCardType() == CardType.PLUSFOUR || comingCard.getCardType() == CardType.CHANGECOLOR) {
 			result = true;

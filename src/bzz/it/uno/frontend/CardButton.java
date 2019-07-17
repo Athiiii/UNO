@@ -21,13 +21,12 @@ public class CardButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private Card card;
 	private boolean selected;
-	
+
 	public CardButton(String filename, Card card) {
-		super(new ImageIcon(new ImageIcon(
-				CardButton.class.getResource("/images/cards/small/" + filename))
-				.getImage().getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
+		super(new ImageIcon(new ImageIcon(CardButton.class.getResource("/images/cards/small/" + filename)).getImage()
+				.getScaledInstance(97, 136, Image.SCALE_SMOOTH)));
 		setCard(card);
-		
+
 		setSize(97, 136);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
@@ -37,11 +36,11 @@ public class CardButton extends JButton {
 			public void actionPerformed(ActionEvent e) {
 				if (getBorder() instanceof TitledBorder) {
 					setSelected(false);
-					//remove border
+					// remove border
 					setBorder(BorderFactory.createEmptyBorder());
-				}else {
+				} else {
 					setSelected(true);
-					//show border
+					// show border
 					setBorder(BorderFactory.createTitledBorder(""));
 				}
 			}

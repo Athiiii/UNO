@@ -86,7 +86,8 @@ public class UNOBasicLogic {
 	/**
 	 * Selects random User from list
 	 * 
-	 * @param users of the game
+	 * @param users
+	 *            of the game
 	 * @return random User from list
 	 */
 	public GameUser triggerUser(List<GameUser> users) {
@@ -166,12 +167,12 @@ public class UNOBasicLogic {
 	public void reshuffleCards() {
 		Card currentCard = playedCards.getCards().get(0);
 		cardStacks.getCards().addAll(playedCards.getCards());
-		
-		//reshuffle cards
+
+		// reshuffle cards
 		Collections.shuffle(cardStacks.getCards());
 		Collections.shuffle(cardStacks.getCards());
 		Collections.shuffle(cardStacks.getCards());
-		
+
 		playedCards = new CardDeck(new ArrayList<Card>());
 		playedCards.addCard(currentCard);
 	}
@@ -211,12 +212,13 @@ public class UNOBasicLogic {
 		}
 		return cards;
 	}
-	
+
 	/**
 	 * Returns the last played card
+	 * 
 	 * @return
 	 */
 	public Card getLastPlayedCard() {
-		return playedCards.getCards().get(playedCards.getCards().size() -1);
+		return playedCards.getCards().get(playedCards.getCards().size() - 1);
 	}
 }

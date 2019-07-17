@@ -26,6 +26,7 @@ public class ImageCanvas extends Canvas {
 			ex.printStackTrace();
 		}
 	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return img == null ? new Dimension(200, 200) : new Dimension(img.getWidth(), img.getHeight());
