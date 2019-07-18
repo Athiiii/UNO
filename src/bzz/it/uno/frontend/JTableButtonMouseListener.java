@@ -7,17 +7,28 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 
 /**
+ * Listener when Button in the table is clicked
+ * 
  * @author Severin Hersche
  */
 public class JTableButtonMouseListener extends MouseAdapter {
 	private final JTable table;
 
+	/**
+	 * define using table
+	 * 
+	 * @param table
+	 */
 	public JTableButtonMouseListener(JTable table) {
 		this.table = table;
 	}
 
+	/**
+	 * Check if a click on the table was on a button and execute the click event of
+	 * this specific button
+	 */
 	public void mouseClicked(MouseEvent event) {
-		// get the coloum of the button
+		// get the column of the button
 		int column = table.getColumnModel().getColumnIndexAtX(event.getX());
 		// get the row of the button
 		int row = event.getY() / table.getRowHeight();

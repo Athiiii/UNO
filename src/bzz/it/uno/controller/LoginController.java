@@ -42,7 +42,8 @@ public class LoginController extends JFrame implements ActionListener {
 	private JPasswordField passwordField;
 
 	/**
-	 * Here starts the application and you can do the Login
+	 * Starting point. <br>
+	 * Create view for login
 	 */
 	public LoginController() {
 		contentPane = new JPanel();

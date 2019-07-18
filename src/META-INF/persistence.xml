@@ -6,7 +6,7 @@
 	<persistence-unit name="uno.jpa">
 
 		<description>
-            Connects to the database where all the data is safed for the UNO game
+            Connects to the database where all the data is saved for the UNO game
         </description>
 
 		<class>bzz.it.uno.model.Lobby</class>

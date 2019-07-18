@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import bzz.it.uno.model.Lobby;
 
 /**
+ * Handling CRUD operations for table "Lobby"
+ * 
  * @author Severin Hersche, Athavan Theivakulasingham
  */
 public class LobbyDao {
@@ -25,6 +27,11 @@ public class LobbyDao {
 		return lobbyDao;
 	}
 
+	/**
+	 * Get all data from the table
+	 * 
+	 * @return List of lobbies
+	 */
 	public List<Lobby> getAllLobbys() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -35,6 +42,12 @@ public class LobbyDao {
 		return lobbys;
 	}
 
+	/**
+	 * Get specific lobby by the lobbyname
+	 * 
+	 * @param lobbyName
+	 * @return lobby
+	 */
 	public Lobby selectLobbyByName(String lobbyName) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -51,6 +64,11 @@ public class LobbyDao {
 		return lobby;
 	}
 
+	/**
+	 * Add a lobby
+	 * 
+	 * @param lobby
+	 */
 	public void addLobby(Lobby lobby) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

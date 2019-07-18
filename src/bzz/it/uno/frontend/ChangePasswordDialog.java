@@ -20,16 +20,22 @@ import javax.swing.JPasswordField;
 
 import bzz.it.uno.controller.GameController;
 
+/**
+ * Dialog to change password
+ * 
+ * @author Athavan Theivakulasingham
+ *
+ */
 public class ChangePasswordDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private String password;
 	private final JPanel contentPanel = new JPanel();
 	private int xx, xy;
 
-	public static void main(String[] args) {
-		new ChangePasswordDialog(new GameController(null, null));
-	}
-
+	/**
+	 * 
+	 * @param parent
+	 */
 	public ChangePasswordDialog(JFrame parent) {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		setUndecorated(true);
@@ -69,6 +75,7 @@ public class ChangePasswordDialog extends JDialog {
 		});
 		contentPanel.setLayout(null);
 
+		// set up labels
 		JLabel passwordLabel = new JLabel("Neues Passwort eingeben:");
 		passwordLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 		passwordLabel.setForeground(Color.WHITE);
@@ -81,13 +88,13 @@ public class ChangePasswordDialog extends JDialog {
 		repeatPasswordLabel.setBounds(10, 136, 250, 56);
 		contentPanel.add(repeatPasswordLabel);
 
-		// set up labels
 		Label titleLabel = new Label("Neues Passwort");
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
 		titleLabel.setBounds(10, 20, 401, 56);
 		titleLabel.setForeground(Color.WHITE);
 		contentPanel.add(titleLabel);
 
+		// inputs
 		JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 27));
 		passwordField.setBounds(243, 80, 190, 39);
@@ -99,11 +106,12 @@ public class ChangePasswordDialog extends JDialog {
 		contentPanel.add(passwordFieldSecond);
 
 		JButton okBtn = ViewSettings.createButton(240, 210, 70, 30, new Color(204, 0, 0), "OK");
+		// validation
 		okBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (passwordField.getPassword().equals("")) {
+				if (new String(passwordField.getPassword()).equals("")) {
 					new UNODialog(parent, "Fehler", "Passwort darf nicht leer sein", UNODialog.WARNING,
 							UNODialog.OK_BUTTON);
 				} else if (new String(passwordField.getPassword())
@@ -121,6 +129,7 @@ public class ChangePasswordDialog extends JDialog {
 		contentPanel.add(okBtn);
 
 		JButton cancelBtn = ViewSettings.createButton(320, 210, 110, 30, new Color(136, 136, 136), "Cancel");
+		// close dialog
 		cancelBtn.addActionListener(new ActionListener() {
 
 			@Override

@@ -3,6 +3,8 @@ package bzz.it.uno.frontend;
 import javax.swing.ImageIcon;
 
 /**
+ * Model for the Ranking table list
+ * 
  * @author Athavan Theivakulasingham
  */
 public class RankModel implements Comparable<RankModel> {

@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import bzz.it.uno.model.User_Lobby;
 
 /**
+ * Handling CRUD operations for table "User_Lobby"
+ * 
  * @author Severin Hersche, Athavan Theivakulasingham
  */
 public class UserLobbyDao {
@@ -24,6 +26,12 @@ public class UserLobbyDao {
 		return userLobbyDao;
 	}
 
+	/**
+	 * select specific user_lobby by userid
+	 * 
+	 * @param userId
+	 * @return list of user_lobby
+	 */
 	public List<User_Lobby> selectByUser(int userId) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -36,6 +44,11 @@ public class UserLobbyDao {
 		return userLobbys;
 	}
 
+	/**
+	 * get whole data of the table
+	 * 
+	 * @return list of user_lobby
+	 */
 	public List<User_Lobby> getAllUserLobbies() {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -46,6 +59,11 @@ public class UserLobbyDao {
 		return userLobbies;
 	}
 
+	/**
+	 * add new user_lobby
+	 * 
+	 * @param userLobby
+	 */
 	public void addUserLobby(User_Lobby userLobby) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();
@@ -54,6 +72,12 @@ public class UserLobbyDao {
 		HandleConnectionToDB.closeEntityManager();
 	}
 
+	/**
+	 * update the points of a specific user_lobby
+	 * 
+	 * @param points
+	 * @param user_Lobby_id
+	 */
 	public void updatePointsUserLobby(int points, int user_Lobby_id) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		entityManager.getTransaction().begin();

@@ -77,14 +77,12 @@ public class ProfileController extends JFrame {
 	private List<User> allUsers;
 
 	/**
-	 * This is called for showing your or a profile from anyone else 
+	 * create display of the profile of yours or from anyone else
 	 * 
 	 * @param user
 	 * @param navigationFrame
-	 * @param otherUser
-	 *            is null if the profile is opened vie navigation
-	 * @param is
-	 *            true if it comes form fromFriendController
+	 * @param otherUser       is null if the profile is opened vie navigation
+	 * @param is              true if it comes form fromFriendController
 	 */
 	public ProfileController(User user, NavigationController navigationFrame, User otherUser,
 			boolean fromFriendController) {
@@ -197,7 +195,6 @@ public class ProfileController extends JFrame {
 			try {
 				profileImage.setIcon(new ImageIcon(getPictureFromUser(showedUser)));
 			} catch (IOException e1) {
-				e1.printStackTrace();
 			}
 		}
 
@@ -310,7 +307,6 @@ public class ProfileController extends JFrame {
 				try {
 					getImageFromFileSystem();
 				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		});

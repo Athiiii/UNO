@@ -15,7 +15,10 @@ public class StartApp {
 			public void run() {
 				try {
 					HandleConnectionToDB.openDbFactory();
+					
+					//show login as starting page
 					new LoginController();
+					
 					Runtime.getRuntime().addShutdownHook(new Thread() {
 						// call before application will be closed
 						@Override
@@ -24,7 +27,6 @@ public class StartApp {
 						}
 					});
 				} catch (Exception e) {
-					e.printStackTrace();
 					HandleConnectionToDB.closeDbFactory();
 				}
 			}

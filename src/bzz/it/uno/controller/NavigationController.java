@@ -38,7 +38,7 @@ public class NavigationController extends JFrame {
 	private int xy, xx;
 
 	/**
-	 * This is called for showing and managing the navigation
+	 * create navigation view after login.
 	 * 
 	 * @param user
 	 * @param frame

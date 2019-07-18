@@ -41,6 +41,15 @@ public class OfflineGameEnd extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow;
 
+	/**
+	 * Generate ranking for offline game. <br>
+	 * Write result of the logged in user to the db
+	 * 
+	 * @param user
+	 * @param navigationFrame
+	 * @param players
+	 * @param lobby
+	 */
 	public OfflineGameEnd(User user, NavigationController navigationFrame, OfflineGameController[] players,
 			Lobby lobby) {
 		contentPane = new JPanel();

@@ -52,9 +52,8 @@ public class RankingController extends JFrame {
 
 	private JCheckBox showOnlyFriends;
 
-	
 	/**
-	 * This is called if you want to see the Ranking
+	 * read ranking data from db and display it as a table
 	 * 
 	 * @param user
 	 * @param navigationFrame

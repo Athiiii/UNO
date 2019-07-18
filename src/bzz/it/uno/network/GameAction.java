@@ -48,7 +48,6 @@ public class GameAction implements MqttCallback {
 			}
 			client.publish("UNO/" + topic, message.getBytes(), 2, true);
 		} catch (MqttException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -66,7 +65,6 @@ public class GameAction implements MqttCallback {
 			}
 			client.subscribe("UNO/" + topic);
 		} catch (MqttException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -84,7 +82,6 @@ public class GameAction implements MqttCallback {
 			}
 			client.unsubscribe("UNO/" + topic);
 		} catch (MqttException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -99,7 +96,6 @@ public class GameAction implements MqttCallback {
 				client.connect();
 			}
 		} catch (MqttException e) {
-			e.printStackTrace();
 		}
 	}
 

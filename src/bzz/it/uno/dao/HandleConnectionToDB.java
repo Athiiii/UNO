@@ -24,10 +24,17 @@ public class HandleConnectionToDB {
 		entityManager.close();
 	}
 
+	/**
+	 * Open Factory to the Database UNO. Should be open once for the whole lifetime
+	 * of the application
+	 */
 	public static void openDbFactory() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("uno.jpa");
 	}
 
+	/**
+	 * Closing Factory to Database UNO. Should be closed at least.<
+	 */
 	public static void closeDbFactory() {
 		entityManagerFactory.close();
 	}

@@ -43,7 +43,8 @@ public class RegisterController extends JFrame implements ActionListener {
 	private TextField usernameField;
 
 	/**
-	 * This is called to register a new user. 
+	 * Create view to create a new user profile
+	 * 
 	 * @param frame
 	 */
 	public RegisterController(LoginController frame) {
