@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
-import bzz.it.uno.model.User;
 import bzz.it.uno.service.RegisterService;
 
 /**

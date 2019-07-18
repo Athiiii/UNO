@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 
-import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
