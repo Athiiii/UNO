@@ -4,7 +4,7 @@ import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
 /**
- * <li>Service for Login</li>
+ * Service for Login
  * 
  * @author Severin Hersche
  *
@@ -14,8 +14,8 @@ public class LoginService {
 	/**
 	 * Tries to login a user.
 	 * 
-	 * @param username
-	 * @param password
+	 * @param username from user
+	 * @param password from user
 	 * @return the user or returns null if the password isn't correct or the user is
 	 *         not in the database.
 	 */

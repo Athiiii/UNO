@@ -4,7 +4,7 @@ import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
 /**
- * <li>Service for Registration</li>
+ * Service for Registration
  * 
  * @author Severin Hersche
  *
