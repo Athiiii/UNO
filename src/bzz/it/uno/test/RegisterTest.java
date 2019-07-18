@@ -9,7 +9,7 @@ import org.junit.Test;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 /**
- * Test for registration
+ * <li>Test for registration</li>
  * 
  * @author Severin Hersche
  *
