@@ -61,6 +61,11 @@ public class UserDao {
 		HandleConnectionToDB.closeEntityManager();
 	}
 	
+	/**
+	 * remove User
+	 * 
+	 * @param user
+	 */
 	public void removeUser(User user) {
 		EntityManager entityManager = HandleConnectionToDB.getEntityManager();
 		User u = entityManager.find(User.class, user.getId());
