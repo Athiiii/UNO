@@ -1,4 +1,4 @@
-package bzz.it.uno.controller;
+package bzz.it.uno.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -13,7 +13,7 @@ import bzz.it.uno.model.User;
 public class RegisterTest {
 
 	@Test
-	public void testT9F() {
+	public void testT9() {
 		run();
 		String username = "testDATA";
 		String password = "123";
@@ -36,6 +36,10 @@ public class RegisterTest {
 		}
 		assertTrue(testTrue);
 
+	}
+	@Test
+	public void testT10() {
+		
 	}
 	public void run() {
 		try {

@@ -6,7 +6,7 @@ import bzz.it.uno.model.User;
 public class RegisterService {
 	
 	/**
-	 * Trys to create a new User if the username isn't used already.
+	 * Tries to create a new User if the username isn't used already.
 	 * 
 	 * @param password
 	 * @param username

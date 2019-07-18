@@ -24,6 +24,7 @@ import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
+import bzz.it.uno.service.LoginService;
 
 /**
  * Login with user Credentials
@@ -150,12 +151,12 @@ public class LoginController extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		User currentUser = UserDao.getInstance().selectByUsername(usernameInput.getText());
 		// validation
-		if (currentUser != null && currentUser.getPassword().equals(new String(passwordField.getPassword()))) {
+		User user = LoginService.login(usernameInput.getText(), new String(passwordField.getPassword()));
+		if (user != null) {
 			// forward to NavigationController
 			this.setVisible(false);
-			new NavigationController(currentUser, this);
+			new NavigationController(user, this);
 		} else {
 			new UNODialog(this, "Login failed", "Login is failed. Invalid username or password", UNODialog.ERROR,
 					UNODialog.OK_BUTTON);
