@@ -3,6 +3,12 @@ package bzz.it.uno.service;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
+/**
+ * <li>Service for Login</li>
+ * 
+ * @author Severin Hersche
+ *
+ */
 public class LoginService {
 
 	/**

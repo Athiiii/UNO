@@ -3,8 +3,14 @@ package bzz.it.uno.service;
 import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.model.User;
 
+/**
+ * <li>Service for Registration</li>
+ * 
+ * @author Severin Hersche
+ *
+ */
 public class RegisterService {
-	
+
 	/**
 	 * Tries to create a new User if the username isn't used already.
 	 * 
