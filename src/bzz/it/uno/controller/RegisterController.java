@@ -24,6 +24,7 @@ import bzz.it.uno.dao.UserDao;
 import bzz.it.uno.frontend.UNODialog;
 import bzz.it.uno.frontend.ViewSettings;
 import bzz.it.uno.model.User;
+import bzz.it.uno.service.RegisterService;
 
 /**
  * Create a new User Profile
@@ -146,18 +147,11 @@ public class RegisterController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (new String(repeatPasswordField.getPassword()).equals(new String(passwordField.getPassword()))) {
-			UserDao dao = UserDao.getInstance();
-			User user = dao.selectByUsername(usernameField.getText());
-			if (user == null) {
-				user = new User();
-				user.setComputer(false);
-				user.setPassword(new String(passwordField.getPassword()));
-				user.setUsername(usernameField.getText());
-				dao.addUser(user);
-
+		
+			if (RegisterService.createUser(new String(passwordField.getPassword()), usernameField.getText())){
 				// forward to NavigationController
 				this.setVisible(false);
-				new NavigationController(user, frame);
+				new NavigationController(UserDao.getInstance().selectByUsername(usernameField.getText()), frame);
 			} else {
 				new UNODialog(this, "Register failed", "Register failed. Entered username is already given.",
 						UNODialog.ERROR, UNODialog.OK_BUTTON);
