@@ -162,7 +162,7 @@ public class ProfileController extends JFrame {
 			}
 		});
 
-		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 230));
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 210, 700, 230));
 
 		name = new JLabel();
 		name.setBounds(160, 112, 154, 55);

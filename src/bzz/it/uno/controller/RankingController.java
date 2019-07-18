@@ -166,7 +166,7 @@ public class RankingController extends JFrame {
 
 		ViewSettings.setupTableDesign(table);
 
-		table.setBounds(73, 145, 548, 500);
+		table.setBounds(73, 200, 700, 300);
 		table.setRowHeight(65);
 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -186,7 +186,7 @@ public class RankingController extends JFrame {
 			}
 		});
 
-		contentPane.add(ViewSettings.createDefaultScrollPane(table, 400, 700, 200));
+		contentPane.add(ViewSettings.createDefaultScrollPane(table, 300, 700, 200));
 	}
 
 	private void setRankingList(List<User> users) {

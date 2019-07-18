@@ -18,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import bzz.it.uno.controller.GameController;
-
 /**
  * Dialog to change password
  * 
